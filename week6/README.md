@@ -20,7 +20,8 @@ week6/
 ├── assignment_5_AGENTS/        Assignment folder
 │   ├── 5_AGENTS.md作業. 題目.md   The assignment brief (authoritative)
 │   ├── 5_AGENTS.md作業.問題1.md   Question 1: test the AGENTS.md
-│   └── AGENTS.md               Task 1: the Data Visualization AGENTS.md (draft)
+│   ├── AGENTS.md               Task 1: the Data Visualization AGENTS.md (draft)
+│   └── test_run/               Clean test project: AGENTS.md copy, data/raw, src/, outputs/
 ├── scenario1/                  Example scenario 1 (data analysis); test run
 │   ├── AGENTS.md
 │   ├── main.py, README.md

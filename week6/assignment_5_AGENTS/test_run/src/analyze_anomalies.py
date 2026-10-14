@@ -77,10 +77,11 @@ def quality_defect_density():
     if log_x:
         ax.set_xscale("log")
     top = df.nlargest(3, "defects_per_kloc")
-    offsets = [(8, 4), (10, 10), (10, -12)]  # stagger the labels so neighbouring points do not overlap
+    offsets = [(12, 0), (45, 60), (115, 30)]  # labels sit in empty space and are joined to their points by a line
     for (_, row), offset in zip(top.iterrows(), offsets):
         ax.annotate(row["module_id"], xy=(row["LOC"], row["defects_per_kloc"]),
-                    xytext=offset, textcoords="offset points", fontsize=10)
+                    xytext=offset, textcoords="offset points", fontsize=10,
+                    arrowprops={"arrowstyle": "-", "color": "gray", "lw": 0.8})
     ax.set_title("Defect density vs module size, by module type")
     ax.set_xlabel("Lines of code (LOC" + (", log scale)" if log_x else ")"))
     ax.set_ylabel("Defects per 1,000 lines of code")
