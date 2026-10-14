@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>留言板</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main>
+    <h1>留言板</h1>
+
+    <p id="notice" class="notice" hidden></p>
+
+    <form id="message-form">
+      <label>名字
+        <input id="name" name="name" maxlength="30" required>
+      </label>
+      <label>留言
+        <textarea id="text" name="text" rows="3" maxlength="500" required></textarea>
+      </label>
+      <button type="submit">送出</button>
+    </form>
+
+    <ul id="message-list"></ul>
+  </main>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
