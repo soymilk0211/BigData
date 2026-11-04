@@ -1,5 +1,7 @@
 # 大數據應用 Week 9：資料清理 — 離群值偵測
 
+📓 [在 nbviewer 檢視筆記本](https://nbviewer.org/github/soymilk0211/BigData/blob/main/week9/week9_outliers.ipynb)（互動圖表可在 nbviewer 顯示）
+
 ## 練習題目
 
 > 哪些 dataset 適合用 Z-score、哪些適合用 IQR、哪些都可以？
@@ -52,7 +54,7 @@ jupyter nbconvert --to notebook --execute --inplace week9_outliers.ipynb
 
 ![datasetA](figures/datasetA.png)
 
-[互動版 datasetA.html](figures/datasetA.html)
+[互動版 datasetA.html](https://soymilk0211.github.io/BigData/week9/figures/datasetA.html)
 
 - 直方圖主體集中在 160–185、左右對稱，但兩側各散落幾個極端值（120–135、210–260）。
 - skew = 3.24、kurtosis = 18.40，厚尾明顯；std = 14.15 是 IQR = 6.27 的兩倍多，標準差被極端值撐大。
@@ -62,7 +64,7 @@ jupyter nbconvert --to notebook --execute --inplace week9_outliers.ipynb
 
 ![datasetB](figures/datasetB.png)
 
-[互動版 datasetB.html](figures/datasetB.html)
+[互動版 datasetB.html](https://soymilk0211.github.io/BigData/week9/figures/datasetB.html)
 
 - 主體集中在 30–75 的鐘形，但上方有一串 120–200、下方有 −20、−10、0。
 - skew = 3.22、kurtosis = 14.03；std = 26.13 遠大於 IQR = 11.73，mean 54.41 被拉離 median 50.34。
@@ -72,7 +74,7 @@ jupyter nbconvert --to notebook --execute --inplace week9_outliers.ipynb
 
 ![datasetC](figures/datasetC.png)
 
-[互動版 datasetC.html](figures/datasetC.html)
+[互動版 datasetC.html](https://soymilk0211.github.io/BigData/week9/figures/datasetC.html)
 
 - 嚴重右偏：直方圖幾乎全部擠在 0 附近，長尾一路延伸到 30000。
 - skew = 8.30、kurtosis = 75.56 為五組最大；std = 2767.75 是 mean 512.41 的 5 倍以上，mean 也比 median 51.82 大近 10 倍——平均數與標準差在這裡已失去代表性。
@@ -82,7 +84,7 @@ jupyter nbconvert --to notebook --execute --inplace week9_outliers.ipynb
 
 ![datasetD](figures/datasetD.png)
 
-[互動版 datasetD.html](figures/datasetD.html)
+[互動版 datasetD.html](https://soymilk0211.github.io/BigData/week9/figures/datasetD.html)
 
 - 直方圖主體是單峰、大致對稱的鐘形（約 75–125），只在兩端各有少數明顯的極端值（40、45 與 160、170、180）。
 - skew = 1.33 是有離群值的四組（A–D）中最小；std = 14.31 與 IQR = 13.40 相近，表示標準差沒有被極端值大幅撐大；mean 99.48 與 median 98.47 幾乎相同。
@@ -92,7 +94,7 @@ jupyter nbconvert --to notebook --execute --inplace week9_outliers.ipynb
 
 ![datasetE](figures/datasetE.png)
 
-[互動版 datasetE.html](figures/datasetE.html)
+[互動版 datasetE.html](https://soymilk0211.github.io/BigData/week9/figures/datasetE.html)
 
 - 直方圖是**雙峰**：一群在 15–25、一群在 70–90，另外有 −10、120、150、170 幾個零星值。
 - skew = 0.26、kurtosis = −0.78 看起來「很對稱、不厚尾」，但這是雙峰造成的假象；mean 51.74 落在兩峰之間的空白區（那裡幾乎沒有資料），median 73.71 落在右峰。
