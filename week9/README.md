@@ -18,14 +18,15 @@ week9/
 ├── data/
 │   └── datasetA.csv ~ datasetE.csv   原始資料（欄位 value，各 200 筆）
 └── figures/
-    └── datasetA.png ~ datasetE.png   直方圖 + Boxplot
+    ├── datasetA.html ~ datasetE.html 互動式圖（plotly，可縮放、滑鼠移上去看數值；需連網載入 plotly.js CDN）
+    └── datasetA.png ~ datasetE.png   靜態圖（plotly + kaleido 輸出）
 ```
 
 ## 執行方式
 
 ```bash
-pip install pandas numpy matplotlib scipy        # 若尚未安裝
-python3 week9_outliers.py                        # 產生 figures/*.png 與 summary.csv
+pip install pandas numpy plotly kaleido scipy    # 若尚未安裝（kaleido 需要 Chrome，可用 plotly_get_chrome -y 安裝）
+python3 week9_outliers.py                        # 產生 figures/*.html、figures/*.png 與 summary.csv
 
 # 或執行筆記本（輸出寫回同一檔案）
 jupyter nbconvert --to notebook --execute --inplace week9_outliers.ipynb
@@ -45,9 +46,13 @@ jupyter nbconvert --to notebook --execute --inplace week9_outliers.ipynb
 
 ## 各 dataset 判斷
 
+每張圖左邊是直方圖、右邊是 Boxplot（鬚延伸到 1.5×IQR 圍欄）；**紅色 ✕ = Z-score 離群值、橘色空心圈 = IQR 離群值**，兩法都抓到的點會疊在一起。圖表用 plotly 繪製，點圖片下方連結可開啟互動版（html）。
+
 ### datasetA → 適合 IQR
 
 ![datasetA](figures/datasetA.png)
+
+[互動版 datasetA.html](figures/datasetA.html)
 
 - 直方圖主體集中在 160–185、左右對稱，但兩側各散落幾個極端值（120–135、210–260）。
 - skew = 3.24、kurtosis = 18.40，厚尾明顯；std = 14.15 是 IQR = 6.27 的兩倍多，標準差被極端值撐大。
@@ -57,6 +62,8 @@ jupyter nbconvert --to notebook --execute --inplace week9_outliers.ipynb
 
 ![datasetB](figures/datasetB.png)
 
+[互動版 datasetB.html](figures/datasetB.html)
+
 - 主體集中在 30–75 的鐘形，但上方有一串 120–200、下方有 −20、−10、0。
 - skew = 3.22、kurtosis = 14.03；std = 26.13 遠大於 IQR = 11.73，mean 54.41 被拉離 median 50.34。
 - 結果：Z-score 只抓到上方 140–200 的 7 個，**下方 −20、−10、0 與 120、130 全被漏掉**（被膨脹的 std 遮蔽）；IQR 抓到 14 個，兩側都有涵蓋。
@@ -64,6 +71,8 @@ jupyter nbconvert --to notebook --execute --inplace week9_outliers.ipynb
 ### datasetC → 適合 IQR（Z-score 不適合）
 
 ![datasetC](figures/datasetC.png)
+
+[互動版 datasetC.html](figures/datasetC.html)
 
 - 嚴重右偏：直方圖幾乎全部擠在 0 附近，長尾一路延伸到 30000。
 - skew = 8.30、kurtosis = 75.56 為五組最大；std = 2767.75 是 mean 512.41 的 5 倍以上，mean 也比 median 51.82 大近 10 倍——平均數與標準差在這裡已失去代表性。
@@ -73,6 +82,8 @@ jupyter nbconvert --to notebook --execute --inplace week9_outliers.ipynb
 
 ![datasetD](figures/datasetD.png)
 
+[互動版 datasetD.html](figures/datasetD.html)
+
 - 直方圖主體是單峰、大致對稱的鐘形（約 75–125），只在兩端各有少數明顯的極端值（40、45 與 160、170、180）。
 - skew = 1.33 是有離群值的四組（A–D）中最小；std = 14.31 與 IQR = 13.40 相近，表示標準差沒有被極端值大幅撐大；mean 99.48 與 median 98.47 幾乎相同。
 - 結果：Z-score 5 個、IQR 6 個，**Z-score 抓到的 5 個 IQR 全部也有抓到**，唯一差別是 137.52（z ≈ 2.69）。兩種方法結論幾乎一致。
@@ -81,9 +92,11 @@ jupyter nbconvert --to notebook --execute --inplace week9_outliers.ipynb
 
 ![datasetE](figures/datasetE.png)
 
+[互動版 datasetE.html](figures/datasetE.html)
+
 - 直方圖是**雙峰**：一群在 15–25、一群在 70–90，另外有 −10、120、150、170 幾個零星值。
 - skew = 0.26、kurtosis = −0.78 看起來「很對稱、不厚尾」，但這是雙峰造成的假象；mean 51.74 落在兩峰之間的空白區（那裡幾乎沒有資料），median 73.71 落在右峰。
-- IQR = 60.41 很大，因為 Q1（19.54）與 Q3（79.96）分別落在兩個峰裡，圍欄被撐到涵蓋所有資料 → **IQR 抓到 0 個**，Boxplot 上也沒有任何點。
+- IQR = 60.41 很大，因為 Q1（19.54）與 Q3（79.96）分別落在兩個峰裡，圍欄被撐到涵蓋所有資料 → **IQR 抓到 0 個**，Boxplot 上也沒有任何橘色 IQR 標記（IQR 圖例因此不顯示）。
 - std = 32.54 同樣被兩峰的距離撐大 → Z-score 只抓到 150、170 兩個，−10 與 120 被遮蔽。
 - 結論：單看數字 Z-score 抓到的較多，但兩種方法都假設資料只有一個中心，雙峰時都會失準；應先把兩群分開再各自做偵測。
 
