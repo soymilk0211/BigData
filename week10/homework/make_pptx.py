@@ -25,7 +25,7 @@ def fit(s, path, x, y, maxw, maxh):
 
 s = prs.slides.add_slide(blank)
 text(s, 1, 2.3, 11.3, 1, ["Week10：K-means 分群作業"], 40, True, "1d4ed8")
-text(s, 1, 3.6, 11.3, 2, ["程式：kmean.py（K-means, K=3, 200 位學生）", "分群準確度：168 / 200 = 84.00%"], 22)
+text(s, 1, 3.6, 11.3, 2, ["程式：kmean.py（K-means, K=3, 200 位學生）", "分群準確度：168 / 200 = 84.00%", "第4組：廖晢勛（B1229009）、姚睿、林敬棠、黃柏瑞"], 22)
 
 s = prs.slides.add_slide(blank); title(s, "kmean.py 執行畫面（終端機實際執行截圖）")
 fit(s, os.path.join(HERE, "run_screenshot.png"), .5, 1.05, 12.3, 5.6)
