@@ -71,6 +71,17 @@ for a, (name, xs) in zip(ax, [("原始資料(2維)", None), (best, None)]):
     # 1 維資料補 0 作為 y 軸以便繪圖
     y = Z[:, 1] if Z.shape[1] > 1 else np.zeros(len(Z))
     a.scatter(Z[:, 0], y, c=lab, cmap="viridis", s=18)
+    # 每一群畫一個虛線圈：圓心 = 群中心，半徑 = 群內離中心最遠的距離
+    P = np.column_stack([Z[:, 0], y])
+    cmap = plt.get_cmap("viridis")
+    for c in np.unique(lab):
+        pts = P[lab == c]
+        ctr = pts.mean(axis=0)
+        r = np.sqrt(((pts - ctr) ** 2).sum(axis=1)).max()
+        color = cmap(c / max(lab.max(), 1))
+        a.add_patch(plt.Circle(ctr, r, fill=False, ls="--", lw=1.5, color=color))
+        a.plot(*ctr, "x", color="red", ms=9, mew=2)
+    a.set_aspect("equal", adjustable="datalim")
     a.set_title(f"{name}　輪廓係數 = {s:.4f}")
 a0, a1 = ax
 a0.set_xlabel("中文（標準化）"); a0.set_ylabel("英文（標準化）")
