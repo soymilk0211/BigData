@@ -57,6 +57,13 @@ for ax, title, cl in ((axes[0], "K-means 分群結果", [mapping[l] for l in lab
 axes[0].set_ylabel("english")
 axes[0].scatter([c[0] for c in centers], [c[1] for c in centers], marker="X", s=200,
                 c="red", edgecolors="black", label="centroid", zorder=5)
+# 每群畫一個圈：圓心 = 群中心，半徑 = 該群離中心最遠的學生距離（把整群圈起來）
+for k, c in enumerate(centers):
+    r = max(kmean.distance(p, c) for p, l in zip(pts, labels) if l == k)
+    axes[0].add_patch(plt.Circle(c, r, fill=False, ls="--", lw=2,
+                                 color=colors[mapping[k]], zorder=4))
+for ax in axes:
+    ax.set_aspect("equal", adjustable="box")
 fig.suptitle(f"K=3 準確度 {acc:.2%}")
 fig.tight_layout()
 fig.savefig(os.path.join(HERE, "kmeans_scatter.png"), dpi=150)
