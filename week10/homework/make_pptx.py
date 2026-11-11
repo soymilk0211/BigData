@@ -1,12 +1,11 @@
 """產生繳交用 PowerPoint：kmean.py 的執行畫面截圖與分群準確度。
-截圖 (k.png / h.png / s.png) 為程式輸出的終端機畫面。"""
+執行畫面為 run_screenshot.png（終端機實際執行 kmean.py 的螢幕截圖）。"""
 import os, sys
 from pptx import Presentation
 from pptx.util import Inches, Pt
 from pptx.dml.color import RGBColor
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-SHOTS = sys.argv[1]
 prs = Presentation(); prs.slide_width, prs.slide_height = Inches(13.333), Inches(7.5)
 blank = prs.slide_layouts[6]
 
@@ -28,9 +27,9 @@ s = prs.slides.add_slide(blank)
 text(s, 1, 2.3, 11.3, 1, ["Week10：K-means 分群作業"], 40, True, "1d4ed8")
 text(s, 1, 3.6, 11.3, 2, ["程式：kmean.py（K-means, K=3, 200 位學生）", "分群準確度：168 / 200 = 84.00%"], 22)
 
-s = prs.slides.add_slide(blank); title(s, "kmean.py 執行畫面")
-fit(s, f"{SHOTS}/k.png", .5, 1.1, 7.3, 6.2)
-text(s, 8.2, 1.4, 4.7, 5, ["只用標準庫 csv / math / random", "隨機選 3 個中心 → 分配 → 更新中心，重複直到收斂（11 次）", "固定亂數種子、跑 10 次取 SSE 最小", "群編號與 A/B/C 無固定對應，取 6 種對應中最高者", "", "分群準確度 = 168 / 200 = 84.00%"], 17)
+s = prs.slides.add_slide(blank); title(s, "kmean.py 執行畫面（終端機實際執行截圖）")
+fit(s, os.path.join(HERE, "run_screenshot.png"), .5, 1.05, 12.3, 5.6)
+text(s, .5, 6.75, 12.3, .6, ["python3 kmean.py：只用標準庫 csv / math / random，K=3；分群準確度 Accuracy = 168 / 200 = 84.00%"], 18, True)
 
 s = prs.slides.add_slide(blank); title(s, "K-means 分群結果 vs 真實群（準確度 84.00%）")
 fit(s, os.path.join(HERE, "kmeans_scatter.png"), .5, 1.2, 12.3, 6)
