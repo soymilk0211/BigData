@@ -1,0 +1,146 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@page{size:A4;margin:16mm} body{font-family:"Noto Sans CJK TC","WenQuanYi Zen Hei",sans-serif;font-size:11pt;line-height:1.6;color:#222}
+h1{font-size:20pt;color:#1d4ed8;margin-bottom:2px} h2{font-size:14pt;color:#1d4ed8;border-bottom:2px solid #1d4ed8;padding-bottom:2px;margin-top:22px}
+pre{background:#f4f4f5;padding:8px;font-size:8.5pt;white-space:pre-wrap;border-radius:4px;font-family:"Noto Sans Mono CJK TC",monospace}
+img{max-width:100%;border:1px solid #ccc;margin:6px 0} table{border-collapse:collapse;margin:8px 0} td,th{border:1px solid #999;padding:4px 12px;text-align:center}
+th{background:#e0e7ff} .cap{font-size:9.5pt;color:#555;margin-top:-2px} .pb{page-break-before:always}
+</style></head><body>
+<h1>Week10 作業：PCA 與 K-means 分群分析</h1>
+<div>學號 B1229009　廖晢勛　｜　資料：students_200.csv（200 位學生的 chinese、english 成績）</div>
+
+<h2>一、分析步驟與過程說明</h2>
+<ol>
+<li><b>讀取與標準化</b>：讀入 students_200.csv，只取 chinese、english 兩欄（student_id、true_cluster 不參與分群），以 StandardScaler 標準化，使兩科在相同尺度上計算距離。</li>
+<li><b>原始資料分群</b>：對標準化後的原始 2 維資料使用 KMeans(n_clusters=3, n_init=10, random_state=42) 分群，計算 silhouette score。</li>
+<li><b>PCA 降維</b>：對標準化資料做 PCA，計算各主成分的特徵值、貢獻率與累積貢獻率，並畫出 Scree Plot。</li>
+<li><b>嘗試不同維度</b>：分別取 n_components = 1、2，各自重新用 KMeans(n=3) 分群並計算 silhouette score。<br>
+※ 題目建議可嘗試 1、2、3 維；但本資料只有 2 個特徵，PCA 的主成分數上限為 min(樣本數, 特徵數) = 2，因此無法降到 3 維，只比較 1 維與 2 維。</li>
+<li><b>比較並選出最適維度</b>：以 silhouette score 最高者為最佳降維維度。</li>
+</ol>
+
+<h2>二、使用 AI 工具協助的截圖</h2>
+<p>使用 AI 工具：Claude Code（Claude Pro），在終端機中下指令請 AI 撰寫並執行程式。</p>
+<img src="ai_screenshots/claude_1.png"><div class="cap">圖 1：向 Claude Code 輸入分析需求，AI 開始產生程式</div>
+<img src="ai_screenshots/claude_2.png"><div class="cap">圖 2：AI 撰寫 pca_kmeans.py 並請求執行權限</div>
+<img src="ai_screenshots/claude_3.png"><div class="cap">圖 3：AI 執行程式後的輸出（特徵值、貢獻率、silhouette score、比較表）</div>
+<img src="ai_screenshots/claude_4.png"><div class="cap">圖 4：確認輸出檔案</div>
+
+<h2 class="pb">三、程式碼（pca_kmeans.py）</h2>
+<pre>import numpy as np
+import pandas as pd
+import matplotlib
+
+matplotlib.use(&quot;Agg&quot;)
+import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
+from sklearn.decomposition import PCA
+from sklearn.metrics import silhouette_score
+from sklearn.preprocessing import StandardScaler
+
+plt.rcParams[&quot;font.sans-serif&quot;] = [&quot;Noto Sans CJK TC&quot;, &quot;Noto Sans CJK JP&quot;, &quot;Microsoft JhengHei&quot;, &quot;PingFang TC&quot;, &quot;SimHei&quot;, &quot;DejaVu Sans&quot;]
+plt.rcParams[&quot;axes.unicode_minus&quot;] = False
+
+df = pd.read_csv(&quot;../teacher/students_200.csv&quot;)
+X = StandardScaler().fit_transform(df[[&quot;chinese&quot;, &quot;english&quot;]])
+
+
+def run_kmeans(data):
+    labels = KMeans(n_clusters=3, n_init=10, random_state=42).fit_predict(data)
+    return labels, silhouette_score(data, labels)
+
+
+# 1) 原始資料
+labels0, s0 = run_kmeans(X)
+print(f&quot;【原始資料（2 維，標準化後）】輪廓係數 = {s0:.4f}&quot;)
+
+# 2) PCA
+pca = PCA().fit(X)
+ev, evr = pca.explained_variance_, pca.explained_variance_ratio_
+cum = np.cumsum(evr)
+print(&quot;\n【PCA 結果】&quot;)
+for i in range(len(ev)):
+    print(f&quot;  PC{i+1}：特徵值 = {ev[i]:.4f}，解釋變異比例 = {evr[i]:.4f}，累積解釋變異比例 = {cum[i]:.4f}&quot;)
+print(&quot;\n註：PCA 的主成分數量上限 = min(樣本數, 特徵數) = 2（只有 chinese、english 兩個特徵），&quot;)
+print(&quot;    主成分彼此正交，2 維空間最多只有 2 個互相正交的方向，因此無法取 n_components=3。&quot;)
+
+results = {&quot;原始資料(2維)&quot;: (s0, X, labels0)}
+for k in (1, 2):
+    Z = PCA(n_components=k).fit_transform(X)
+    lab, s = run_kmeans(Z)
+    results[f&quot;PCA {k} 維&quot;] = (s, Z, lab)
+    print(f&quot;\n【PCA n_components={k}】輪廓係數 = {s:.4f}&quot;)
+
+# 3) 比較表
+print(&quot;\n【比較表】&quot;)
+print(f&quot;{&#x27;資料維度&#x27;:&lt;14}{&#x27;輪廓係數&#x27;:&gt;10}{&#x27;累積解釋變異&#x27;:&gt;14}&quot;)
+cums = {&quot;原始資料(2維)&quot;: 1.0, &quot;PCA 1 維&quot;: cum[0], &quot;PCA 2 維&quot;: cum[1]}
+for name, (s, _, _) in results.items():
+    print(f&quot;{name:&lt;14}{s:&gt;10.4f}{cums[name]:&gt;14.4f}&quot;)
+
+pca_names = [&quot;PCA 1 維&quot;, &quot;PCA 2 維&quot;]
+best = max(pca_names, key=lambda n: results[n][0])
+print(f&quot;\n【結論】最佳 PCA 維度：{best}（輪廓係數 {results[best][0]:.4f}）&quot;)
+
+# 4) 圖
+plt.figure(figsize=(6, 4))
+plt.plot([1, 2], ev, &quot;o-&quot;)
+plt.axhline(1, ls=&quot;--&quot;, c=&quot;gray&quot;, label=&quot;特徵值 = 1&quot;)
+plt.xticks([1, 2])
+plt.xlabel(&quot;主成分&quot;)
+plt.ylabel(&quot;特徵值&quot;)
+plt.title(&quot;陡坡圖 (Scree Plot)&quot;)
+plt.legend()
+plt.tight_layout()
+plt.savefig(&quot;scree.png&quot;, dpi=150)
+
+fig, ax = plt.subplots(1, 2, figsize=(11, 4.5))
+for a, (name, xs) in zip(ax, [(&quot;原始資料(2維)&quot;, None), (best, None)]):
+    s, Z, lab = results[name]
+    # 1 維資料補 0 作為 y 軸以便繪圖
+    y = Z[:, 1] if Z.shape[1] &gt; 1 else np.zeros(len(Z))
+    a.scatter(Z[:, 0], y, c=lab, cmap=&quot;viridis&quot;, s=18)
+    a.set_title(f&quot;{name}　輪廓係數 = {s:.4f}&quot;)
+a0, a1 = ax
+a0.set_xlabel(&quot;中文（標準化）&quot;); a0.set_ylabel(&quot;英文（標準化）&quot;)
+a1.set_xlabel(&quot;PC1&quot;); a1.set_ylabel(&quot;PC2&quot; if best == &quot;PCA 2 維&quot; else &quot;（1 維，y 固定為 0）&quot;)
+plt.tight_layout()
+plt.savefig(&quot;pca_kmeans_compare.png&quot;, dpi=150)
+</pre>
+
+<h2>四、輸出結果</h2>
+<pre>【原始資料（2 維，標準化後）】輪廓係數 = 0.4540
+
+【PCA 結果】
+  PC1：特徵值 = 1.7745，解釋變異比例 = 0.8828，累積解釋變異比例 = 0.8828
+  PC2：特徵值 = 0.2356，解釋變異比例 = 0.1172，累積解釋變異比例 = 1.0000
+
+註：PCA 的主成分數量上限 = min(樣本數, 特徵數) = 2（只有 chinese、english 兩個特徵），
+    主成分彼此正交，2 維空間最多只有 2 個互相正交的方向，因此無法取 n_components=3。
+
+【PCA n_components=1】輪廓係數 = 0.6122
+
+【PCA n_components=2】輪廓係數 = 0.4540
+
+【比較表】
+資料維度                輪廓係數        累積解釋變異
+原始資料(2維)          0.4540        1.0000
+PCA 1 維           0.6122        0.8828
+PCA 2 維           0.4540        1.0000
+
+【結論】最佳 PCA 維度：PCA 1 維（輪廓係數 0.6122）
+</pre>
+<img src="scree.png" style="max-width:65%"><div class="cap">圖 5：Scree Plot（PC1 特徵值 1.7745，貢獻率 88.28%，已超過 80%）</div>
+<img src="pca_kmeans_compare.png"><div class="cap">圖 6：原始資料（2 維）與 PCA 1 維的 K-means 分群結果</div>
+
+<h2>五、降維前後的 silhouette score 比較</h2>
+<table><tr><th>資料維度</th><th>Silhouette score</th><th>累積解釋變異</th></tr>
+<tr><td>原始資料（2 維，標準化）</td><td>0.4540</td><td>100.00%</td></tr>
+<tr><td>PCA 1 維</td><td><b>0.6122</b></td><td>88.28%</td></tr>
+<tr><td>PCA 2 維</td><td>0.4540</td><td>100.00%</td></tr></table>
+<p><b>結論：最適降維維度為 PCA 1 維</b>（silhouette score 0.6122，高於原始資料的 0.4540）。</p>
+<ul>
+<li>PC1 一個主成分就保留了 88.28% 的資料變異，超過 80% 的門檻，足以代表主要資料結構。</li>
+<li>PCA 2 維只是把標準化後的資料做旋轉，點與點之間的距離不變，所以分群結果與 silhouette score 都和原始資料相同（0.4540）。</li>
+<li>降到 1 維後，去掉了變異較小的 PC2 方向（多為雜訊），各群在 PC1 上分得更開、群內更緊密，因此 silhouette score 提高到 0.6122。</li>
+</ul>
+</body></html>
