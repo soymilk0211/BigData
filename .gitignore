@@ -1,0 +1,6 @@
+# week11: local working files, drafts, logs (not committed)
+week11/work/
+week11/homework/
+week11/topic-research.md
+week11/**/*.log
+week11/**/*.err

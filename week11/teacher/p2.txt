@@ -1,0 +1,221 @@
+從範本建立自己的 skill
+                 1
+AI Agent 建立策略
+透過既有的 skill 範本，
+
+先由 使用者 撰寫 需求描述，接著交由 AI 自動化完成整個 skill 的建置流程。
+
+優勢：AI 依據需求生成對應的 skills 檔案，也能產出相關程式碼。
+
+技巧：需求描述要盡量明確，每一個 Agent 負責一個功能。
+
+
+
+
+                                              2
+Skills 架構
+專案資料夾/
+ ├──SKILL.md       核心指令，500 行以內 （必填）
+ ├──agents/        代理人（一隻代理人搭配一個 .md檔案）
+ │   ├──代理人1.md
+ │   ├──代理人2.md
+ │   └──代理人3.md
+ ├──scripts/ （選填）
+ │   ├── 程式1.md
+ │   ├── 程式2.md
+ │   └── 程式3.md
+ ├──references/ （選填）
+ │   ├── 技術手冊1.md
+ │   ├── 技術手冊2.md
+ │   └── 技術手冊3.md
+ └──assets/ （選填，「輸出模板」，例如報告架構、文件骨架範例。）
+     ├── 計畫申請注意事項.pdf/.pptx/.txt
+     ├── manuscript_template.pdf
+     └── 結案報告範例.pdf
+
+
+                                          3
+模板 Skill 架構
+              設計原則
+              - 模組化：每個檔案只負責一件事
+              - 漸進揭露：不需要的資訊不要載入
+              - 平台無關：核心結構兩平台通用 (Claude/Antigravity)
+              - 可擴展：隨需求成長，不需要一開始就用滿所有資料夾
+
+
+                 蒐集 à 產出 à 檢查
+                 三位代理人技能範本
+
+
+
+
+                                               4
+             本模板由 Claude 生成，原則
+Skill 範例模板   為易讀懂、好維護、作為後續
+             自動生成其他 Skill 的模板
+
+                         5
+skill-template.zip
+
+
+
+
+                     註：Skill 的格式非常彈性，請以此為參考
+                     未來可再由AI根據需修改skill模板
+                                   6
+SKILL.md
+           一定要有 (只寫這一個檔案也可以運作)
+
+           l 開頭有一個「標頭」（YAML frontmatter），告訴 AI 這
+             個 Skill 叫什麼、什麼時候要用
+
+           l 主體包含工作流程、分工表、輸出格式等
+
+           l 會「永遠」留在 AI 的 context ，AI 會根據 name +
+             description 來決定是否啟用本 Skill。
+
+
+
+
+                                               7
+agents/ (1/2)
+                代理人指令
+
+                l 把一個大任務拆成幾個子任務，每個子任務由一位
+                  「虛擬助手」（代理人）負責。每個 .md 檔案就是一
+                  位代理人的詳細工作指引。
+
+                類比： 一個大型實驗計畫中的分工表
+                l researcher.md → 負責查找資料的人
+                l writer.md → 負責撰寫報告的人
+                l reviewer.md → 負責檢查品質的人
+
+
+
+
+                                             8
+      agents/ (2/2)
+
+臨床試驗文獻回顧 Skill：                                 合成路徑規劃 Skill：
+
+代理人      職責                                     代理人       職責
+搜尋員      到 PubMed、ClinicalTrials.gov 搜尋文獻       路徑搜尋員      搜尋已知的合成路徑與反應條件
+
+篩選員      根據 inclusion/exclusion criteria 篩選文獻   可行性評估員     評估每條路徑的產率、成本、安全性
+
+分析員      萃取數據、評估偏誤風險                            報告員       整理成路徑比較表與推薦方案
+
+
+
+
+                                                                          9
+scripts/   自動化腳本
+
+           l 讓 AI 直接執行的程式碼，通常是 Python 或 Shell 腳本。
+           l 不需要自己會寫程式。 由 AI 幫你寫腳本，放在這個資
+             料夾裡。之後執行 Skill 時，能直接呼叫這些腳本。
+
+           l 什麼時候需要腳本？
+              當任務涉及跟外部系統互動時
+              l 呼叫 PubMed API 搜尋文獻
+              l 讀取 CSV / Excel 檔案並做計算
+              l 呼叫化學資料庫（如 PubChem）查詢分子資訊
+              l 把數據轉換成特定格式
+
+           l 什麼時候不需要？
+              指導 AI 如何思考和回答
+              l 教 AI 用你的 SOP 格式撰寫實驗報告
+              l 教 AI 按照特定邏輯分析文獻
+              l 教 AI 用你實驗室的命名規範來整理資料
+
+                                            10
+assets/   輸出模板
+
+          最終產出物的「骨架」。當你希望 AI 產出的報告、文件有固
+          定的格式和結構時，把模板放在這裡。
+
+          類比： 你的 lab notebook 模板、期刊投稿的 Word 模板、規
+          定的報告格式。
+
+          範例：
+          irb-application-template.md：IRB 倫理審查申請書的格式範本
+          case-report-template.md — 個案報告模板（含 CARE 清單欄位）
+          safety-assessment-template.md — 化學品安全評估報告模板
+          analytical-report-template.md — 分析報告模板（含 QC 數據格
+          式）
+
+
+
+
+                                                11
+根據模板建立 AI Agents
+                   12
+讓AI根據模板建立 AI Agents 範例 (1/3)
+                                      文句不通順
+草稿：                                           、細節不具
+                                                      體、任務不
+                                                               夠明確
+幫我根據上述的skill模板 (skill-template.zip)，建立一個 pubmed文獻蒐集的 ai
+agents, 我希望有三個Agents, 第一個agent 跟使用這對話，蒐集使用者要找的文獻
+領域關鍵詞，利用對話跟使用者明確出要找的文獻屬性（例如：方法文獻、新
+發現、Review類型），統整出關鍵詞、文獻描述、pubmed或google scholar的
+search terms， 第二個agent 為到pubmed抓下30篇（或讓用者挑選）標題，根據文
+獻摘要做初步分類， 第三個agent 幫使用者下載根據大分類選出的文章摘要
+
+
+                                                          13
+    讓AI根據模板建立 AI Agents 範例 (2/3)
+貼到任何一個網頁AI (例如 Google AI 模式)
+
+
+
+
+潤飾以下的prompt：
+
+幫我根據上述的skill模板 (skill-template.zip)，建
+立一個 pubmed文獻……
+
+                                        14
+讓AI根據模板建立 AI Agents 範例 (3/3)
+請根據提供的 skill 模板（skill-template.zip），建立一個用於 PubMed 文獻蒐集的 AI Agents 系統。
+
+系統需包含三個 Agent，並具備以下功能與流程：
+
+Agent 1：需求釐清與搜尋策略生成
+負責與使用者進行對話，逐步蒐集並釐清文獻搜尋需求，包括研究領域、關鍵字與文獻類型（例如：方法學研究、最新研究發現、Review 等）。
+最終需整理並輸出：
+
+關鍵字（Keywords）
+
+文獻需求描述（Research Intent）
+
+可用於 PubMed 或 Google Scholar 的搜尋語句（Search Queries）
+
+Agent 2：文獻抓取與初步分類
+根據 Agent 1 產生的搜尋語句，從 PubMed 擷取約 30 篇文獻（或提供使用者自訂數量的選項）。
+針對每篇文獻的標題與摘要進行分析，並完成初步分類（例如：研究類型、主題分類等）。
+
+Agent 3：摘要整理與輸出
+依據使用者選擇的分類結果，彙整並輸出對應文獻的摘要內容，提供結構化整理，協助使用者快速掌握重點。
+
+其他要求
+
+請依照 skill 模板自動生成所有必要的 skills 檔案與相關程式碼
+
+系統架構需清楚區分三個 Agents 的責任與資料流
+
+輸出內容應具備良好的可讀性與可擴展性
+                                                                        15
+測試你的AI Agent
+步驟一：打開 SKILL.md 檔案，觀察是否有完整涵蓋規格，如果不完備，可直接
+修改SKILL.md檔案的內容。
+
+
+
+步驟二：輸入三～五個問題，觀察SKILL 是否有被啟動；如果不滿意，重新修
+正前述的需求文字，讓各Agent的分工更明確、觸發條件更清晰、輸出的結果
+更格式化。
+
+
+                                           16
+
