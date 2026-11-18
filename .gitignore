@@ -5,3 +5,4 @@ week11/homework/team-XX-skill/**/__pycache__/
 week11/topic-research.md
 week11/**/*.log
 week11/**/*.err
+week11/homework/team-XX-skill/test-logs/.*
