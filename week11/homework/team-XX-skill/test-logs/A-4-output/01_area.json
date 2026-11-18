@@ -1,0 +1,24 @@
+{
+  "area_status": "resolved",
+  "targets": [
+    {
+      "city": "桃園市",
+      "city_code": "h",
+      "district": "龜山區",
+      "area_key": "桃園市|龜山區",
+      "area_source": "user_explicit",
+      "matched_text": "龜山區",
+      "in_rent_data": true
+    }
+  ],
+  "destination": {
+    "label": "長庚大學",
+    "city": "桃園市",
+    "district": "龜山區",
+    "source": "school_lookup"
+  },
+  "ambiguities": [],
+  "missing": [],
+  "question": null,
+  "district_quirk": null
+}

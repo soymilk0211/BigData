@@ -54,8 +54,10 @@ jq -c 'select(.type=="assistant") | .message.content[]? | select(.type=="tool_us
 | N3-1 | 近似（法規問答） | 「租屋押金法規上限是多少？」 | 不啟動 | 回答 2 個月並附條文 | Skill 呼叫 0 | PASS |
 | N4-1 | 近似（房東角度） | 「我想把台中的房子出租，租金該訂多少？」 | 不啟動 | 反問物件條件 | Skill 呼叫 0 | PASS |
 | N1-1 | — | 同 N1-2 | — | 執行中碰到帳號用量上限（`is_error=true`） | `N1-1.jsonl` | **無效**，以 N1-2 重跑 |
+| A-4 | 應啟動（完整，SKILL.md v2 回歸） | 測試 A 原文 | 同 A-1 | 符合：12618、略過 devil-advocate、PASS | `A-4.jsonl` E1 第 27 行；Read 4 個角色檔 | PASS |
+| B-4 | 改寫後仍應啟動（完整，SKILL.md v2 回歸） | 測試 B 原文 | 同 B-1 | 符合：school_lookup、L2 第 1、L1 R3＋R6 high、devil-advocate、PASS | `B-4.jsonl` E1 第 30 行；Read 5 個角色檔 | PASS |
 
-穩定性：A 3/3、B 3/3 自動啟動；C 3/3 未啟動；近似與邊界題 6/6 未啟動。每個反向 log 的 E0 都顯示 Skill 已安裝，所以「沒啟動」是模型依 description 判斷的結果。
+穩定性：A 4/4、B 4/4 自動啟動（含 v2 回歸各 1 次）；C 3/3 未啟動；近似與邊界題 6/6 未啟動。每個反向 log 的 E0 都顯示 Skill 已安裝，所以「沒啟動」是模型依 description 判斷的結果。
 
 兩個 agent 的完整明細：`test-logs/agent1-positive-results.md`（.json）、`test-logs/agent2-negative-results.md`（.json）。
 
@@ -94,7 +96,7 @@ jq -c 'select(.type=="assistant") | .message.content[]? | select(.type=="tool_us
 
 ### 4.1 description（觸發條件）：首次即通過
 
-`SKILL.md` 的 frontmatter 以規格書 2.4 節的 v1 為基礎（加上 591 一句），在第一次正式測試就全部通過：A、B 自動啟動 3/3，C 與 6 題邊界、近似題 0 誤觸發。依規格書 13.6「誠實原則」，**沒有為了製造失敗而改壞 description**，所以沒有 description 的 v2；`test-logs/SKILL.v1.md` 就是受測版本，與目前的 `SKILL.md` 相同（`diff -q` 無差異）。
+`SKILL.md` 的 frontmatter 以規格書 2.4 節的 v1 為基礎（加上 591 一句），在第一次正式測試就全部通過：A、B 自動啟動 3/3，C 與 6 題邊界、近似題 0 誤觸發。依規格書 13.6「誠實原則」，**沒有為了製造失敗而改壞 description**，所以沒有 description 的 v2；`test-logs/SKILL.v1.md` 就是受測版本。之後 SKILL.md 本體為對齊範本而改版（4.3 節），frontmatter 前 14 行與 v1 完全相同。
 
 最容易誤觸發的近似題是 N3（押金法規）與 N4（房東想出租），兩題都有「租屋」主題，但 description 的「學生找房」與「不要用於」讓模型改用一般回答；N3 的回答結尾只提議「可以貼刊登給我看」，沒有呼叫 Skill。
 
@@ -112,7 +114,17 @@ jq -c 'select(.type=="assistant") | .message.content[]? | select(.type=="tool_us
 | 6 | 591 的電費與水費寫法多樣（「臺電繳費」「5.5元/度」「100元/月」「免管理費」）解析不到 | 只處理了部分寫法 | `candidates.py` 補上這些寫法；「臺電／台電計價」視為電價未驗證、不計 | 單元檢查通過 |
 | 7 | 測試腳本在本環境沒有 `rsync`；log 仍殘留 `/tmp/` 路徑 | 環境差異、去識別規則不足 | 改用 `tar`；sed 另外遮蔽 `/tmp/…` | 所有 `.jsonl` 掃描 `/tmp/`、`/home/`、`/root/` 皆 0 |
 
-### 4.3 無效執行
+### 4.3 SKILL.md 本體 v1 → v2：對齊老師範本章節
+
+正式測試後，對照老師的 `skill-template.zip`，發現 SKILL.md 的內容雖然齊全，但章節名稱與順序和範本不同、缺「範例」一節；角色檔也沒有獨立列出「輸入／處理任務／輸出／交接格式」。修正：
+
+- SKILL.md 改為範本的九節：概述、前置條件、核心工作流程、代理人分工、輸出格式、邊界案例與限制、參考資料索引、可用腳本、範例（183 行）。
+- 五個角色檔開頭加上「輸入／處理任務／輸出／交接格式／不做」表。
+- **description 一字未改**（觸發條件不變）。
+
+證據：`test-logs/SKILL.v1.md`、`test-logs/SKILL.v2.md`、`test-logs/SKILL.v1-v2.diff`（`diff -u`）。修改後以同樣提示詞重跑完整流程 A-4、B-4，結果與 A-1、B-1 一致（自動啟動、依序讀角色檔、審查 PASS、`validate.py` 結束碼 0）。
+
+### 4.4 無效執行
 
 第一次啟動兩個測試 agent 時，帳號碰到 5 小時用量上限，A-1、B-1、N1-1 的執行被中斷（log 結尾 `is_error = true`、「You've hit your 5-hour limit」）。A-1、B-1 的中斷 log 已刪除並重跑；N1-1 保留作為紀錄，以 N1-2 重跑。這些中斷不計入成功或失敗。
 
