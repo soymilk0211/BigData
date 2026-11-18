@@ -1,0 +1,17 @@
+{
+  "mode": "area",
+  "city": "桃園市",
+  "district": "龜山區",
+  "started_at": "2026-11-18T17:26:16+08:00",
+  "errors": [],
+  "source": "591 租屋網（刊登租金，非成交價）",
+  "reference": "https://github.com/ryk001/Rent591Watcher",
+  "region_id": "6",
+  "section_id": "74",
+  "listing_total_on_site": 792,
+  "requests": 209,
+  "list_rows": 792,
+  "detail_rows": 181,
+  "finished_at": "2026-11-18T17:36:36+08:00",
+  "status": "ok"
+}
