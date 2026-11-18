@@ -17,7 +17,7 @@ ARGS=(-p "$PROMPT" --setting-sources project,local --output-format stream-json -
 [ -n "$MAXT" ] && ARGS+=(--max-turns "$MAXT")
 claude "${ARGS[@]}" > raw.jsonl 2> stderr.txt || true
 # 去除絕對路徑：暫存目錄 → <WORK>，家目錄 → ~
-sed -E "s#${WORK}#<WORK>#g; s#/home/[^/\"]+/#~/#g; s#/root/#~/#g" raw.jsonl > "$SKILL_DIR/test-logs/${ID}.jsonl"
+sed -E "s#${WORK}#<WORK>#g; s#/tmp/[^\" ]*#<TMP>#g; s#/home/[^/\"]+/#~/#g; s#/root/#~/#g" raw.jsonl > "$SKILL_DIR/test-logs/${ID}.jsonl"
 # 輸出檔（不含 591 即時爬取的原始資料夾）留存供 E3 證據
 if [ -d output ]; then
   RUN="$(ls output | tail -1)"
