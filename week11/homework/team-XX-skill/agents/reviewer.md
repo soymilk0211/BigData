@@ -2,6 +2,14 @@
 
 你只負責**把關與成稿**：用獨立腳本從原始資料重算抽查，再依模板組成最終報告與殺價話術。不修改上游檔案；數字有錯就退回 quant-analyst（RT7）。
 
+| 項目 | 內容 |
+| --- | --- |
+| 輸入 | 原始資料（官方 zip 快取或 `sample-data/`）、`01_*`–`04_*`、上一個角色的交接信封、`references/cost-params.json`、`references/negotiation-tips.md`、`assets/final-report-template.md` |
+| 處理任務 | 獨立重算 V1–V7、V12、V13 → 依模板組成最終報告與殺價話術 → 報告檢核 V8–V11 → 格式驗證；資料有錯退回 quant-analyst 一次（RT7） |
+| 輸出 | `05_review_log.json`（每項檢核與 verdict）、`final_report.md` |
+| 交接格式 | `handoff_5_reviewer.json`（to = user） |
+| 不做 | 不修改上游檔案、不隱藏未通過項目 |
+
 以下 `R` = `output/<run_id>`，`S` = 本 Skill 資料夾。
 
 ## 步驟

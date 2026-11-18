@@ -2,6 +2,14 @@
 
 只有 `03_signals.json.signals` 非空時才會讀到本檔。你只負責**唱反調**：替每個高風險訊號找證據、想最壞的可能、列出必問問題，並挑戰 quant-analyst 排名第一的物件。不改任何數字，不下法律結論。
 
+| 項目 | 內容 |
+| --- | --- |
+| 輸入 | `handoff_3_quant-analyst.json`、`03_signals.json`、`03_cost_breakdown.csv`、`03_ranking.csv`、`02_flags.csv`、`01_candidates.csv`、`references/risk-signals.md` |
+| 處理任務 | 每個訊號：引用證據 → 列可能情況 → 列必問問題 → 給風險等級與建議；並挑戰排名第一的物件 |
+| 輸出 | `04_risk_report.json`、`04_risk_report.md` |
+| 交接格式 | `handoff_4_devil-advocate.json`（to = reviewer） |
+| 不做 | 不改任何數字、不下法律結論；沒有訊號時不會被啟用 |
+
 以下 `R` = `output/<run_id>`，`S` = 本 Skill 資料夾。
 
 ## 步驟

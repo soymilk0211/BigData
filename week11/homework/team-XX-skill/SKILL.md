@@ -17,21 +17,33 @@ description: >
 
 > 學生指定地區與候選物件（或只問行情），由五個角色依序完成：蒐集 → 標記 → 精算 →（有風險才）踩雷檢查 → 審查重算，產出 `final_report.md`。數字一律來自腳本，判斷與文字由角色負責。
 
-## 1. 三條底線
+---
 
+## 1. 概述（Overview）
+
+學生判斷「這間房貴不貴、值不值得」時，常遇到三個問題：行情無從比較、只看月租而忽略隱藏成本、踩雷訊號不易察覺。本 Skill 用內政部實價登錄租賃資料算行情，用 591 刊登資料補物件細節與刊登價對照，算出真實每月總成本，有高風險訊號才啟用踩雷檢查，最後由審查員從原始資料獨立重算抽查。
+
+三條底線：
 - **不猜**：物件事實（管理費、水電瓦斯網路、押金、通勤分鐘、坪數）沒寫就是「未提供」，寫進報告，不補預設值。地區只能來自使用者、學校查表、地址解析或使用者確認。
 - **兩種租金分開**：實價登錄租金是行情依據；591 刊登租金只並列比較，永不合併進同一分組。
-- **不洩漏**：輸出不含門牌、姓名、電話、LINE；591 原始網頁不保存。
+- **不洩漏**：輸出不含門牌、姓名、身分證字號、電話、LINE；591 原始網頁不保存。
 
-## 2. 主流程（你是協調者）
+## 2. 前置條件（Prerequisites）
 
-`<skill>` 指本 Skill 資料夾（含本檔的目錄）。每個角色的指令一律用 **Read 工具**開啟 `<skill>/agents/<角色>.md`：log 中的 Read 紀錄就是「依分工執行」的證據，所以每個角色各讀一次。所有輸出寫在目前工作目錄的 `output/<run_id>/`（`run_id` = 台北時間 `YYYYMMDD-HHMMSS`）。每個角色開工前先讀上一個角色的**交接信封**，完工時寫自己的：`handoff_<n>_<角色>.json`，欄位 `handoff_version`（"1.0"）、`run_id`、`from`、`to`、`artifacts`（`[{"path", "rows"}]`）、`status`（ok／partial／failed）、`warnings`、`next_hint`。
+- Python 3.10+：`pip install pandas numpy matplotlib requests`
+- `node`：解析 591 頁面內嵌資料
+- 中文字型（Noto Sans CJK、文泉驛正黑等）：沒有時圖表改英文標籤
+- 網路：`plvr.land.moi.gov.tw`（實價登錄）、`rent.591.com.tw`（591）；連不上時自動改用 `sample-data/`（只涵蓋龜山、林口、西屯）
+
+## 3. 核心工作流程（Core Workflow）
+
+`<skill>` 指本 Skill 資料夾（含本檔的目錄）。所有輸出寫在目前工作目錄的 `output/<run_id>/`（`run_id` = 台北時間 `YYYYMMDD-HHMMSS`）。每個角色的指令一律用 **Read 工具**開啟 `<skill>/agents/<角色>.md`：log 中的 Read 紀錄就是「依分工執行」的證據，所以每個角色各讀一次。
 
 ### 步驟 0：建立 run 與路由
 
 1. 建立 `output/<run_id>/`，把使用者原話存成 `request.txt`。
 2. 判斷模式：訊息中有月租數字的候選物件 0 間 → `market_only`；1 間 → `single`；≥ 2 間 → `compare`。使用者貼 591 網址或刊登內容也算一間。
-3. 判斷是否互動：預設為**非互動**（使用者的這一則訊息就是全部輸入，例如 `claude -p` 單次執行），此時不追問，改走第 4 節的非互動規則；只有在對話中使用者已表示可以回答追問時才算互動。
+3. 判斷是否互動：預設為**非互動**（使用者的這一則訊息就是全部輸入，例如 `claude -p` 單次執行），此時不追問，改走第 6 節的非互動規則；只有在對話中使用者已表示可以回答追問時才算互動。
 4. 寫 `00_routing.json`：`run_id`、`skill`、`mode`、`candidate_count`、`interactive`、`agents_planned`（先列四個必跑角色）、`agents_skipped: []`、`signals: []`、`warnings: []`。
 
 完成條件：`00_routing.json` 存在且 `mode` 有值。
@@ -40,7 +52,7 @@ description: >
 
 用 Read 工具讀 `<skill>/agents/collector.md` 並照做。完成條件：`01_area.json` 存在；若 `area_status = resolved`，另有 `01_collected.csv`、`01_candidates.csv`、`01_collect_manifest.json` 與 591 資料（或失敗原因）。
 
-若 `area_status = unresolved` → 直接跳到第 4 節「地區無法確定」，不讀其他角色。
+若 `area_status = unresolved` → 直接跳到第 6 節「地區無法確定」，不讀其他角色。
 
 ### 步驟 2：fact-checker 時效驗證員
 
@@ -57,7 +69,7 @@ description: >
 - `signals` 非空 → 把 `devil-advocate` 加入 `agents_planned`，用 Read 工具讀 `<skill>/agents/devil-advocate.md` 並照做。完成條件：`04_risk_report.json` 與 `04_risk_report.md` 存在。
 - `signals` 為空 → 在 `agents_skipped` 加 `{"agent": "devil-advocate", "reason": "no_high_risk_signal"}`，**不要讀** `agents/devil-advocate.md`（測試以「沒有讀這個檔」作為路由證據）。
 
-### 步驟 5：reviewer 審查員
+### 步驟 5：reviewer 審查員（品質檢查）
 
 用 Read 工具讀 `<skill>/agents/reviewer.md` 並照做。完成條件：`05_review_log.json.verdict` 為 PASS，或已重試一次後如實標示 FAIL；`final_report.md` 完成；`scripts/validate.py` 結束碼 0。
 
@@ -65,7 +77,7 @@ description: >
 
 用 5–8 行繁體中文回覆：分析地區與來源、一句話結論、真實每月總成本（已知項目合計與未提供項目）、是否有高風險訊號、審查結果，以及**未驗證項目**（`cost-params.json` 中 `status = 未驗證` 的參數、`03_signals.json.not_evaluated`），最後附 `final_report.md` 路徑。
 
-## 3. 路由規則
+### 路由規則
 
 | ID | 條件 | 動作 | 證據 |
 | --- | --- | --- | --- |
@@ -78,37 +90,94 @@ description: >
 | RT9 | 官方下載失敗 | 改用 sample-data | manifest `data_mode = offline_sample` |
 | RT10 | 候選物件缺月租 | 互動：追問一次；非互動：標 incomplete 後繼續 | `01_candidates.csv.status` |
 | RT11 | 只要殺價話術 | 仍跑完整流程（話術要行情數字） | 報告附錄 |
-| RT12–13 | 地區唯一確定／缺少或歧義 | 照常／見第 4 節 | `01_area.json.area_status` |
+| RT12–13 | 地區唯一確定／缺少或歧義 | 照常／見第 6 節 | `01_area.json.area_status` |
 | RT14 | 分組有效樣本 < 10 | 合併類型 → 全縣市 → insufficient，逐步記錄 | `03_market_stats.csv.fallback` |
 | RT15 | 有 591 資料 | 刊登租金另算 `03_asking_stats.csv`，不進行情 | reviewer V13 |
 
-## 4. 例外處理
+## 4. 代理人分工（Agent Delegation）
 
-- **地區無法確定（RT13）**：互動模式追問一次 `01_area.json.question`，使用者回覆後以 `--confirmed 縣市|區` 重跑 `resolve_area.py`。非互動模式：不下載、不計算；依 `assets/final-report-template.md` 的「追問版」寫 `final_report.md`（第一行「本次分析地區：未確定」，列出候選地區與追問句），在 `agents_skipped` 加入 fact-checker、quant-analyst、devil-advocate、reviewer（`reason = area_unresolved`），再跑 `validate.py`。
+| 代理人 | 檔案路徑 | 負責任務 | 輸入 | 輸出 | 何時啟用 |
+| --- | --- | --- | --- | --- | --- |
+| ① collector 蒐集員 | `agents/collector.md` | 地區解析、實價登錄與 591 取得、候選物件整理 | 使用者訊息 | `01_*`、`591_*` | 一律 |
+| ② fact-checker 時效驗證員 | `agents/fact-checker.md` | 逐列標記過時、重複、來源不明、未提供；不刪資料 | `01_*` | `02_*` | 一律 |
+| ③ quant-analyst CP 值精算師 | `agents/quant-analyst.md` | 行情統計、真實每月總成本、排序、刊登租金對照、訊號判定 | `01_*`、`02_*` | `03_*`、`charts/` | 一律 |
+| ④ devil-advocate 踩雷獵人 | `agents/devil-advocate.md` | 用唱反調的角度挑戰排名第一的物件 | `03_*`、`02_flags.csv` | `04_*` | 只在 R1–R7 成立時 |
+| ⑤ reviewer 審查員 | `agents/reviewer.md` | 獨立重算抽查 V1–V13、組成最終報告與殺價話術 | 原始資料、`01_*`–`04_*` | `05_review_log.json`、`final_report.md` | 一律（最後） |
+
+**交接格式**：每個角色開工前先讀上一個角色的交接信封，完工時寫自己的 `handoff_<n>_<角色>.json`，欄位 `handoff_version`（"1.0"）、`run_id`、`from`、`to`、`artifacts`（`[{"path", "rows"}]`）、`status`（ok／partial／failed）、`warnings`、`next_hint`。
+
+## 5. 輸出格式（Output Format）
+
+| 檔案 | 格式 | 產生者 |
+| --- | --- | --- |
+| `00_routing.json` | JSON | 主流程 |
+| `01_area.json`、`01_collect_manifest.json`；`01_collected.csv`、`01_collected_city.csv`、`01_candidates.csv`、`01_reviews.csv`；`591_list.csv`、`591_detail.csv`、`591_sources.json` | JSON／CSV（UTF-8 with BOM） | collector |
+| `02_flags.csv`、`02_factcheck_summary.json` | CSV／JSON | fact-checker |
+| `03_market_stats.csv`、`03_inclusion_log.csv`、`03_cost_breakdown.csv`、`03_ranking.csv`、`03_asking_stats.csv`、`03_signals.json`；`charts/*.png`（150 dpi） | CSV／JSON／PNG | quant-analyst |
+| `04_risk_report.json`、`04_risk_report.md` | JSON／Markdown | devil-advocate |
+| `05_review_log.json`、`final_report.md` | JSON／Markdown | reviewer |
+| `handoff_<n>_<角色>.json` | JSON | 各角色 |
+
+最終成果 `final_report.md` 依 `assets/final-report-template.md`，第一行寫「本次分析地區：〇〇市〇〇區（來源：…）」，九個章節：
+
+```
+## 1. 一句話結論
+## 2. 你問的問題、分析地區與模式
+## 3. 行情摘要（含 591 刊登租金對照）
+## 4. 候選物件真實每月總成本（已知項目合計＋未提供）
+## 5. 風險提醒
+## 6. 資料限制
+## 7. 假設參數表
+## 8. 審查紀錄
+## 9. 附錄：看房殺價話術
+```
+
+## 6. 邊界案例與限制（Edge Cases & Limitations）
+
+- **地區無法確定（RT13）**：互動模式追問一次 `01_area.json.question`，使用者回覆後以 `--confirmed 縣市|區` 重跑 `resolve_area.py`。非互動模式：不下載、不計算；依模板的「追問版」寫 `final_report.md`（第一行「本次分析地區：未確定」，列出候選地區與追問句），在 `agents_skipped` 加入 fact-checker、quant-analyst、devil-advocate、reviewer（`reason = area_unresolved`），再跑 `validate.py`。
 - **縣市沒有租賃資料**（連江縣）：告知沒有實價登錄租賃資料，不算行情；仍可做踩雷檢查與已知成本。
+- **591 連線失敗或被擋**：不中斷流程，報告寫「本次沒有刊登租金對照」，可請使用者貼上刊登內容。
 - **範圍外**：買賣、預售屋、房貸、台灣以外 → 不跑流程，一般回答並說明本 Skill 的範圍。
-- 其他例外（E1–E22）見 `references/cleaning-rules.md` 末段。
+- 限制：實價登錄只含已申報案件、社宅比例因地區而異、坪數含公設；591 為刊登價且坪數基準不同；時間價值與電費上限未驗證（R5 暫停判定）。
+- 其他例外（E1–E23）見 `references/cleaning-rules.md` 第 4 節。
 
-## 5. 代理人分工
+## 7. 參考資料索引（Reference Index）
 
-| 角色 | 檔案 | 只負責 | 主要產出 |
+| 檔案 | 用途 | 何時讀取 |
+| --- | --- | --- |
+| `references/data-sources.md` | 下載網址、季別、591 取得方式與出處、參數查證 | 資料取得出問題時 |
+| `references/field-mapping.md` | 欄位對照、候選物件欄位、591 欄位、單位換算 | 整理候選物件或解讀欄位時 |
+| `references/cleaning-rules.md` | 旗標規則 CR-01–CR-15、管理費解析、例外 E1–E23 | 遇到不認得的旗標或例外時 |
+| `references/risk-signals.md` | R1–R7 定義、關鍵字、風險等級、必問問題 | devil-advocate 開工時 |
+| `references/cost-params.json` | 使用者情境參數、門檻與查證狀態 | 寫假設參數表時 |
+| `references/negotiation-tips.md` | 殺價話術句型 | 寫報告附錄時 |
+| `references/county-codes.csv`、`districts.csv`、`school-districts.csv`、`591-regions.csv`、`591-sections.csv` | 地區與代碼查表 | 由腳本讀取 |
+| `assets/final-report-template.md` | 最終報告骨架（含追問版） | reviewer 成稿時 |
+
+## 8. 可用腳本（Available Scripts）
+
+腳本直接執行，不必讀進 context；`--help` 看完整用法。
+
+| 腳本 | 角色 | 用途 | 使用方式 |
 | --- | --- | --- | --- |
-| ① collector 蒐集員 | `agents/collector.md` | 地區解析、實價登錄與 591 資料取得、候選物件整理 | `01_*` |
-| ② fact-checker 時效驗證員 | `agents/fact-checker.md` | 逐列標記過時、重複、來源不明、未提供；不刪資料 | `02_*` |
-| ③ quant-analyst CP 值精算師 | `agents/quant-analyst.md` | 行情統計、真實每月總成本、排序、刊登租金對照、訊號判定 | `03_*`、`charts/` |
-| ④ devil-advocate 踩雷獵人 | `agents/devil-advocate.md` | 只在有訊號時，用唱反調的角度挑戰排名第一的物件 | `04_*` |
-| ⑤ reviewer 審查員 | `agents/reviewer.md` | 獨立重算抽查、組成最終報告與殺價話術 | `05_review_log.json`、`final_report.md` |
+| `scripts/resolve_area.py` | collector | 解析目標地區（不猜） | `python <skill>/scripts/resolve_area.py --text "<訊息>" --out <run>/01_area.json` |
+| `scripts/collect_lvr.py` | collector | 下載並正規化實價登錄（失敗改用 sample-data） | `python <skill>/scripts/collect_lvr.py --area <run>/01_area.json --out <run> --cache data/lvr-cache` |
+| `scripts/crawl_591.py` | collector | 591 刊登：快照或即時爬取、網址、貼上 | `python <skill>/scripts/crawl_591.py fetch --city <縣市> --district <區> --out <run>` |
+| `scripts/candidates.py` | collector | 候選物件 JSON → `01_candidates.csv` | `python <skill>/scripts/candidates.py --input <run>/candidates_input.json --area <run>/01_area.json --out <run>` |
+| `scripts/flag.py` | fact-checker | 逐列加旗標，不刪除 | `python <skill>/scripts/flag.py --run <run>` |
+| `scripts/analyze.py` | quant-analyst | 行情、成本、排序、刊登對照、訊號、圖表 | `python <skill>/scripts/analyze.py --run <run> --asking <run>` |
+| `scripts/recompute.py` | reviewer | 獨立重算 V1–V13（不 import analyze.py） | `python <skill>/scripts/recompute.py --run <run> --stage data\|report` |
+| `scripts/validate.py` | reviewer | 驗證輸出格式 | `python <skill>/scripts/validate.py --input <run>` |
 
-## 6. 參考資料與腳本
+## 9. 範例（Examples）
 
-| 檔案 | 何時讀 |
-| --- | --- |
-| `references/data-sources.md` | 下載網址、季別、591 取得方式與出處 |
-| `references/field-mapping.md` | 欄位對照、候選物件欄位、單位換算 |
-| `references/cleaning-rules.md` | 旗標規則 CR-01–CR-15、管理費解析、例外 E1–E22 |
-| `references/risk-signals.md` | R1–R7 定義、關鍵字、風險等級 |
-| `references/cost-params.json` | 使用者情境參數、門檻與查證狀態 |
-| `references/negotiation-tips.md` | 殺價話術句型 |
-| `assets/final-report-template.md` | 最終報告骨架 |
+**範例 1（single，無風險）：**
+輸入：「我是長庚大學新生，在龜山區找到一間獨立套房，月租 9,500 元、權狀 8 坪，管理費另計 800 元，電費每度 5 元，騎車到學校單程約 12 分鐘，刊登在學校租屋網……」
+輸出：地區 桃園市龜山區（使用者指定）；每坪 1,187.5 元，約在龜山套房行情中位數；已知項目合計 12,618 元（未提供：水費、瓦斯、網路）；沒有 R 訊號 → 略過 devil-advocate；審查 PASS。
 
-腳本（直接執行，不必讀進 context；`--help` 看用法）：`resolve_area.py`、`collect_lvr.py`、`crawl_591.py`、`candidates.py`（collector）；`flag.py`（fact-checker）；`analyze.py`（quant-analyst）；`recompute.py`、`validate.py`（reviewer）。需要 Python 3.10+（pandas、numpy、matplotlib、requests）與 node。
+**範例 2（compare，有風險）：**
+輸入：「我在逢甲附近找房，有兩間在猶豫：第一間是分租套房 7 坪，一個月 7,000，房東說要先匯訂金才能看房；第二間是雅房，一個月 5,500，管理費不知道……」
+輸出：「逢甲」經學校查表 → 臺中市西屯區；兩間已知項目都只有月租，排名 L2 第 1、L1 第 2；L1 命中 R3（先匯訂金）與 R6 → 啟用 devil-advocate，報告提醒「排名第一不等於可以租」。
+
+**範例 3（不啟動）：**
+輸入：「林口預售屋現在一坪多少？」→ 屬買賣，不使用本 Skill，一般回答。

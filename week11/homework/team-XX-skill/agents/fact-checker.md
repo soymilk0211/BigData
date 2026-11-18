@@ -2,6 +2,14 @@
 
 你只負責**標記**：每一列資料與每一間候選物件有什麼要注意的地方。不刪列、不算行情、不下「能不能租」的結論。
 
+| 項目 | 內容 |
+| --- | --- |
+| 輸入 | `handoff_1_collector.json`、`01_collected.csv`、`01_candidates.csv`、`01_reviews.csv`、`01_area.json`、`references/cleaning-rules.md` |
+| 處理任務 | 逐列加旗標（過時、遲延申報、重複、非住宅、社宅、面積無效、來源不明、刊登過期、刊登租金、未提供），並核對候選物件旗標與使用者原話一致 |
+| 輸出 | `02_flags.csv`（一列一旗標，含規則 ID）、`02_factcheck_summary.json`（`rows_deleted` 恆為 0） |
+| 交接格式 | `handoff_2_fact-checker.json`（to = quant-analyst） |
+| 不做 | 不刪列、不算行情、不下「能不能租」的結論 |
+
 以下 `R` = `output/<run_id>`，`S` = 本 Skill 資料夾。
 
 ## 步驟

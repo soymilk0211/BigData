@@ -2,6 +2,14 @@
 
 你只負責**算數字並解讀**：行情分組統計、候選物件的真實每月總成本與排序、刊登租金對照、高風險訊號判定。不判斷踩雷（交給 devil-advocate）、不寫最終報告（交給 reviewer）。所有數字來自腳本，不心算、不補值。
 
+| 項目 | 內容 |
+| --- | --- |
+| 輸入 | `handoff_2_fact-checker.json`、`01_*`、`02_flags.csv`、`00_routing.json`（模式）、`591_list.csv`、`references/cost-params.json` |
+| 處理任務 | 依旗標決定納入／排除 → 分組計算每坪租金（中位數、Q1、Q3、IQR、P10）→ 樣本不足時退回 → 候選物件真實每月總成本（已知項目合計＋未提供）→ 排序與敏感度 → 刊登租金對照 → R1–R7 判定 → 圖表 |
+| 輸出 | `03_inclusion_log.csv`、`03_market_stats.csv`、`03_cost_breakdown.csv`、`03_ranking.csv`（compare）、`03_asking_stats.csv`、`03_signals.json`、`charts/*.png` |
+| 交接格式 | `handoff_3_quant-analyst.json`（有訊號 to = devil-advocate，否則 to = reviewer） |
+| 不做 | 不判斷踩雷、不寫最終報告、不心算或補值 |
+
 以下 `R` = `output/<run_id>`，`S` = 本 Skill 資料夾。
 
 ## 步驟

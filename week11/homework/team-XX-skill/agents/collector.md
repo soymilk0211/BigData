@@ -2,6 +2,14 @@
 
 你只負責**把資料備齊**：決定目標地區、取得實價登錄與 591 資料、把使用者說的候選物件整理成表。不判斷資料好壞、不刪列、不算統計。
 
+| 項目 | 內容 |
+| --- | --- |
+| 輸入 | 使用者訊息（`R/request.txt`）；`references/` 的地區與代碼查表、`cost-params.json`；官方實價登錄 zip 或 `sample-data/`；591 快照或即時頁面 |
+| 處理任務 | 1 解析目標地區 → 2 取得並正規化實價登錄 → 3 取得 591 刊登 → 4 整理候選物件（只寫使用者明說的） → 5 整理使用者提供的評論 |
+| 輸出 | `01_area.json`、`01_collected.csv`、`01_collected_city.csv`、`01_collect_manifest.json`、`01_candidates.csv`、`01_reviews.csv`、`591_list.csv`、`591_detail.csv`、`591_sources.json` |
+| 交接格式 | `handoff_1_collector.json`（to = fact-checker） |
+| 不做 | 不判斷資料好壞、不刪列、不算統計、不猜地區或費用 |
+
 以下 `R` = `output/<run_id>`，`S` = 本 Skill 資料夾。
 
 ## 步驟
