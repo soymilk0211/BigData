@@ -1,0 +1,17 @@
+{
+  "mode": "area",
+  "city": "臺中市",
+  "district": "西屯區",
+  "started_at": "2026-11-18T17:41:45+08:00",
+  "errors": [],
+  "source": "591 租屋網（刊登租金，非成交價）",
+  "reference": "https://github.com/ryk001/Rent591Watcher",
+  "region_id": "8",
+  "section_id": "104",
+  "listing_total_on_site": 3887,
+  "requests": 431,
+  "list_rows": 3881,
+  "detail_rows": 300,
+  "finished_at": "2026-11-18T18:04:44+08:00",
+  "status": "ok"
+}
