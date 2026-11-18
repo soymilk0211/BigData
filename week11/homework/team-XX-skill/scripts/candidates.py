@@ -35,8 +35,8 @@ def from_591(row):
          "risk_hits_591": row.get("risk_hits", ""), "city": row.get("city"), "district": row.get("district")}
     contain = row.get("price_contain_text", "") or ""
     mg = str(row.get("mgmt_fee_text") or "")
-    if "管理費" in contain or "含" in mg:
-        c["mgmt_status"] = "included"
+    if "管理費" in contain or "含" in mg or mg.strip() in ("無", "免") or "免管理費" in (row.get("tags") or ""):
+        c["mgmt_status"] = "included"  # 含在租金內或免管理費：每月另付 0 元
     elif row.get("mgmt_fee"):
         c["mgmt_fee"], c["mgmt_status"] = row["mgmt_fee"], "stated"
     wt = row.get("water_fee_type") or ""

@@ -200,16 +200,25 @@ def stage_report(run, log):
     params = json.loads((SKILL / "references/cost-params.json").read_text(encoding="utf-8"))
     missing = [k for k, v in params.items() if isinstance(v, dict) and v.get("kind") != "分析設定" and k not in rep_full]
     check(log, "V9", "假設參數表", "列出全部使用者情境參數與門檻", missing or "全部列出", not missing, "全部")
-    # V10 隱私
+    # V10 隱私：只檢查文字欄位與報告（數值欄的長串小數不是電話）
     leaks = []
-    for p in list(run.glob("*.csv")) + list(run.glob("*.json")) + list(run.glob("*.md")):
-        t = p.read_text(encoding="utf-8-sig")
-        if "土地位置建物門牌" in t and p.name != "01_collect_manifest.json":
+    phone = re.compile(r"(?<![\d.])09\d{2}-?\d{3}-?\d{3}(?![\d.])")
+    addr = re.compile(r"[^\s，,。〔]{1,10}(路|街)[^\s，,。]{0,6}?\d+\s*號")
+    text_cols = ("note_raw", "notes_text", "fee_mentions", "text", "risk_hits_591", "label")
+    for p in list(run.glob("*.csv")):
+        rows = rcsv(p)
+        if rows and "土地位置建物門牌" in rows[0]:
             leaks.append(f"{p.name}: 門牌欄")
-        if re.search(r"09\d{2}-?\d{3}-?\d{3}", t):
-            leaks.append(f"{p.name}: 手機號碼樣式")
-        if re.search(r"[^\s，,。〔]{1,10}(路|街)[^\s，,。]{0,6}?\d+\s*號", t):
-            leaks.append(f"{p.name}: 門牌樣式")
+        for r in rows:
+            for k in text_cols:
+                v = r.get(k) or ""
+                if phone.search(v) or addr.search(v):
+                    leaks.append(f"{p.name}: {k} 含電話或門牌樣式"); break
+    for p in list(run.glob("*.md")) + list(run.glob("*.json")):
+        t = p.read_text(encoding="utf-8")
+        if phone.search(t) or addr.search(t):
+            leaks.append(f"{p.name}: 電話或門牌樣式")
+    leaks = sorted(set(leaks))
     check(log, "V10", "所有輸出", "不含門牌與個資", leaks or "無", not leaks, "0")
     # V11 模擬標示：本 Skill 不使用模擬資料；若有使用者提供的評論，不得被標成模擬
     rv = rcsv(run / "01_reviews.csv")

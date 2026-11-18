@@ -28,6 +28,7 @@ ADDR = "土地位置建物門牌"
 TYPE_GROUP = {"獨立套房": "student_suite", "分租套房": "student_suite", "分租雅房": "student_room",
               "整棟(戶)出租": "whole_unit", "分層出租": "whole_unit"}
 CN = {"零": 0, "一": 1, "二": 2, "三": 3, "四": 4, "五": 5, "六": 6, "七": 7, "八": 8, "九": 9}
+PII_MASK = re.compile(r"[\u4e00-\u9fff]{0,3}\s*[A-Z][12]\d{8}|(?<![\d.])0\d{1,3}-?\d{3,4}-?\d{3,4}(?![\d.])")  # 身分證字號（含前面姓名）、電話
 ADDR_MASK = re.compile(r"[^\s，,。；;]{0,10}(路|街|大道)[^\s，,。；;]{0,8}?(段|巷|弄|號)[^\s，,。；;]{0,6}|"
                        r"[^\s，,。；;]{0,8}\d+\s*號[^\s，,。；;]{0,4}|車位編號\s*[\w-]+")
 
@@ -124,7 +125,7 @@ def normalize(raw, season, code, city):
     bc = roc_date(raw["建築完成年月"])
     lease = str(raw["租賃期間"] or "").split("~")
     ls, le = (roc_date(lease[0]), roc_date(lease[1])) if len(lease) == 2 else (None, None)
-    note = ADDR_MASK.sub("〔遮蔽〕", raw["備註"] or "")
+    note = ADDR_MASK.sub("〔遮蔽〕", PII_MASK.sub("〔遮蔽〕", raw["備註"] or ""))
     status, amount, with_park = parse_mgmt(raw["備註"] or "")
     service = raw["租賃住宅服務"] or ""
     addr_hash = raw.get("addr_hash") or hashlib.sha256((raw.get(ADDR) or "").encode()).hexdigest()[:12]
@@ -248,7 +249,7 @@ def main():
                     r = dict(r)
                     r["addr_hash"] = hashlib.sha256(r[ADDR].encode()).hexdigest()[:12]
                     r[ADDR] = ""
-                    r["備註"] = ADDR_MASK.sub("〔遮蔽〕", r["備註"])
+                    r["備註"] = ADDR_MASK.sub("〔遮蔽〕", PII_MASK.sub("〔遮蔽〕", r["備註"]))
                     rows.append({"season": s, "city_code": c, **r})
         write_csv(a.out, rows, ["season", "city_code"] + SCHEMA + ["addr_hash"])
         print(json.dumps({"rows": len(rows), "downloads": man["downloads"]}, ensure_ascii=False))

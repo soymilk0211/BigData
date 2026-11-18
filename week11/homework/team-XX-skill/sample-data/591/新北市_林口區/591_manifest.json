@@ -1,0 +1,17 @@
+{
+  "mode": "area",
+  "city": "新北市",
+  "district": "林口區",
+  "started_at": "2026-11-18T17:36:36+08:00",
+  "errors": [],
+  "source": "591 租屋網（刊登租金，非成交價）",
+  "reference": "https://github.com/ryk001/Rent591Watcher",
+  "region_id": "3",
+  "section_id": "46",
+  "listing_total_on_site": 695,
+  "requests": 97,
+  "list_rows": 695,
+  "detail_rows": 72,
+  "finished_at": "2026-11-18T17:41:45+08:00",
+  "status": "ok"
+}
