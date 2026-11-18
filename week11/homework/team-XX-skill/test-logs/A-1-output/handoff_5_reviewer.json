@@ -1,0 +1,1 @@
+{"handoff_version":"1.0","run_id":"20261118-220902","from":"reviewer","to":"user","artifacts":[{"path":"final_report.md","rows":1},{"path":"05_review_log.json","rows":28}],"status":"ok","warnings":["未驗證：hourly_value 196 元／小時","未驗證：elec_cap_per_kwh（R5 不判定）","R7 不判定：無評論","未提供：水費、瓦斯、網路、押金、刊登日期"],"next_hint":"PASS"}

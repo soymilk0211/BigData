@@ -1,0 +1,36 @@
+{
+ "run_id": "20261118-220902",
+ "skill": "student-rental-check",
+ "mode": "compare",
+ "candidate_count": 2,
+ "interactive": false,
+ "agents_planned": [
+  "collector",
+  "fact-checker",
+  "quant-analyst",
+  "devil-advocate",
+  "reviewer"
+ ],
+ "agents_skipped": [],
+ "signals": [
+  {
+   "listing_id": "L1",
+   "signal": "R3",
+   "evidence": "命中：先匯訂金",
+   "source": "user_input"
+  },
+  {
+   "listing_id": "L1",
+   "signal": "R6",
+   "evidence": "STALE_LISTING＋UNKNOWN_SOURCE",
+   "source": "02_flags.csv"
+  },
+  {
+   "listing_id": "L2",
+   "signal": "R6",
+   "evidence": "STALE_LISTING＋UNKNOWN_SOURCE",
+   "source": "02_flags.csv"
+  }
+ ],
+ "warnings": []
+}

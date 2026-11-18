@@ -1,0 +1,4 @@
+{"handoff_version":"1.0","run_id":"20261118-220902","from":"reviewer","to":"user",
+"artifacts":[{"path":"final_report.md","rows":1},{"path":"05_review_log.json","rows":1}],
+"status":"ok","warnings":["未驗證：hourly_value、elec_cap_per_kwh（R5 暫停判定）","未判定：L2 的 R1/R2（缺坪數）、R7（無評論）、R4（押金未提供）"],
+"next_hint":"L1 先匯訂金才能看房 → 建議避開"}
