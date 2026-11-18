@@ -72,7 +72,7 @@
 | --- | --- | --- |
 | V1 筆數與地區 … V13 刊登租金未混入行情 | ✅／❌ | {05_review_log.json} |
 
-審查結論：{verdict}；重試次數：{retry_count}。{FAIL 時：審查未通過項目：…}
+審查結論：{verdict}；資料階段重試次數：{retry_count}；報告階段重試次數：{report_retry}。{report_retry = 1 時：第一次未通過項目：{report_first_issues}，修法：…}{FAIL 時：審查未通過項目：…}
 
 ## 9. 附錄：看房殺價話術
 

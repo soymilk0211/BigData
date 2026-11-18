@@ -4,7 +4,7 @@
   "date": "2026-11-18",
   "runner": "tests/run_test.sh（claude -p --setting-sources project,local --output-format stream-json --verbose）",
   "env": {
-    "LVR_CACHE": "~/BigData/week11/work/rent-raw"
+    "LVR_CACHE": "<LVR_CACHE>"
   },
   "prompts": {
     "A": "我是長庚大學新生，在龜山區找到一間獨立套房，月租 9,500 元、權狀 8 坪，管理費另計 800 元，電費每度 5 元，騎車到學校單程約 12 分鐘，刊登在學校租屋網。請用實價登錄幫我判斷這個價格合不合理，並算出真實每月總成本。",

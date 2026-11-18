@@ -6,7 +6,7 @@
 | --- | --- |
 | 輸入 | `handoff_2_fact-checker.json`、`01_*`、`02_flags.csv`、`00_routing.json`（模式）、`591_list.csv`、`references/cost-params.json` |
 | 處理任務 | 依旗標決定納入／排除 → 分組計算每坪租金（中位數、Q1、Q3、IQR、P10）→ 樣本不足時退回 → 候選物件真實每月總成本（已知項目合計＋未提供）→ 排序與敏感度 → 刊登租金對照 → R1–R7 判定 → 圖表 |
-| 輸出 | `03_inclusion_log.csv`、`03_market_stats.csv`、`03_cost_breakdown.csv`、`03_ranking.csv`（compare）、`03_asking_stats.csv`、`03_signals.json`、`charts/*.png` |
+| 輸出 | `03_inclusion_log.csv`、`03_market_stats.csv`、`03_mgmt_fee_status.csv`、`03_cost_breakdown.csv`、`03_ranking.csv`（compare）、`03_asking_stats.csv`、`03_signals.json`、`charts/*.png` |
 | 交接格式 | `handoff_3_quant-analyst.json`（有訊號 to = devil-advocate，否則 to = reviewer） |
 | 不做 | 不判斷踩雷、不寫最終報告、不心算或補值 |
 
@@ -26,6 +26,7 @@
    - `03_cost_breakdown.csv`：`true_monthly_cost_known` 是**已知項目合計**，`unstated_items` 是未提供的項目。不要把未提供項目當 0 解讀。`area_basis = 591_use_area` 的物件，每坪租金與實價登錄不同基準，不比百分位。
    - `03_ranking.csv`（compare）：`comparable = False` 時，排名只能說「已知項目合計」的高低，並同時看 `rank_common_items`（只用每間都有的項目重排）。
    - `03_asking_stats.csv`：刊登租金中位數與實價登錄月租中位數的差距（`asking_vs_lvr_pct`）。只並列解讀，永不合併。
+   - `03_mgmt_fee_status.csv`：行情資料中各管理費解析狀態（`not_mentioned`、`extra`、`included`、`unknown`、`landlord_pays`）的筆數，`area_key = ALL` 為全部。報告要提這些筆數時只能抄這個檔，reviewer 的 V8 才能追溯。
    - `03_signals.json`：`signals` 是 R1–R7 判定結果；`not_evaluated` 是不能判定的項目與原因（例：電費上限未驗證所以 R5 不判定）。兩者都要原樣交給下一位。
 4. 圖表在 `R/charts/`（4 張）；若輸出出現英文標籤，代表沒有中文字型（E15），在交接信封註明。
 

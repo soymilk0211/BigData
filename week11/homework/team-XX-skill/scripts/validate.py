@@ -2,6 +2,9 @@
 """validate.py — 檢查一次執行的輸出是否符合規格（沿用老師範本的結構改寫）。
 
 用法：python scripts/validate.py --input output/<run_id>/
+      python scripts/validate.py --input test-logs/A-1-output --evidence-copy   # 檢查證據複本
+--evidence-copy：test-logs/ 的輸出複本刻意不含 01_collected*.csv 與 03_inclusion_log.csv
+（行情原始列太大且含官方備註），此旗標只跳過這些檔的「必要檔案」檢查，其餘檢查不變。
 檢查：必要檔案存在、JSON 可解析、CSV 欄名、final_report.md 九個章節且開頭寫分析地區、
 area_source 為允許值、rows_deleted = 0、輸出不含門牌欄、路由與檔案一致。
 area_status = unresolved 時只檢查 00_routing.json、01_area.json、final_report.md。
@@ -17,10 +20,11 @@ COLS = {"02_flags.csv": ["record_id", "record_kind", "flag_code", "severity", "r
         "03_cost_breakdown.csv": ["listing_id", "rent", "true_monthly_cost_known", "unstated_items", "market_percentile"],
         "03_ranking.csv": ["rank", "listing_id", "true_monthly_cost_known", "comparable", "rank_common_items"]}
 HEADS = ["一句話結論", "你問的問題", "行情摘要", "真實每月總成本", "風險提醒", "資料限制", "假設參數", "審查紀錄", "看房殺價話術"]
+EVIDENCE_EXCLUDED = {"01_collected.csv", "01_collected_city.csv", "03_inclusion_log.csv"}
 SOURCES = {"user_explicit", "user_confirmed", "school_lookup", "address_parse"}
 
 
-def validate(d: Path) -> list[str]:
+def validate(d: Path, evidence_copy: bool = False) -> list[str]:
     errs = []
     if not d.is_dir():
         return [f"找不到資料夾：{d}"]
@@ -32,6 +36,8 @@ def validate(d: Path) -> list[str]:
     area = json.loads((d / "01_area.json").read_text(encoding="utf-8")) if (d / "01_area.json").exists() else {}
     unresolved = area.get("area_status") == "unresolved"
     need = ["00_routing.json", "01_area.json", "final_report.md"] if unresolved else REQUIRED
+    if evidence_copy:
+        need = [f for f in need if f not in EVIDENCE_EXCLUDED]
     errs += [f"缺少必要檔案：{f}" for f in need if not (d / f).exists()]
     if unresolved:
         if not area.get("question"):
@@ -76,13 +82,16 @@ def validate(d: Path) -> list[str]:
 def main():
     ap = argparse.ArgumentParser(description="驗證輸出格式")
     ap.add_argument("--input", required=True, help="output/<run_id>/ 資料夾")
-    errs = validate(Path(ap.parse_args().input))
+    ap.add_argument("--evidence-copy", action="store_true",
+                    help="證據複本模式：跳過刻意不複製的 01_collected*.csv、03_inclusion_log.csv")
+    a = ap.parse_args()
+    errs = validate(Path(a.input), a.evidence_copy)
     if errs:
         print("❌ 驗證失敗：")
         for e in errs:
             print(f"  - {e}")
         sys.exit(1)
-    print("✅ 驗證通過")
+    print("✅ 驗證通過" + ("（證據複本模式：未檢查 " + "、".join(sorted(EVIDENCE_EXCLUDED)) + "）" if a.evidence_copy else ""))
 
 
 if __name__ == "__main__":

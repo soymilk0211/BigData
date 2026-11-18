@@ -3,7 +3,7 @@
 
 用法：python scripts/analyze.py --run <run> [--asking <dir 含 591_list.csv>]
 輸出：03_inclusion_log.csv、03_market_stats.csv、03_cost_breakdown.csv、03_ranking.csv（≥2 間）、
-     03_asking_stats.csv（有 591 資料時）、03_signals.json、charts/*.png
+     03_mgmt_fee_status.csv（管理費解析狀態筆數）、03_asking_stats.csv（有 591 資料時）、03_signals.json、charts/*.png
 原則：物件事實沒寫就是「未提供」，不補預設值；刊登租金與實價登錄租金永不合併。
 """
 import argparse, csv, json, sys
@@ -157,6 +157,16 @@ def main():
                 stats.append(stats_row(nsh, city_name, district, level, gname, scope, False, fb, None))
     ms = pd.DataFrame(stats)
     ms.to_csv(run / "03_market_stats.csv", index=False, encoding="utf-8-sig")
+
+    # 管理費解析狀態統計：報告若要寫各狀態筆數，抄這個檔（V8 才能追溯）
+    mf = []
+    if len(market) and "mgmt_fee_status" in market.columns:
+        st = market.mgmt_fee_status.fillna("").replace("", "blank")
+        mf = [{"area_key": "ALL", "mgmt_fee_status": k, "n": int(v)} for k, v in st.value_counts().items()]
+        for (ak, k), v in market.assign(_s=st).groupby(["area_key", "_s"]).size().items():
+            mf.append({"area_key": ak, "mgmt_fee_status": k, "n": int(v)})
+    pd.DataFrame(mf, columns=["area_key", "mgmt_fee_status", "n"]).to_csv(
+        run / "03_mgmt_fee_status.csv", index=False, encoding="utf-8-sig")
 
     # 真實每月總成本（已知項目合計＋未提供清單）
     costs = []

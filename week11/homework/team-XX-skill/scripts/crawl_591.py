@@ -10,6 +10,8 @@
   python scripts/crawl_591.py paste --file listing.txt --out <dir>
   python scripts/crawl_591.py fetch --city 桃園市 --district 龜山區 --out <run>
       （collector 用：sample-data/591/ 有 30 天內的快照就複製，否則即時爬取；結果附加到 <run>/591_*.csv）
+  python scripts/crawl_591.py remask sample-data/591/*/
+      （維護者用：遮蔽規則更新後，就地重新遮蔽既有快照的文字欄位，不重新連線 591）
 
 輸出（UTF-8 with BOM CSV）：
   591_list.csv    列表層級：每筆刊登的刊登租金、類型、使用坪數、區、標籤、刊登身分
@@ -48,6 +50,12 @@ RISK_WORDS = ["先匯訂金", "先轉帳", "未看房先付", "不能看房", "�
               "鐵皮", "違建", "二房東", "轉租"]
 FEE_RE = re.compile(r"[^。！!；;\n<>]{0,25}(水費|電費|每度|台電|網路|瓦斯|管理費|清潔費)[^。！!；;\n<>]{0,25}")
 MASK_RES = [re.compile(r"09\d{2}[-\s]?\d{3}[-\s]?\d{3}"), re.compile(r"0\d{1,2}[-\s]?\d{6,8}"),
+            # 姓名：（屋主／仲介／房東／代理人／經紀人／聯絡人／管理員）＋姓＋先生／小姐／太太
+            re.compile(r"(?:(?:屋主|仲介|房東|二房東|代理人|經紀人|聯絡人|管理員)\s*)?[\u4e00-\u9fff](?:先生|小姐|太太)"),
+            # 被截斷的電話片段（例：「0X-X」「09XX-」「09XX」）與「電話：」後的數字
+            re.compile(r"(?<![\d\w./:-])0\d{1,2}[-\s]?\d{3,4}[-\s]?\d{4}(?!\d)"),
+            re.compile(r"(?<![\d\w./:-])0\d{1,3}-\d{0,4}(?![\d/:])"), re.compile(r"(?<![\d\w./:-])09\d{2}(?![\d/:])"),
+            re.compile(r"(?<=電話|手機|專線|市話)\s*[:：]?\s*\d[\d\-()]*"),
             re.compile(r"(?i)line\s*(id)?\s*[:：]?\s*@?[\w.\-]+"), re.compile(r"@[\w.\-]{3,}"),
             re.compile(r"[\w.+-]+@[\w-]+\.[\w.]+"),
             re.compile(r"[^\s，,。]{1,8}(路|街|大道)[^\s，,。]{0,6}(段|巷|弄|號)")]
@@ -96,7 +104,7 @@ def money(s):
 
 
 def role_only(role_name):
-    """「代理人李先生」→「代理人」：只保留身分，去掉姓名。"""
+    """「代理人○先生」→「代理人」：只保留身分，去掉姓名。"""
     for r in ("屋主", "代理人", "仲介", "房東", "二房東", "經紀人"):
         if str(role_name or "").startswith(r):
             return r
@@ -159,7 +167,8 @@ def detail_row(lid, d, now):
     city = (crumbs[0]["name"] if crumbs else "").replace("台", "臺")
     district = crumbs[1]["name"] if len(crumbs) > 1 else ""
     tags = [t.get("value", "") for t in d.get("tags", [])]
-    remark = re.sub(r"<[^>]+>|&nbsp;", " ", (d.get("remark") or {}).get("content", ""))
+    # 先遮蔽整段備註再擷取費用片段，避免電話被片段邊界截斷而漏遮（例：「0X-X」）
+    remark = mask(re.sub(r"<[^>]+>|&nbsp;", " ", (d.get("remark") or {}).get("content", "")))
     rent = rc.get("rent_price") or money(d.get("price"))
     fav = d.get("favData") or {}
     posted = dt.datetime.fromtimestamp(fav["posttime"], TZ).date().isoformat() if fav.get("posttime") else ""
@@ -170,14 +179,14 @@ def detail_row(lid, d, now):
             "kind_name": info.get("kind", ""), "rent_type_group": KIND_GROUP.get(kind, "other"),
             "asking_rent": rent, "use_area_ping": ping(info.get("area")), "floor": info.get("floor", ""),
             "shape": info.get("shape", ""), "role": role_only((d.get("linkInfo") or {}).get("roleName")),
-            "deposit_text": rc.get("deposit") or d.get("deposit", ""),
+            "deposit_text": mask(str(rc.get("deposit") or d.get("deposit", ""))),
             "deposit_months": deposit_months(rc.get("deposit") or d.get("deposit"), rent),
-            "service_fee": rc.get("service_fee", ""), "mgmt_fee_text": rc.get("manage_fee_text") or cost.get("manageprice", ""),
+            "service_fee": rc.get("service_fee", ""), "mgmt_fee_text": mask(str(rc.get("manage_fee_text") or cost.get("manageprice", ""))),
             "mgmt_fee": rc.get("manage_fee") if rc.get("manage_fee") else None,
             "water_fee_type": rc.get("water_fee_type", ""), "water_fee": rc.get("water_fee") or None,
             "electric_fee_type": rc.get("electric_fee_type", ""), "electric_fee": rc.get("electric_fee") or None,
-            "price_contain_text": rc.get("price_contain_text") or cost.get("priceContainText", ""),
-            "extra_fee_text": d.get("extra_fee_text", ""), "net_included": fac.get("net", ""),
+            "price_contain_text": mask(str(rc.get("price_contain_text") or cost.get("priceContainText", ""))),
+            "extra_fee_text": mask(str(d.get("extra_fee_text", ""))), "net_included": fac.get("net", ""),
             "gas_facility": fac.get("gas", ""), "has_certificate": infod.get("hasCertificate", ""),
             "tags": ";".join(tags), "rent_subsidy_ok": int("租金補貼" in tags), "tax_ok": int("可報稅" in tags),
             "posted_date": posted, "end_date": d.get("endTime", ""), "status": d.get("status", ""),
@@ -341,6 +350,30 @@ def cmd_fetch(a):
     return 0
 
 
+TEXT_COLS = ("shape", "deposit_text", "service_fee", "mgmt_fee_text", "price_contain_text", "extra_fee_text",
+             "tags", "risk_hits", "fee_mentions", "floor_name")
+
+
+def cmd_remask(a):
+    """對既有快照（591_list.csv、591_detail.csv）的文字欄位重新套用 mask()，就地改寫，不重新連線 591。"""
+    for d in a.dirs:
+        for name in ("591_list.csv", "591_detail.csv"):
+            p = Path(d) / name
+            if not p.exists():
+                continue
+            with open(p, encoding="utf-8-sig", newline="") as f:
+                r = csv.DictReader(f); cols = r.fieldnames; rows = list(r)
+            n = 0
+            for row in rows:
+                for c in TEXT_COLS:
+                    if row.get(c):
+                        new = mask(row[c])
+                        n += new != row[c]; row[c] = new
+            write_csv(p, rows, cols)
+            print(json.dumps({"file": str(p), "rows": len(rows), "cells_masked": n}, ensure_ascii=False))
+    return 0
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = p.add_subparsers(dest="cmd", required=True)
@@ -353,8 +386,9 @@ def main():
     s = sub.add_parser("fetch"); s.add_argument("--city", required=True); s.add_argument("--district", required=True)
     s.add_argument("--out", required=True); s.add_argument("--detail-cap", type=int, default=300)
     s.add_argument("--live", action="store_true", help="忽略快照，強制即時爬取")
+    s = sub.add_parser("remask", help="對既有快照重新套用遮蔽規則（不重新爬取）"); s.add_argument("dirs", nargs="+")
     a = p.parse_args()
-    sys.exit({"area": cmd_area, "ids": cmd_ids, "paste": cmd_paste, "fetch": cmd_fetch}[a.cmd](a))
+    sys.exit({"area": cmd_area, "ids": cmd_ids, "paste": cmd_paste, "fetch": cmd_fetch, "remask": cmd_remask}[a.cmd](a))
 
 
 if __name__ == "__main__":

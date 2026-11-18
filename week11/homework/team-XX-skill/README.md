@@ -14,6 +14,24 @@
 
 流程：使用者需求 → Trigger（SKILL.md 的 name＋description）→ collector → fact-checker → quant-analyst →（有訊號）devil-advocate → reviewer（品質檢查）→ `final_report.md`。詳細流程、路由表與例外見 `SKILL.md`。
 
+```mermaid
+flowchart TD
+    U["使用者需求"] --> T{"Trigger<br/>name＋description 符合？"}
+    T -- 否 --> X["不啟用，一般回答"]
+    T -- 是 --> C["① collector<br/>地區解析"]
+    C --> A{"地區唯一確定？"}
+    A -- "否（缺少或歧義，例：東區）" --> Q["停止計算：追問一次，<br/>或列出候選地區＋追問句"]
+    A -- 是 --> C2["① collector<br/>實價登錄＋591＋候選物件"]
+    C2 --> F["② fact-checker<br/>標記旗標（不刪資料）"]
+    F --> QA["③ quant-analyst<br/>行情、真實每月總成本、R1–R7 判定"]
+    QA --> R{"R1–R7 有訊號？"}
+    R -- 有 --> D["④ devil-advocate<br/>踩雷檢查"]
+    R -- 無 --> RV
+    D --> RV["⑤ reviewer<br/>獨立重算＋報告檢核"]
+    RV -- "FAIL（重試一次）" --> FX["資料錯 → 回 ③ 重算（RT7）<br/>報告數字無法追溯 → 改成可追溯（RT16）"] --> RV
+    RV -- "PASS／第二次仍 FAIL 標 ❌" --> OUT["final_report.md"]
+```
+
 ## 安裝與啟動
 
 1. 把本資料夾複製到專案的 `.claude/skills/student-rental-check/`（Claude Code）。
@@ -22,6 +40,8 @@
 4. 輸出在工作目錄的 `output/<run_id>/`。實價登錄 zip 會快取在 `data/lvr-cache/`。
 
 離線時會自動改用 `sample-data/`（只涵蓋龜山、林口、西屯）。
+
+自行驗證 `test-logs/` 的輸出複本：`python3 scripts/validate.py --input test-logs/A-1-output --evidence-copy`（複本刻意不含 `01_collected*.csv`、`03_inclusion_log.csv`）。
 
 ## 資料來源
 

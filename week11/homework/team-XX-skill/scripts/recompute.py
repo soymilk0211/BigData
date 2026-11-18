@@ -5,6 +5,7 @@
   python scripts/recompute.py --run <run> --stage data   [--cache data/lvr-cache]   # V1–V7、V12、V13
   python scripts/recompute.py --run <run> --stage report                            # V8–V11（final_report.md 寫好後）
 兩個階段都寫入同一份 05_review_log.json；任一項 FAIL → verdict = FAIL。
+報告階段若前一次 FAIL，再跑時自動記錄 report_retry 與 report_first_issues（第一次的問題）。
 """
 import argparse, csv, hashlib, io, json, random, re, sys, zipfile
 from pathlib import Path
@@ -182,7 +183,8 @@ def stage_report(run, log):
     rep = re.sub(r"`[^`]*`|\]\([^)]*\)|\b(V|R|E|CR-|RT)\d+\b", " ", rep)
     # V8 數字可追溯：報告中 ≥3 位數的金額與百分比要能在 03_*.csv／03_signals.json／參數中找到
     pool = set()
-    srcs = list(run.glob("0[0-5]_*.json")) + list(run.glob("03_*.csv")) + [run / "01_candidates.csv", run / "591_sources.json",
+    # 不含 05_review_log.json：它記錄了上一次 V8 的「無法追溯」數字，納入會讓重跑自我通過
+    srcs = [p for p in run.glob("0[0-5]_*.json") if p.name != "05_review_log.json"] + list(run.glob("03_*.csv")) + [run / "01_candidates.csv", run / "591_sources.json",
             SKILL / "references/cost-params.json"]
     for p in srcs:
         if p.exists():
@@ -195,7 +197,8 @@ def stage_report(run, log):
         if 1900 <= v <= 2100 or v in pool or abs(v) in pool or round(v) in pool:
             continue
         bad.append(t)
-    check(log, "V8", "final_report.md 的數字", "全部可追溯", f"{len(nums) - len(bad)}/{len(nums)}", not bad, "全部", "無法追溯：" + "、".join(bad[:10]))
+    check(log, "V8", "final_report.md 的數字", "全部可追溯", f"{len(nums) - len(bad)}/{len(nums)}", not bad, "全部",
+          ("無法追溯：" + "、".join(bad[:10])) if bad else "")
     # V9 假設揭露
     params = json.loads((SKILL / "references/cost-params.json").read_text(encoding="utf-8"))
     missing = [k for k, v in params.items() if isinstance(v, dict) and v.get("kind") != "分析設定" and k not in rep_full]
@@ -239,6 +242,14 @@ def main():
     lp = run / "05_review_log.json"
     log = json.loads(lp.read_text(encoding="utf-8")) if lp.exists() else {"verdict": None, "retry_count": 0, "checks": [], "issues": []}
     prefix = ("V8", "V9", "V10", "V11") if a.stage == "report" else ("V1", "V2", "V3", "V4", "V5", "V6", "V7", "V12", "V13")
+    if a.stage == "report":
+        # 報告階段重試紀錄：上一次報告檢核 FAIL 時，保留第一次的問題，report_retry 加 1（最多 1 次，見 SKILL.md RT16）
+        prev_fail = [f"{c['check_id']} {c['target']}：{c.get('note') or c.get('recomputed')}"
+                     for c in log["checks"] if c["check_id"] in prefix and c["status"] == "FAIL"]
+        log.setdefault("report_retry", 0)
+        if prev_fail:
+            log["report_retry"] += 1
+            log.setdefault("report_first_issues", prev_fail)
     log["checks"] = [c for c in log["checks"] if c["check_id"] not in prefix]
     try:
         (stage_report if a.stage == "report" else lambda r, l: stage_data(r, a.cache, l))(run, log)
@@ -248,7 +259,11 @@ def main():
     log["issues"] = [f"{c['check_id']} {c['target']}：{c.get('note') or c.get('recomputed')}" for c in fails]
     log["verdict"] = "FAIL" if fails else "PASS"
     lp.write_text(json.dumps(log, ensure_ascii=False, indent=2), encoding="utf-8")
-    print(json.dumps({"stage": a.stage, "verdict": log["verdict"], "checks": len(log["checks"]), "issues": log["issues"]}, ensure_ascii=False))
+    out = {"stage": a.stage, "verdict": log["verdict"], "checks": len(log["checks"]), "issues": log["issues"]}
+    if a.stage == "report":
+        out["report_retry"] = log.get("report_retry", 0)
+    print(json.dumps(out, ensure_ascii=False))
+    return 0
 
 
 if __name__ == "__main__":

@@ -37,6 +37,29 @@ description: >
 
 ## 3. 核心工作流程（Core Workflow）
 
+```mermaid
+flowchart TD
+    U["使用者需求<br/>（地區＋候選物件或只問行情）"] --> T{"Trigger<br/>name＋description 符合？"}
+    T -- 否 --> X["不啟用，一般回答"]
+    T -- 是 --> S0["步驟 0：建立 run、判斷模式<br/>00_routing.json"]
+    S0 --> C["① collector 蒐集員<br/>resolve_area.py → 01_area.json"]
+    C --> A{"地區唯一確定？<br/>area_status"}
+    A -- "unresolved（缺少或歧義，例：東區）" --> Q["停止計算：互動時追問一次；<br/>非互動時列出候選地區＋追問句<br/>（追問版 final_report.md）"]
+    A -- resolved --> C2["① collector：實價登錄＋591＋候選物件<br/>01_*"]
+    C2 --> F["② fact-checker 時效驗證員<br/>02_flags.csv（不刪資料）"]
+    F --> QA["③ quant-analyst CP 值精算師<br/>03_*、charts/"]
+    QA --> R{"R1–R7 有訊號？<br/>03_signals.json"}
+    R -- 有 --> D["④ devil-advocate 踩雷獵人<br/>04_risk_report"]
+    R -- 無 --> RV
+    D --> RV["⑤ reviewer 審查員<br/>recompute.py data／report、validate.py"]
+    RV --> V{"verdict"}
+    V -- "資料階段 FAIL（RT7）" --> QA
+    V -- "報告階段 FAIL（RT16）" --> FX["記錄 report_retry 與第一次問題<br/>讓數字可追溯後重驗一次"] --> RV
+    V -- "PASS／第二次仍 FAIL（RT8 標 ❌）" --> OUT["final_report.md"]
+```
+
+圖中兩種 FAIL 各最多重試一次；第二次仍 FAIL 時照常出報告並如實標 ❌（RT8）。
+
 `<skill>` 指本 Skill 資料夾（含本檔的目錄）。所有輸出寫在目前工作目錄的 `output/<run_id>/`（`run_id` = 台北時間 `YYYYMMDD-HHMMSS`）。每個角色的指令一律用 **Read 工具**開啟 `<skill>/agents/<角色>.md`：log 中的 Read 紀錄就是「依分工執行」的證據，所以每個角色各讀一次。
 
 ### 步驟 0：建立 run 與路由
@@ -60,7 +83,7 @@ description: >
 
 ### 步驟 3：quant-analyst CP 值精算師
 
-用 Read 工具讀 `<skill>/agents/quant-analyst.md` 並照做。完成條件：`03_market_stats.csv`、`03_signals.json` 存在；有候選物件時有 `03_cost_breakdown.csv`；`compare` 時有 `03_ranking.csv`。
+用 Read 工具讀 `<skill>/agents/quant-analyst.md` 並照做。完成條件：`03_market_stats.csv`、`03_mgmt_fee_status.csv`、`03_signals.json` 存在；有候選物件時有 `03_cost_breakdown.csv`；`compare` 時有 `03_ranking.csv`。
 
 ### 步驟 4：路由 devil-advocate（條件啟動）
 
@@ -71,7 +94,12 @@ description: >
 
 ### 步驟 5：reviewer 審查員（品質檢查）
 
-用 Read 工具讀 `<skill>/agents/reviewer.md` 並照做。完成條件：`05_review_log.json.verdict` 為 PASS，或已重試一次後如實標示 FAIL；`final_report.md` 完成；`scripts/validate.py` 結束碼 0。
+用 Read 工具讀 `<skill>/agents/reviewer.md` 並照做。完成條件：`05_review_log.json.verdict` 為 PASS，或已重試一次後如實標示 FAIL；`final_report.md` 完成；`scripts/validate.py` 結束碼 0（直接執行、不接 `| tail` 等管線，否則 `$?` 是管線最後一個指令的結束碼）。
+
+**報告階段 FAIL（RT16）**：`recompute.py --stage report` 回報 FAIL（例如 V8「無法追溯」）時：
+1. 不覆蓋第一次的結果：再跑 `recompute.py --stage report` 時，腳本會自動在 `05_review_log.json` 寫入 `report_retry`（次數）與 `report_first_issues`（第一次的問題）；手動修改報告前不要刪除這兩個欄位。
+2. 修法是**讓數字可追溯**，不是刪掉數字：把報告中的數字改成 `03_*`、`02_*`、`01_candidates.csv`、`cost-params.json` 中的原值，並在文字中寫出來源檔（例：管理費解析狀態的筆數抄 `03_mgmt_fee_status.csv`）；檔案中真的沒有的數字，才改寫成不含該數字的敘述，並在第 8 節說明。
+3. 最多重試 1 次（`report_retry ≤ 1`）；第二次仍 FAIL → 依 RT8 照常出報告，第 8 節標 ❌ 並列出 `report_first_issues` 與仍未通過的項目。
 
 ### 步驟 6：回覆使用者
 
@@ -93,6 +121,7 @@ description: >
 | RT12–13 | 地區唯一確定／缺少或歧義 | 照常／見第 6 節 | `01_area.json.area_status` |
 | RT14 | 分組有效樣本 < 10 | 合併類型 → 全縣市 → insufficient，逐步記錄 | `03_market_stats.csv.fallback` |
 | RT15 | 有 591 資料 | 刊登租金另算 `03_asking_stats.csv`，不進行情 | reviewer V13 |
+| RT16 | 報告階段（V8–V11）FAIL 且 `report_retry = 0` | 讓數字可追溯（不刪數字）後重驗一次；第二次仍 FAIL → RT8 | `05_review_log.json.report_retry`、`report_first_issues` |
 
 ## 4. 代理人分工（Agent Delegation）
 
@@ -113,7 +142,7 @@ description: >
 | `00_routing.json` | JSON | 主流程 |
 | `01_area.json`、`01_collect_manifest.json`；`01_collected.csv`、`01_collected_city.csv`、`01_candidates.csv`、`01_reviews.csv`；`591_list.csv`、`591_detail.csv`、`591_sources.json` | JSON／CSV（UTF-8 with BOM） | collector |
 | `02_flags.csv`、`02_factcheck_summary.json` | CSV／JSON | fact-checker |
-| `03_market_stats.csv`、`03_inclusion_log.csv`、`03_cost_breakdown.csv`、`03_ranking.csv`、`03_asking_stats.csv`、`03_signals.json`；`charts/*.png`（150 dpi） | CSV／JSON／PNG | quant-analyst |
+| `03_market_stats.csv`、`03_inclusion_log.csv`、`03_mgmt_fee_status.csv`、`03_cost_breakdown.csv`、`03_ranking.csv`、`03_asking_stats.csv`、`03_signals.json`；`charts/*.png`（150 dpi） | CSV／JSON／PNG | quant-analyst |
 | `04_risk_report.json`、`04_risk_report.md` | JSON／Markdown | devil-advocate |
 | `05_review_log.json`、`final_report.md` | JSON／Markdown | reviewer |
 | `handoff_<n>_<角色>.json` | JSON | 各角色 |
@@ -167,7 +196,7 @@ description: >
 | `scripts/flag.py` | fact-checker | 逐列加旗標，不刪除 | `python <skill>/scripts/flag.py --run <run>` |
 | `scripts/analyze.py` | quant-analyst | 行情、成本、排序、刊登對照、訊號、圖表 | `python <skill>/scripts/analyze.py --run <run> --asking <run>` |
 | `scripts/recompute.py` | reviewer | 獨立重算 V1–V13（不 import analyze.py） | `python <skill>/scripts/recompute.py --run <run> --stage data\|report` |
-| `scripts/validate.py` | reviewer | 驗證輸出格式 | `python <skill>/scripts/validate.py --input <run>` |
+| `scripts/validate.py` | reviewer | 驗證輸出格式（`--evidence-copy`：檢查 `test-logs/*-output` 這類刻意不含 `01_collected*.csv`、`03_inclusion_log.csv` 的證據複本） | `python <skill>/scripts/validate.py --input <run>` |
 
 ## 9. 範例（Examples）
 
@@ -177,7 +206,7 @@ description: >
 
 **範例 2（compare，有風險）：**
 輸入：「我在逢甲附近找房，有兩間在猶豫：第一間是分租套房 7 坪，一個月 7,000，房東說要先匯訂金才能看房；第二間是雅房，一個月 5,500，管理費不知道……」
-輸出：「逢甲」經學校查表 → 臺中市西屯區；兩間已知項目都只有月租，排名 L2 第 1、L1 第 2；L1 命中 R3（先匯訂金）與 R6 → 啟用 devil-advocate，報告提醒「排名第一不等於可以租」。
+輸出：「逢甲」經學校查表 → 臺中市西屯區；兩間已知項目都只有月租，排名 L2 第 1、L1 第 2；L1 命中 R3（先匯訂金）與 R6，L2 也命中 R6（沒有交代刊登來源與日期），兩間都是 high → 啟用 devil-advocate，報告提醒「排名第一不等於可以租」。（與測試 B-1、B-4 的實際輸出一致；R6 一律判 high 可能偏嚴，見 `test-report.md` 第 5 節。）
 
 **範例 3（不啟動）：**
 輸入：「林口預售屋現在一坪多少？」→ 屬買賣，不使用本 Skill，一般回答。

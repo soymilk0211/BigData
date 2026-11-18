@@ -1,7 +1,7 @@
 # Agent 1 正向測試結果（student-rental-check）
 
 - 測試日期：2026-11-18
-- 執行方式：`tests/run_test.sh <ID> "<提示詞>" [max_turns]`（`claude -p --setting-sources project,local --output-format stream-json --verbose`），執行前 `export LVR_CACHE=~/BigData/week11/work/rent-raw`
+- 執行方式：`tests/run_test.sh <ID> "<提示詞>" [max_turns]`（`claude -p --setting-sources project,local --output-format stream-json --verbose`），執行前把環境變數 `LVR_CACHE` 設為本機的實價登錄 zip 快取目錄（以下記為 `<LVR_CACHE>`，實際路徑已去識別化）
 - 觸發方式：全部為**自動**觸發，提示詞一字未改，也沒有指名 Skill
 - 機器可讀版本：`test-logs/agent1-positive-results.json`
 - 無效執行：A-1、B-1 的第一次執行被 API 用量上限中斷（result `is_error=true`，訊息為 5-hour limit）。協調者已刪除那兩份 log，本報告用的是重跑結果，那兩次不算 FAIL。重跑後 7 份 log 都沒有用量上限訊息。A-2、A-3、B-2、B-3、A591-1 的 `is_error=true` 是 `subtype=error_max_turns`，代表照設計在第 3 回合停止，不是錯誤。
