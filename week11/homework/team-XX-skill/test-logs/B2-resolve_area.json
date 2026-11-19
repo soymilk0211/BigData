@@ -1,0 +1,19 @@
+{
+  "area_status": "unresolved",
+  "targets": [],
+  "destination": null,
+  "ambiguities": [
+    {
+      "matched_text": "東區",
+      "candidates": [
+        "臺中市東區",
+        "臺南市東區",
+        "新竹市東區",
+        "嘉義市東區"
+      ]
+    }
+  ],
+  "missing": [],
+  "question": "你說的「東區」是指哪一個？可選：臺中市東區、臺南市東區、新竹市東區、嘉義市東區。請補上縣市與區。",
+  "district_quirk": null
+}

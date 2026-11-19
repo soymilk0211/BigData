@@ -1,0 +1,24 @@
+{
+  "handoff_version": "1.0",
+  "run_id": "20261118-233348",
+  "from": "fact-checker",
+  "to": "quant-analyst",
+  "artifacts": [
+    {
+      "path": "02_flags.csv",
+      "rows": 6605
+    },
+    {
+      "path": "02_factcheck_summary.json",
+      "rows": 1
+    }
+  ],
+  "status": "ok",
+  "warnings": [
+    "社會住宅比例高：桃園市|龜山區 行情窗內社宅相關案件 2362/3700 筆，行情會被拉低，需做排除社宅的敏感度比較",
+    "L1 warn 級旗標：STALE_LISTING（使用者未提供刊登日期）、COST_UNSTATED（水費、瓦斯、網路未提供）",
+    "L1 刊登來源為學校租屋網（school_portal），沒有 UNKNOWN_SOURCE，與原話一致",
+    "rows_deleted = 0"
+  ],
+  "next_hint": "龜山套房分組須留意社宅占比，報告要並列排除社宅後的中位數"
+}

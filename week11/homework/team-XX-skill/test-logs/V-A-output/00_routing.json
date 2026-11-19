@@ -1,0 +1,21 @@
+{
+  "run_id": "20261118-233348",
+  "skill": "student-rental-check",
+  "mode": "single",
+  "candidate_count": 1,
+  "interactive": false,
+  "agents_planned": [
+    "collector",
+    "fact-checker",
+    "quant-analyst",
+    "reviewer"
+  ],
+  "agents_skipped": [
+    {
+      "agent": "devil-advocate",
+      "reason": "no_high_risk_signal"
+    }
+  ],
+  "signals": [],
+  "warnings": []
+}

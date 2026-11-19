@@ -1,0 +1,370 @@
+{
+  "verdict": "PASS",
+  "retry_count": 0,
+  "checks": [
+    {
+      "check_id": "V1",
+      "target": "112S4 桃園市|龜山區",
+      "expected": 800,
+      "recomputed": 800,
+      "tolerance": "0",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V1",
+      "target": "114S4 桃園市|龜山區",
+      "expected": 830,
+      "recomputed": 830,
+      "tolerance": "0",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V1",
+      "target": "115S1 桃園市|龜山區",
+      "expected": 819,
+      "recomputed": 819,
+      "tolerance": "0",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V1",
+      "target": "115S2 桃園市|龜山區",
+      "expected": 909,
+      "recomputed": 909,
+      "tolerance": "0",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V1",
+      "target": "115S3 桃園市|龜山區",
+      "expected": 1142,
+      "recomputed": 1142,
+      "tolerance": "0",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V1",
+      "target": "area_source",
+      "expected": "允許值",
+      "recomputed": [
+        "user_explicit"
+      ],
+      "tolerance": "—",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V1",
+      "target": "city_code",
+      "expected": "與 county-codes.csv 一致",
+      "recomputed": [
+        "h"
+      ],
+      "tolerance": "—",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V2",
+      "target": "RPQOMLTLQHKGFHH37CC",
+      "expected": {
+        "area_ping": "16.3",
+        "rent_date": "2025-08-25",
+        "rpp": "1042.9"
+      },
+      "recomputed": {
+        "area_ping": 16.3,
+        "rent_date": "2025-08-25",
+        "rpp": 1042.9
+      },
+      "tolerance": "坪 ±0.01；日期相同",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V2",
+      "target": "RPWNMLKKRHIGFHH76CC",
+      "expected": {
+        "area_ping": "17.53",
+        "rent_date": "2022-06-02",
+        "rpp": "1043.9"
+      },
+      "recomputed": {
+        "area_ping": 17.53,
+        "rent_date": "2022-06-02",
+        "rpp": 1043.9
+      },
+      "tolerance": "坪 ±0.01；日期相同",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V2",
+      "target": "RPTPMLSLJHLGFHH07CC",
+      "expected": {
+        "area_ping": "37.15",
+        "rent_date": "2026-01-21",
+        "rpp": "538.4"
+      },
+      "recomputed": {
+        "area_ping": 37.15,
+        "rent_date": "2026-01-21",
+        "rpp": 538.4
+      },
+      "tolerance": "坪 ±0.01；日期相同",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V2",
+      "target": "RPQNMLLJJHLGFHH28CC",
+      "expected": {
+        "area_ping": "45.62",
+        "rent_date": "2025-12-11",
+        "rpp": "469.1"
+      },
+      "recomputed": {
+        "area_ping": 45.62,
+        "rent_date": "2025-12-11",
+        "rpp": 469.1
+      },
+      "tolerance": "坪 ±0.01；日期相同",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V2",
+      "target": "RPTNMLMKKIKGFHH88CC",
+      "expected": {
+        "area_ping": "35.85",
+        "rent_date": "2025-12-01",
+        "rpp": "599.7"
+      },
+      "recomputed": {
+        "area_ping": 35.85,
+        "rent_date": "2025-12-01",
+        "rpp": 599.7
+      },
+      "tolerance": "坪 ±0.01；日期相同",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V3",
+      "target": "目標區房屋類",
+      "expected": "全部可對帳",
+      "recomputed": "4446/4446",
+      "tolerance": "±2 元或 ±2%（容許 1% 例外並列出）",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V4",
+      "target": "桃園市|龜山區|student_room|114S4-115S3 社宅=True",
+      "expected": {
+        "n": 27,
+        "median": 1381.5,
+        "q1": 921.8,
+        "q3": 2048.5
+      },
+      "recomputed": {
+        "n": 27,
+        "median": 1381.5,
+        "q1": 921.8,
+        "q3": 2048.5
+      },
+      "tolerance": "0",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V4",
+      "target": "桃園市|龜山區|student_room|114S4-115S3 社宅=False",
+      "expected": {
+        "n": 27,
+        "median": 1381.5,
+        "q1": 921.8,
+        "q3": 2048.5
+      },
+      "recomputed": {
+        "n": 27,
+        "median": 1381.5,
+        "q1": 921.8,
+        "q3": 2048.5
+      },
+      "tolerance": "0",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V4",
+      "target": "桃園市|龜山區|student_suite|114S4-115S3 社宅=True",
+      "expected": {
+        "n": 1126,
+        "median": 1188.5,
+        "q1": 824.8,
+        "q3": 1687.0
+      },
+      "recomputed": {
+        "n": 1126,
+        "median": 1188.5,
+        "q1": 824.8,
+        "q3": 1687.0
+      },
+      "tolerance": "0",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V4",
+      "target": "桃園市|龜山區|student_suite|114S4-115S3 社宅=False",
+      "expected": {
+        "n": 699,
+        "median": 1583.3,
+        "q1": 1220.1,
+        "q3": 2076.4
+      },
+      "recomputed": {
+        "n": 699,
+        "median": 1583.3,
+        "q1": 1220.1,
+        "q3": 2076.4
+      },
+      "tolerance": "0",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V4",
+      "target": "桃園市|龜山區|whole_unit|114S4-115S3 社宅=True",
+      "expected": {
+        "n": 2402,
+        "median": 618.2,
+        "q1": 487.9,
+        "q3": 768.0
+      },
+      "recomputed": {
+        "n": 2402,
+        "median": 618.2,
+        "q1": 487.9,
+        "q3": 768.0
+      },
+      "tolerance": "0",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V4",
+      "target": "桃園市|龜山區|whole_unit|114S4-115S3 社宅=False",
+      "expected": {
+        "n": 467,
+        "median": 845.1,
+        "q1": 733.8,
+        "q3": 992.9
+      },
+      "recomputed": {
+        "n": 467,
+        "median": 845.1,
+        "q1": 733.8,
+        "q3": 992.9
+      },
+      "tolerance": "0",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V5",
+      "target": "L1",
+      "expected": 12618,
+      "recomputed": 12618,
+      "tolerance": "±1 元",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V7",
+      "target": "01 筆數 = 納入 + 排除；rows_deleted = 0",
+      "expected": 4500,
+      "recomputed": "3588+912; rows_deleted=0",
+      "tolerance": "0",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V12",
+      "target": "有 R 訊號 ⇔ 04_risk_report.json",
+      "expected": false,
+      "recomputed": false,
+      "tolerance": "一致",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V13",
+      "target": "03_market_stats 只含實價登錄",
+      "expected": 0,
+      "recomputed": 0,
+      "tolerance": "0",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V8",
+      "target": "final_report.md 的數字",
+      "expected": "全部可追溯",
+      "recomputed": "117/117",
+      "tolerance": "全部",
+      "status": "PASS",
+      "note": "無法追溯："
+    },
+    {
+      "check_id": "V9",
+      "target": "假設參數表",
+      "expected": "列出全部使用者情境參數與門檻",
+      "recomputed": "全部列出",
+      "tolerance": "全部",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V10",
+      "target": "所有輸出",
+      "expected": "不含門牌與個資",
+      "recomputed": "無",
+      "tolerance": "0",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V11",
+      "target": "模擬資料",
+      "expected": "無模擬資料或皆已標示",
+      "recomputed": "0 則模擬",
+      "tolerance": "全部",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V8",
+      "target": "報告章節與第一行地區",
+      "expected": "九個章節＋第一行寫分析地區",
+      "recomputed": "齊全",
+      "tolerance": "全部",
+      "status": "PASS",
+      "note": ""
+    }
+  ],
+  "issues": [],
+  "spot_sample_ids": [
+    "RPQOMLTLQHKGFHH37CC",
+    "RPWNMLKKRHIGFHH76CC",
+    "RPTPMLSLJHLGFHH07CC",
+    "RPQNMLLJJHLGFHH28CC",
+    "RPTNMLMKKIKGFHH88CC"
+  ]
+}

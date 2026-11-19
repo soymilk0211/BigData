@@ -1,0 +1,3 @@
+﻿rank,listing_id,true_monthly_cost_known,delta_vs_best,comparable,unstated_items,common_items,cost_common_items,rank_common_items,rank_if_time_free,rank_excl_commute,risk_signal_count
+1,L2,5500,0,True,mgmt;water;gas;internet;elec;commute,rent,5500,1,1,1,1
+2,L1,7000,1500,True,mgmt;water;gas;internet;elec;commute,rent,7000,2,2,2,2

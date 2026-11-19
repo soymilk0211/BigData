@@ -1,0 +1,4 @@
+﻿area_key,rent_type_group,price_basis,n_listings,asking_rent_median,asking_rent_q1,asking_rent_q3,asking_per_use_ping_median,lvr_rent_median,asking_vs_lvr_pct,crawled_at,note
+桃園市|龜山區,student_suite,asking_591,165,12000.0,8800.0,16000.0,1500.0,10000.0,20.0,2026-11-18T17:26:16+08:00,刊登價≠成交價；坪數為使用坪數，不與實價登錄合併
+桃園市|龜山區,student_room,asking_591,16,6500.0,4875.0,7000.0,1150.0,8275.0,-21.5,2026-11-18T17:26:16+08:00,刊登價≠成交價；坪數為使用坪數，不與實價登錄合併
+桃園市|龜山區,whole_unit,asking_591,591,27000.0,23000.0,30000.0,1310.0,19900.0,35.7,2026-11-18T17:26:16+08:00,刊登價≠成交價；坪數為使用坪數，不與實價登錄合併

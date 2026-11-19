@@ -1,0 +1,3 @@
+﻿listing_id,label,city,district,area_key,area_source,rent_type_group,rent_monthly,price_basis,area_ping,area_basis,mgmt_fee,mgmt_status,elec_price_per_kwh,elec_status,water_fee,water_status,gas_fee,gas_status,internet_fee,internet_status,deposit_months,destination_label,commute_minutes_oneway,commute_mode,commute_fare_per_trip,source_type,source_url,posted_date,notes_text,risk_hits_591,status,status_reason
+L1,逢甲分租套房,臺中市,西屯區,臺中市|西屯區,school_lookup,student_suite,7000,user_stated,7,user,,unstated,,unstated,,unstated,,unstated,,unstated,,逢甲大學,,,,unknown,,,分租套房；房東說要先匯訂金才能看房,,ok,
+L2,逢甲雅房,臺中市,西屯區,臺中市|西屯區,school_lookup,student_room,5500,user_stated,,unstated,,unstated,,unstated,,unstated,,unstated,,unstated,,逢甲大學,,,,unknown,,,雅房；管理費不知道,,ok,

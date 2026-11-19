@@ -1,0 +1,706 @@
+{
+  "agent": "Agent 1（正向測試）",
+  "skill": "student-rental-check",
+  "date": "2026-11-18",
+  "runner": "tests/run_test.sh（claude -p --setting-sources project,local --output-format stream-json --verbose）",
+  "env": {
+    "LVR_CACHE": "<LVR_CACHE>"
+  },
+  "prompts": {
+    "A": "我是長庚大學新生，在龜山區找到一間獨立套房，月租 9,500 元、權狀 8 坪，管理費另計 800 元，電費每度 5 元，騎車到學校單程約 12 分鐘，刊登在學校租屋網。請用實價登錄幫我判斷這個價格合不合理，並算出真實每月總成本。",
+    "B": "我在逢甲附近找房，有兩間在猶豫：第一間是分租套房 7 坪，一個月 7,000，房東說要先匯訂金才能看房；第二間是雅房，一個月 5,500，管理費不知道。哪間比較划算？會不會踩雷？",
+    "A591": "這是我在 591 看到的，幫我看會不會踩雷：龜山區 獨立套房 7,000元/月 5坪 押金一個月租金 租金含網路、第四台 免管理費 仲介刊登 11月17日發佈 https://rent.591.com.tw/22364377"
+  },
+  "tests": [
+    {
+      "id": "A-1",
+      "group": "A",
+      "kind": "full",
+      "max_turns": null,
+      "trigger": "自動（提示詞未指名 Skill）",
+      "log": "test-logs/A-1.jsonl",
+      "E0_skill_available": true,
+      "E0_line": 3,
+      "E1_triggered": true,
+      "E1_line": 29,
+      "E2_agents_read": [
+        {
+          "line": 125,
+          "file": "collector.md"
+        },
+        {
+          "line": 356,
+          "file": "fact-checker.md"
+        },
+        {
+          "line": 469,
+          "file": "quant-analyst.md"
+        },
+        {
+          "line": 692,
+          "file": "reviewer.md"
+        }
+      ],
+      "E2_devil_advocate_read": false,
+      "E2_scripts_run": [
+        {
+          "line": 165,
+          "script": "resolve_area.py"
+        },
+        {
+          "line": 165,
+          "script": "collect_lvr.py"
+        },
+        {
+          "line": 245,
+          "script": "crawl_591.py"
+        },
+        {
+          "line": 245,
+          "script": "candidates.py"
+        },
+        {
+          "line": 382,
+          "script": "flag.py"
+        },
+        {
+          "line": 501,
+          "script": "analyze.py"
+        },
+        {
+          "line": 729,
+          "script": "recompute.py"
+        },
+        {
+          "line": 1293,
+          "script": "recompute.py"
+        },
+        {
+          "line": 1293,
+          "script": "validate.py"
+        }
+      ],
+      "result": {
+        "line": 1520,
+        "subtype": "success",
+        "num_turns": 21,
+        "total_cost_usd": 0.673178,
+        "duration_ms": 109423,
+        "is_error": false
+      },
+      "invalid_usage_limit": false,
+      "full_flow": {
+        "validate_test_logs_output": {
+          "exit_code": 1,
+          "output": "❌ 驗證失敗：\n  - 缺少必要檔案：01_collected.csv\n  - 缺少必要檔案：03_inclusion_log.csv"
+        },
+        "validate_tmp_run_dir": {
+          "exit_code": 0,
+          "output": "✅ 驗證通過",
+          "path": "<WORK>/output/20261118-220902"
+        },
+        "routing": {
+          "mode": "single",
+          "agents_planned": [
+            "collector",
+            "fact-checker",
+            "quant-analyst",
+            "reviewer"
+          ],
+          "agents_skipped": [
+            {
+              "agent": "devil-advocate",
+              "reason": "no_high_risk_signal"
+            }
+          ]
+        },
+        "area_targets": [
+          {
+            "area_key": "桃園市|龜山區",
+            "area_source": "user_explicit"
+          }
+        ],
+        "review": {
+          "verdict": "PASS",
+          "retry_count": 0,
+          "issues": []
+        },
+        "signals": [],
+        "not_evaluated": [
+          "L1 的 R5 不判定：電費上限未驗證（電價 5 元/度）",
+          "R7 不判定：使用者沒有提供評論，此地區無評論資料"
+        ],
+        "final_report_first_line": "本次分析地區：桃園市龜山區（來源：使用者指定）　｜　run：20261118-220902",
+        "cost_breakdown_L1": {
+          "rent": "9500",
+          "mgmt_fee": "800",
+          "elec_cost": "750",
+          "elec_assumption": "5 元/度 × 150 度（使用者情境參數）",
+          "commute_time_cost": "1568",
+          "true_monthly_cost_known": "12618",
+          "unstated_items": "water;gas;internet",
+          "rent_per_ping": "1187.5",
+          "true_cost_per_ping": "1577.2",
+          "market_group_key": "桃園市|龜山區|student_suite|114S4-115S3",
+          "market_percentile": "49.9",
+          "vs_median_pct": "-0.1",
+          "outlier": "none"
+        }
+      },
+      "checks": [
+        {
+          "item": "validate.py（暫存 run 資料夾）結束碼",
+          "expected": 0,
+          "actual": 0,
+          "pass": true
+        },
+        {
+          "item": "validate.py（test-logs 複本）失敗只因刻意未複製的檔案",
+          "expected": true,
+          "actual": true,
+          "pass": true
+        },
+        {
+          "item": "05 verdict",
+          "expected": "PASS",
+          "actual": "PASS",
+          "pass": true
+        },
+        {
+          "item": "讀四個必跑 agents",
+          "expected": [
+            "collector.md",
+            "fact-checker.md",
+            "quant-analyst.md",
+            "reviewer.md"
+          ],
+          "actual": [
+            "collector.md",
+            "fact-checker.md",
+            "quant-analyst.md",
+            "reviewer.md"
+          ],
+          "pass": true
+        },
+        {
+          "item": "mode",
+          "expected": "single",
+          "actual": "single",
+          "pass": true
+        },
+        {
+          "item": "true_monthly_cost_known",
+          "expected": "12618 ±1",
+          "actual": 12618.0,
+          "pass": true
+        },
+        {
+          "item": "rent_per_ping",
+          "expected": 1187.5,
+          "actual": 1187.5,
+          "pass": true
+        },
+        {
+          "item": "unstated_items 有列出",
+          "expected": "非空（未提供項目）",
+          "actual": "water;gas;internet",
+          "pass": true
+        },
+        {
+          "item": "agents_skipped 含 devil-advocate",
+          "expected": "no_high_risk_signal",
+          "actual": [
+            {
+              "agent": "devil-advocate",
+              "reason": "no_high_risk_signal"
+            }
+          ],
+          "pass": true
+        },
+        {
+          "item": "沒有 04_risk_report.json",
+          "expected": false,
+          "actual": false,
+          "pass": true
+        },
+        {
+          "item": "沒有 Read devil-advocate.md",
+          "expected": false,
+          "actual": false,
+          "pass": true
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "A-2",
+      "group": "A",
+      "kind": "trigger_only",
+      "max_turns": 3,
+      "trigger": "自動（提示詞未指名 Skill）",
+      "log": "test-logs/A-2.jsonl",
+      "E0_skill_available": true,
+      "E0_line": 3,
+      "E1_triggered": true,
+      "E1_line": 31,
+      "E2_agents_read": [
+        {
+          "line": 132,
+          "file": "collector.md"
+        }
+      ],
+      "E2_devil_advocate_read": false,
+      "E2_scripts_run": [],
+      "result": {
+        "line": 137,
+        "subtype": "error_max_turns",
+        "num_turns": 4,
+        "total_cost_usd": 0.1152254,
+        "duration_ms": 9938,
+        "is_error": true
+      },
+      "invalid_usage_limit": false,
+      "pass": true
+    },
+    {
+      "id": "A-3",
+      "group": "A",
+      "kind": "trigger_only",
+      "max_turns": 3,
+      "trigger": "自動（提示詞未指名 Skill）",
+      "log": "test-logs/A-3.jsonl",
+      "E0_skill_available": true,
+      "E0_line": 3,
+      "E1_triggered": true,
+      "E1_line": 28,
+      "E2_agents_read": [
+        {
+          "line": 124,
+          "file": "collector.md"
+        }
+      ],
+      "E2_devil_advocate_read": false,
+      "E2_scripts_run": [],
+      "result": {
+        "line": 129,
+        "subtype": "error_max_turns",
+        "num_turns": 4,
+        "total_cost_usd": 0.11406580000000001,
+        "duration_ms": 8879,
+        "is_error": true
+      },
+      "invalid_usage_limit": false,
+      "pass": true
+    },
+    {
+      "id": "B-1",
+      "group": "B",
+      "kind": "full",
+      "max_turns": null,
+      "trigger": "自動（提示詞未指名 Skill）",
+      "log": "test-logs/B-1.jsonl",
+      "E0_skill_available": true,
+      "E0_line": 3,
+      "E1_triggered": true,
+      "E1_line": 34,
+      "E2_agents_read": [
+        {
+          "line": 134,
+          "file": "collector.md"
+        },
+        {
+          "line": 393,
+          "file": "fact-checker.md"
+        },
+        {
+          "line": 516,
+          "file": "quant-analyst.md"
+        },
+        {
+          "line": 692,
+          "file": "devil-advocate.md"
+        },
+        {
+          "line": 1077,
+          "file": "reviewer.md"
+        }
+      ],
+      "E2_devil_advocate_read": true,
+      "E2_scripts_run": [
+        {
+          "line": 163,
+          "script": "resolve_area.py"
+        },
+        {
+          "line": 192,
+          "script": "collect_lvr.py"
+        },
+        {
+          "line": 223,
+          "script": "crawl_591.py"
+        },
+        {
+          "line": 287,
+          "script": "candidates.py"
+        },
+        {
+          "line": 419,
+          "script": "flag.py"
+        },
+        {
+          "line": 552,
+          "script": "analyze.py"
+        },
+        {
+          "line": 1119,
+          "script": "recompute.py"
+        },
+        {
+          "line": 1785,
+          "script": "recompute.py"
+        },
+        {
+          "line": 1785,
+          "script": "validate.py"
+        }
+      ],
+      "result": {
+        "line": 2028,
+        "subtype": "success",
+        "num_turns": 25,
+        "total_cost_usd": 0.7900176,
+        "duration_ms": 130154,
+        "is_error": false
+      },
+      "invalid_usage_limit": false,
+      "full_flow": {
+        "validate_test_logs_output": {
+          "exit_code": 1,
+          "output": "❌ 驗證失敗：\n  - 缺少必要檔案：01_collected.csv\n  - 缺少必要檔案：03_inclusion_log.csv"
+        },
+        "validate_tmp_run_dir": {
+          "exit_code": 0,
+          "output": "✅ 驗證通過",
+          "path": "<WORK>/output/20261118-220902"
+        },
+        "routing": {
+          "mode": "compare",
+          "agents_planned": [
+            "collector",
+            "fact-checker",
+            "quant-analyst",
+            "devil-advocate",
+            "reviewer"
+          ],
+          "agents_skipped": []
+        },
+        "area_targets": [
+          {
+            "area_key": "臺中市|西屯區",
+            "area_source": "school_lookup"
+          }
+        ],
+        "review": {
+          "verdict": "PASS",
+          "retry_count": 0,
+          "issues": []
+        },
+        "signals": [
+          {
+            "listing_id": "L1",
+            "signal": "R3",
+            "evidence": "命中：先匯訂金",
+            "source": "user_input"
+          },
+          {
+            "listing_id": "L1",
+            "signal": "R6",
+            "evidence": "STALE_LISTING＋UNKNOWN_SOURCE",
+            "source": "02_flags.csv"
+          },
+          {
+            "listing_id": "L2",
+            "signal": "R6",
+            "evidence": "STALE_LISTING＋UNKNOWN_SOURCE",
+            "source": "02_flags.csv"
+          }
+        ],
+        "not_evaluated": [
+          "L2 的 R1／R2 不判定：缺坪數或行情樣本不足",
+          "R7 不判定：使用者沒有提供評論，此地區無評論資料"
+        ],
+        "final_report_first_line": "本次分析地區：臺中市西屯區（來源：學校查表）　｜　run：20261118-220902",
+        "county_files": [
+          {
+            "city_code": "b",
+            "city": "臺中市",
+            "file": "b_lvr_land_c.csv"
+          }
+        ],
+        "data_mode": "online",
+        "ranking": [
+          {
+            "rank": "1",
+            "listing_id": "L2",
+            "true_monthly_cost_known": "5500",
+            "unstated_items": "mgmt;water;gas;internet;elec;commute",
+            "risk_signal_count": "1"
+          },
+          {
+            "rank": "2",
+            "listing_id": "L1",
+            "true_monthly_cost_known": "7000",
+            "unstated_items": "mgmt;water;gas;internet;elec;commute",
+            "risk_signal_count": "2"
+          }
+        ],
+        "risk_levels": {
+          "L1": "high",
+          "L2": "high"
+        },
+        "cost_breakdown": [
+          {
+            "listing_id": "L1",
+            "rent": "7000",
+            "true_monthly_cost_known": "7000",
+            "unstated_items": "mgmt;water;gas;internet;elec;commute",
+            "rent_per_ping": "1000.0",
+            "market_percentile": "55.2"
+          },
+          {
+            "listing_id": "L2",
+            "rent": "5500",
+            "true_monthly_cost_known": "5500",
+            "unstated_items": "mgmt;water;gas;internet;elec;commute",
+            "rent_per_ping": "",
+            "market_percentile": ""
+          }
+        ],
+        "top_rank_warning_line": "**排名第一不等於可以租**：L2 便宜只是因為目前只知道月租，管理費、水電都未提供；L1 則有「未看房先付款」的典型詐騙特徵。"
+      },
+      "checks": [
+        {
+          "item": "validate.py（暫存 run 資料夾）結束碼",
+          "expected": 0,
+          "actual": 0,
+          "pass": true
+        },
+        {
+          "item": "validate.py（test-logs 複本）失敗只因刻意未複製的檔案",
+          "expected": true,
+          "actual": true,
+          "pass": true
+        },
+        {
+          "item": "05 verdict",
+          "expected": "PASS",
+          "actual": "PASS",
+          "pass": true
+        },
+        {
+          "item": "讀四個必跑 agents",
+          "expected": [
+            "collector.md",
+            "fact-checker.md",
+            "quant-analyst.md",
+            "reviewer.md"
+          ],
+          "actual": [
+            "collector.md",
+            "fact-checker.md",
+            "quant-analyst.md",
+            "devil-advocate.md",
+            "reviewer.md"
+          ],
+          "pass": true
+        },
+        {
+          "item": "mode",
+          "expected": "compare",
+          "actual": "compare",
+          "pass": true
+        },
+        {
+          "item": "01_area",
+          "expected": "臺中市|西屯區 / school_lookup",
+          "actual": "臺中市|西屯區 / school_lookup",
+          "pass": true
+        },
+        {
+          "item": "county_files 只有 b",
+          "expected": [
+            "b"
+          ],
+          "actual": [
+            "b"
+          ],
+          "pass": true
+        },
+        {
+          "item": "03_ranking.csv 列數",
+          "expected": 2,
+          "actual": 2,
+          "pass": true
+        },
+        {
+          "item": "03_signals L1 有 R3",
+          "expected": true,
+          "actual": [
+            "R3",
+            "R6"
+          ],
+          "pass": true
+        },
+        {
+          "item": "04 L1 risk_level",
+          "expected": "high",
+          "actual": "high",
+          "pass": true
+        },
+        {
+          "item": "final_report 提醒排名第一不等於可以租",
+          "expected": true,
+          "actual": "**排名第一不等於可以租**：L2 便宜只是因為目前只知道月租，管理費、水電都未提供；L1 則有「未看房先付款」的典型詐騙特徵。",
+          "pass": true
+        },
+        {
+          "item": "有 Read devil-advocate.md",
+          "expected": true,
+          "actual": true,
+          "pass": true
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "B-2",
+      "group": "B",
+      "kind": "trigger_only",
+      "max_turns": 3,
+      "trigger": "自動（提示詞未指名 Skill）",
+      "log": "test-logs/B-2.jsonl",
+      "E0_skill_available": true,
+      "E0_line": 3,
+      "E1_triggered": true,
+      "E1_line": 33,
+      "E2_agents_read": [
+        {
+          "line": 120,
+          "file": "collector.md"
+        }
+      ],
+      "E2_devil_advocate_read": false,
+      "E2_scripts_run": [],
+      "result": {
+        "line": 126,
+        "subtype": "error_max_turns",
+        "num_turns": 4,
+        "total_cost_usd": 0.1135676,
+        "duration_ms": 8875,
+        "is_error": true
+      },
+      "invalid_usage_limit": false,
+      "pass": true
+    },
+    {
+      "id": "B-3",
+      "group": "B",
+      "kind": "trigger_only",
+      "max_turns": 3,
+      "trigger": "自動（提示詞未指名 Skill）",
+      "log": "test-logs/B-3.jsonl",
+      "E0_skill_available": true,
+      "E0_line": 3,
+      "E1_triggered": true,
+      "E1_line": 35,
+      "E2_agents_read": [
+        {
+          "line": 133,
+          "file": "collector.md"
+        }
+      ],
+      "E2_devil_advocate_read": false,
+      "E2_scripts_run": [],
+      "result": {
+        "line": 138,
+        "subtype": "error_max_turns",
+        "num_turns": 4,
+        "total_cost_usd": 0.1143508,
+        "duration_ms": 9510,
+        "is_error": true
+      },
+      "invalid_usage_limit": false,
+      "pass": true
+    },
+    {
+      "id": "A591-1",
+      "group": "A591",
+      "kind": "trigger_only",
+      "max_turns": 3,
+      "trigger": "自動（提示詞未指名 Skill）",
+      "log": "test-logs/A591-1.jsonl",
+      "E0_skill_available": true,
+      "E0_line": 3,
+      "E1_triggered": true,
+      "E1_line": 27,
+      "E2_agents_read": [
+        {
+          "line": 120,
+          "file": "collector.md"
+        }
+      ],
+      "E2_devil_advocate_read": false,
+      "E2_scripts_run": [],
+      "result": {
+        "line": 125,
+        "subtype": "error_max_turns",
+        "num_turns": 4,
+        "total_cost_usd": 0.11806119999999999,
+        "duration_ms": 8991,
+        "is_error": true
+      },
+      "invalid_usage_limit": false,
+      "pass": true
+    }
+  ],
+  "verdicts": {
+    "A": {
+      "rule": "A-1..A-3 三次都有 E1，A-1 完整流程符合預期",
+      "e1_count": 3,
+      "pass": true
+    },
+    "B": {
+      "rule": "B-1..B-3 至少 2 次有 E1，B-1 完整流程符合預期",
+      "e1_count": 3,
+      "pass": true
+    },
+    "A591": {
+      "rule": "A591-1 有 E1（加測）",
+      "e1_count": 1,
+      "pass": true
+    }
+  },
+  "path_scrub": {
+    "note": "run_test.sh 的 sed 只取代完整暫存路徑；log 中仍殘留 init 事件的 scratchpad_path、messaging_socket_path 與 stream_event 分段的 /tmp/ 片段，已用 sed 改為 <WORK>/...，取代後每行仍為合法 JSON、行數不變",
+    "sed": "sed -i -E 's#/tmp/claude-0/[^\"]*#<WORK>/scratchpad#g; s#/tmp/cc-socks/#<WORK>/cc-socks/#g; s#/tmp/#<WORK>/#g; s#/home/[^/\"]+/#~/#g; s#/root/#~/#g'",
+    "files": [
+      "A-1.jsonl",
+      "A-2.jsonl",
+      "A-3.jsonl",
+      "B-1.jsonl",
+      "B-2.jsonl",
+      "B-3.jsonl",
+      "A591-1.jsonl"
+    ]
+  },
+  "invalid_runs_discarded": [
+    {
+      "id": "A-1",
+      "reason": "第一次執行遭 API 用量上限中斷（result is_error=true，5-hour limit），已由協調者刪除後重跑"
+    },
+    {
+      "id": "B-1",
+      "reason": "同上"
+    }
+  ]
+}

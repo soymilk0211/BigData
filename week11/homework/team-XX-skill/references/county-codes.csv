@@ -1,0 +1,23 @@
+﻿city_code,city,rent_file,source
+a,臺北市,a_lvr_land_c.csv,115S3 manifest.csv
+b,臺中市,b_lvr_land_c.csv,115S3 manifest.csv
+c,基隆市,c_lvr_land_c.csv,115S3 manifest.csv
+d,臺南市,d_lvr_land_c.csv,115S3 manifest.csv
+e,高雄市,e_lvr_land_c.csv,115S3 manifest.csv
+f,新北市,f_lvr_land_c.csv,115S3 manifest.csv
+g,宜蘭縣,g_lvr_land_c.csv,115S3 manifest.csv
+h,桃園市,h_lvr_land_c.csv,115S3 manifest.csv
+i,嘉義市,i_lvr_land_c.csv,115S3 manifest.csv
+j,新竹縣,j_lvr_land_c.csv,115S3 manifest.csv
+k,苗栗縣,k_lvr_land_c.csv,115S3 manifest.csv
+m,南投縣,m_lvr_land_c.csv,115S3 manifest.csv
+n,彰化縣,n_lvr_land_c.csv,115S3 manifest.csv
+o,新竹市,o_lvr_land_c.csv,115S3 manifest.csv
+p,雲林縣,p_lvr_land_c.csv,115S3 manifest.csv
+q,嘉義縣,q_lvr_land_c.csv,115S3 manifest.csv
+t,屏東縣,t_lvr_land_c.csv,115S3 manifest.csv
+u,花蓮縣,u_lvr_land_c.csv,115S3 manifest.csv
+v,臺東縣,v_lvr_land_c.csv,115S3 manifest.csv
+w,金門縣,w_lvr_land_c.csv,115S3 manifest.csv
+x,澎湖縣,x_lvr_land_c.csv,115S3 manifest.csv
+z,連江縣,,manifest 無租賃檔（只有買賣檔）

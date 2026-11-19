@@ -1,0 +1,26 @@
+{
+  "signals": [
+    {
+      "listing_id": "L1",
+      "signal": "R3",
+      "evidence": "命中：先匯訂金",
+      "source": "user_input"
+    },
+    {
+      "listing_id": "L1",
+      "signal": "R6",
+      "evidence": "STALE_LISTING＋UNKNOWN_SOURCE",
+      "source": "02_flags.csv"
+    },
+    {
+      "listing_id": "L2",
+      "signal": "R6",
+      "evidence": "STALE_LISTING＋UNKNOWN_SOURCE",
+      "source": "02_flags.csv"
+    }
+  ],
+  "not_evaluated": [
+    "L2 的 R1／R2 不判定：缺坪數或行情樣本不足",
+    "R7 不判定：使用者沒有提供評論，此地區無評論資料"
+  ]
+}
