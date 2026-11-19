@@ -1,0 +1,392 @@
+{
+  "verdict": "PASS",
+  "retry_count": 0,
+  "checks": [
+    {
+      "check_id": "V1",
+      "target": "112S4 臺中市|西屯區",
+      "expected": 645,
+      "recomputed": 645,
+      "tolerance": "0",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V1",
+      "target": "114S4 臺中市|西屯區",
+      "expected": 915,
+      "recomputed": 915,
+      "tolerance": "0",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V1",
+      "target": "115S1 臺中市|西屯區",
+      "expected": 866,
+      "recomputed": 866,
+      "tolerance": "0",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V1",
+      "target": "115S2 臺中市|西屯區",
+      "expected": 963,
+      "recomputed": 963,
+      "tolerance": "0",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V1",
+      "target": "115S3 臺中市|西屯區",
+      "expected": 1393,
+      "recomputed": 1393,
+      "tolerance": "0",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V1",
+      "target": "area_source",
+      "expected": "允許值",
+      "recomputed": [
+        "school_lookup"
+      ],
+      "tolerance": "—",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V1",
+      "target": "city_code",
+      "expected": "與 county-codes.csv 一致",
+      "recomputed": [
+        "b"
+      ],
+      "tolerance": "—",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V2",
+      "target": "RPRPMLPKRHKGFCB68CC",
+      "expected": {
+        "area_ping": "8.68",
+        "rent_date": "2025-08-20",
+        "rpp": "645.2"
+      },
+      "recomputed": {
+        "area_ping": 8.68,
+        "rent_date": "2025-08-20",
+        "rpp": 645.2
+      },
+      "tolerance": "坪 ±0.01；日期相同",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V2",
+      "target": "RPVNMLTLQHIGFCB09CC",
+      "expected": {
+        "area_ping": "19.77",
+        "rent_date": "2023-08-10",
+        "rpp": "758.7"
+      },
+      "recomputed": {
+        "area_ping": 19.77,
+        "rent_date": "2023-08-10",
+        "rpp": 758.7
+      },
+      "tolerance": "坪 ±0.01；日期相同",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V2",
+      "target": "RPPPMLMJKHLGFCB47CC",
+      "expected": {
+        "area_ping": "4.61",
+        "rent_date": "2026-02-02",
+        "rpp": "1692.0"
+      },
+      "recomputed": {
+        "area_ping": 4.61,
+        "rent_date": "2026-02-02",
+        "rpp": 1692.0
+      },
+      "tolerance": "坪 ±0.01；日期相同",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V2",
+      "target": "RPSNMLTJJHLGFCB18CC",
+      "expected": {
+        "area_ping": "10.42",
+        "rent_date": "2025-12-23",
+        "rpp": "739.0"
+      },
+      "recomputed": {
+        "area_ping": 10.42,
+        "rent_date": "2025-12-23",
+        "rpp": 739.0
+      },
+      "tolerance": "坪 ±0.01；日期相同",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V2",
+      "target": "RPUOMLTKKIKGFCB68CC",
+      "expected": {
+        "area_ping": "47.4",
+        "rent_date": "2025-12-18",
+        "rpp": "327.0"
+      },
+      "recomputed": {
+        "area_ping": 47.4,
+        "rent_date": "2025-12-18",
+        "rpp": 327.0
+      },
+      "tolerance": "坪 ±0.01；日期相同",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V3",
+      "target": "目標區房屋類",
+      "expected": "全部可對帳",
+      "recomputed": "4729/4729",
+      "tolerance": "±2 元或 ±2%（容許 1% 例外並列出）",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V4",
+      "target": "臺中市|西屯區|student_room|114S4-115S3 社宅=True",
+      "expected": {
+        "n": 53,
+        "median": 2148.1,
+        "q1": 1754.8,
+        "q3": 2342.1
+      },
+      "recomputed": {
+        "n": 53,
+        "median": 2148.1,
+        "q1": 1754.8,
+        "q3": 2342.1
+      },
+      "tolerance": "0",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V4",
+      "target": "臺中市|西屯區|student_room|114S4-115S3 社宅=False",
+      "expected": {
+        "n": 53,
+        "median": 2148.1,
+        "q1": 1754.8,
+        "q3": 2342.1
+      },
+      "recomputed": {
+        "n": 53,
+        "median": 2148.1,
+        "q1": 1754.8,
+        "q3": 2342.1
+      },
+      "tolerance": "0",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V4",
+      "target": "臺中市|西屯區|student_suite|114S4-115S3 社宅=True",
+      "expected": {
+        "n": 2091,
+        "median": 959.2,
+        "q1": 786.4,
+        "q3": 1516.6
+      },
+      "recomputed": {
+        "n": 2091,
+        "median": 959.2,
+        "q1": 786.4,
+        "q3": 1516.6
+      },
+      "tolerance": "0",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V4",
+      "target": "臺中市|西屯區|student_suite|114S4-115S3 社宅=False",
+      "expected": {
+        "n": 896,
+        "median": 1679.8,
+        "q1": 1184.8,
+        "q3": 2223.3
+      },
+      "recomputed": {
+        "n": 896,
+        "median": 1679.8,
+        "q1": 1184.8,
+        "q3": 2223.3
+      },
+      "tolerance": "0",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V4",
+      "target": "臺中市|西屯區|whole_unit|114S4-115S3 社宅=True",
+      "expected": {
+        "n": 1616,
+        "median": 635.6,
+        "q1": 488.3,
+        "q3": 817.0
+      },
+      "recomputed": {
+        "n": 1616,
+        "median": 635.6,
+        "q1": 488.3,
+        "q3": 817.0
+      },
+      "tolerance": "0",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V4",
+      "target": "臺中市|西屯區|whole_unit|114S4-115S3 社宅=False",
+      "expected": {
+        "n": 515,
+        "median": 882.0,
+        "q1": 667.8,
+        "q3": 1106.0
+      },
+      "recomputed": {
+        "n": 515,
+        "median": 882.0,
+        "q1": 667.8,
+        "q3": 1106.0
+      },
+      "tolerance": "0",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V5",
+      "target": "L1",
+      "expected": 7000,
+      "recomputed": 7000,
+      "tolerance": "±1 元",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V5",
+      "target": "L2",
+      "expected": 5500,
+      "recomputed": 5500,
+      "tolerance": "±1 元",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V6",
+      "target": "03_ranking.csv",
+      "expected": "依已知項目合計遞增",
+      "recomputed": [
+        5500,
+        7000
+      ],
+      "tolerance": "完全一致",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V7",
+      "target": "01 筆數 = 納入 + 排除；rows_deleted = 0",
+      "expected": 4782,
+      "recomputed": "3800+982; rows_deleted=0",
+      "tolerance": "0",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V12",
+      "target": "有 R 訊號 ⇔ 04_risk_report.json",
+      "expected": true,
+      "recomputed": true,
+      "tolerance": "一致",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V13",
+      "target": "03_market_stats 只含實價登錄",
+      "expected": 0,
+      "recomputed": 0,
+      "tolerance": "0",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V8",
+      "target": "final_report.md 的數字",
+      "expected": "全部可追溯",
+      "recomputed": "99/99",
+      "tolerance": "全部",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V9",
+      "target": "假設參數表",
+      "expected": "列出全部使用者情境參數與門檻",
+      "recomputed": "全部列出",
+      "tolerance": "全部",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V10",
+      "target": "所有輸出",
+      "expected": "不含門牌與個資",
+      "recomputed": "無",
+      "tolerance": "0",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V11",
+      "target": "模擬資料",
+      "expected": "無模擬資料或皆已標示",
+      "recomputed": "0 則模擬",
+      "tolerance": "全部",
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check_id": "V8",
+      "target": "報告章節與第一行地區",
+      "expected": "九個章節＋第一行寫分析地區",
+      "recomputed": "齊全",
+      "tolerance": "全部",
+      "status": "PASS",
+      "note": ""
+    }
+  ],
+  "issues": [],
+  "spot_sample_ids": [
+    "RPRPMLPKRHKGFCB68CC",
+    "RPVNMLTLQHIGFCB09CC",
+    "RPPPMLMJKHLGFCB47CC",
+    "RPSNMLTJJHLGFCB18CC",
+    "RPUOMLTKKIKGFCB68CC"
+  ],
+  "report_retry": 0
+}

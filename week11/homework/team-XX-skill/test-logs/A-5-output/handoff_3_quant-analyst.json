@@ -1,0 +1,36 @@
+{
+  "handoff_version": "1.0",
+  "run_id": "20261119-075028",
+  "from": "quant-analyst",
+  "to": "reviewer",
+  "artifacts": [
+    {
+      "path": "03_market_stats.csv",
+      "rows": 6
+    },
+    {
+      "path": "03_cost_breakdown.csv",
+      "rows": 1
+    },
+    {
+      "path": "03_asking_stats.csv",
+      "rows": 3
+    },
+    {
+      "path": "03_mgmt_fee_status.csv",
+      "rows": 10
+    },
+    {
+      "path": "03_signals.json",
+      "rows": 1
+    }
+  ],
+  "status": "ok",
+  "warnings": [
+    "龜山套房含社宅 n=1126 每坪中位數 1188.5；不含社宅 n=699 每坪中位數 1583.3，差距大",
+    "L1 未提供：水費、瓦斯、網路；已知項目合計含通勤時間成本 1568（時薪 196 未驗證）",
+    "R5、R7 不判定（見 03_signals.json.not_evaluated）",
+    "無退回步驟（n≥10）"
+  ],
+  "next_hint": "L1 每坪 1187.5，位於含社宅行情第 49.9 百分位（約中位數）；無 R1–R7 訊號"
+}

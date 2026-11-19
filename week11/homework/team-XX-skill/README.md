@@ -54,6 +54,13 @@ flowchart TD
 
 `tests/run_test.sh <ID> "<提示詞>" [max_turns]`：在乾淨暫存目錄安裝本 Skill，用 `claude -p --setting-sources project,local --output-format stream-json --verbose` 執行，log 去除絕對路徑後存到 `test-logs/`。A／B／C 測試結果、啟動證據與修正紀錄見 `test-report.md`。
 
+影片錄製時的 A、B 實際執行另存為 `test-logs/V-A.jsonl`、`V-B.jsonl`（含輸出複本 `V-A-output/`、`V-B-output/`）；V-A 審查 V8 FAIL 的除錯與修正後的回歸測試 A-5 見 `test-report.md` 第 4.6 節。
+
+## 影片與 AI Tutor
+
+- 影片（5:11）：章節表 `tutor/chapters.md`，字幕 `tutor/subtitles.zh-TW.srt`（上傳 YouTube 時一併上傳）。
+- AI Tutor（ClassTutor）材料在 `tutor/`：講義 `tutor-material.md`、詞彙 `vocabulary.txt`、課程簡介 `course-intro.md`；老師端製作 `.classtutor` 課程包與學生端使用步驟、測試題見 `tutor/README.md`。
+
 ## 限制
 
 - 實價登錄只含已申報案件；社會住宅比例因地區而異；坪數為登記面積（含公設）。

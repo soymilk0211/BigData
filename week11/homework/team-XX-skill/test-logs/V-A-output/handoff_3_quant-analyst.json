@@ -1,0 +1,46 @@
+{
+  "handoff_version": "1.0",
+  "run_id": "20261118-233348",
+  "from": "quant-analyst",
+  "to": "reviewer",
+  "artifacts": [
+    {
+      "path": "03_inclusion_log.csv",
+      "rows": 4500
+    },
+    {
+      "path": "03_market_stats.csv",
+      "rows": 6
+    },
+    {
+      "path": "03_mgmt_fee_status.csv",
+      "rows": 10
+    },
+    {
+      "path": "03_cost_breakdown.csv",
+      "rows": 1
+    },
+    {
+      "path": "03_asking_stats.csv",
+      "rows": 3
+    },
+    {
+      "path": "03_signals.json",
+      "rows": 1
+    },
+    {
+      "path": "charts/",
+      "rows": 4
+    }
+  ],
+  "status": "ok",
+  "warnings": [
+    "L1 比對分組 桃園市|龜山區|student_suite|114S4-115S3，含社宅 n=1126、無退回（fallback 空白）",
+    "社宅敏感度差異大：含社宅每坪中位數 1188.5，不含社宅 1583.3（n=699）；L1 每坪 1187.5，含社宅時位於第 49.9 百分位，不含社宅時低於 Q1 1220.1",
+    "L1 true_monthly_cost_known 12618 含通勤時間成本 1568（hourly_value 196 未驗證）；未提供：water、gas、internet",
+    "591 刊登套房中位數 12000，比實價登錄月租中位數 10000 高 20.0%（只並列，不合併）",
+    "signals 為空；not_evaluated：R5（電費上限未驗證）、R7（無評論）",
+    "圖表為中文標籤（有中文字型）"
+  ],
+  "next_hint": "single 模式只有 L1：已知項目合計 12618 元，每坪 1187.5 約在含社宅行情中位數，主要缺口為水費、瓦斯、網路與押金未提供"
+}

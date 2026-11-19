@@ -98,8 +98,9 @@ flowchart TD
 
 **報告階段 FAIL（RT16）**：`recompute.py --stage report` 回報 FAIL（例如 V8「無法追溯」）時：
 1. 不覆蓋第一次的結果：再跑 `recompute.py --stage report` 時，腳本會自動在 `05_review_log.json` 寫入 `report_retry`（次數）與 `report_first_issues`（第一次的問題）；手動修改報告前不要刪除這兩個欄位。
-2. 修法是**讓數字可追溯**，不是刪掉數字：把報告中的數字改成 `03_*`、`02_*`、`01_candidates.csv`、`cost-params.json` 中的原值，並在文字中寫出來源檔（例：管理費解析狀態的筆數抄 `03_mgmt_fee_status.csv`）；檔案中真的沒有的數字，才改寫成不含該數字的敘述，並在第 8 節說明。
-3. 最多重試 1 次（`report_retry ≤ 1`）；第二次仍 FAIL → 依 RT8 照常出報告，第 8 節標 ❌ 並列出 `report_first_issues` 與仍未通過的項目。
+2. 修法是**讓數字可追溯**，不是刪掉數字：把報告中的數字改成 `03_*`、`02_*`、`01_candidates.csv`、`cost-params.json` 中的原值，並在文字中寫出來源檔（例：管理費解析狀態的筆數抄 `03_mgmt_fee_status.csv`）；第 8 節引用的審查數字（例：V3 對帳筆數、V7 納入＋排除筆數）照抄 `05_review_log.json` 中資料階段檢核（V1–V7、V12、V13）的 `expected`／`recomputed` 值，V8 會把這些值當作可追溯來源；檔案中真的沒有的數字，才改寫成不含該數字的敘述，並在第 8 節說明。
+3. 第 8 節記錄第一次的問題時，抄 `report_first_issues_summary`（腳本產生、不含原始數字，例：「V8 final_report.md 的數字：3 個數字無法追溯」），**不要**把 `report_first_issues` 中的原始數字抄進報告，否則那些數字會再被 V8 判為無法追溯。
+4. 最多重試 1 次（`report_retry ≤ 1`）；第二次仍 FAIL → 依 RT8 照常出報告，第 8 節標 ❌ 並列出 `report_first_issues_summary` 與仍未通過的項目。
 
 ### 步驟 6：回覆使用者
 
@@ -121,7 +122,7 @@ flowchart TD
 | RT12–13 | 地區唯一確定／缺少或歧義 | 照常／見第 6 節 | `01_area.json.area_status` |
 | RT14 | 分組有效樣本 < 10 | 合併類型 → 全縣市 → insufficient，逐步記錄 | `03_market_stats.csv.fallback` |
 | RT15 | 有 591 資料 | 刊登租金另算 `03_asking_stats.csv`，不進行情 | reviewer V13 |
-| RT16 | 報告階段（V8–V11）FAIL 且 `report_retry = 0` | 讓數字可追溯（不刪數字）後重驗一次；第二次仍 FAIL → RT8 | `05_review_log.json.report_retry`、`report_first_issues` |
+| RT16 | 報告階段（V8–V11）FAIL 且 `report_retry = 0` | 讓數字可追溯（不刪數字）後重驗一次；第二次仍 FAIL → RT8 | `05_review_log.json.report_retry`、`report_first_issues`、`report_first_issues_summary` |
 
 ## 4. 代理人分工（Agent Delegation）
 

@@ -1,0 +1,24 @@
+{
+  "area_status": "resolved",
+  "targets": [
+    {
+      "city": "臺中市",
+      "city_code": "b",
+      "district": "西屯區",
+      "area_key": "臺中市|西屯區",
+      "area_source": "school_lookup",
+      "matched_text": "逢甲",
+      "in_rent_data": true
+    }
+  ],
+  "destination": {
+    "label": "逢甲大學",
+    "city": "臺中市",
+    "district": "西屯區",
+    "source": "school_lookup"
+  },
+  "ambiguities": [],
+  "missing": [],
+  "question": null,
+  "district_quirk": null
+}

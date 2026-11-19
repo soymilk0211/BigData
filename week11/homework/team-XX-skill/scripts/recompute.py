@@ -5,7 +5,9 @@
   python scripts/recompute.py --run <run> --stage data   [--cache data/lvr-cache]   # V1–V7、V12、V13
   python scripts/recompute.py --run <run> --stage report                            # V8–V11（final_report.md 寫好後）
 兩個階段都寫入同一份 05_review_log.json；任一項 FAIL → verdict = FAIL。
-報告階段若前一次 FAIL，再跑時自動記錄 report_retry 與 report_first_issues（第一次的問題）。
+報告階段若前一次 FAIL，再跑時自動記錄 report_retry、report_first_issues（第一次的問題原文）與
+report_first_issues_summary（不含原始數字的摘要，給報告第 8 節引用）。
+V8 的可追溯來源包含本次資料階段檢核（V1–V7、V12、V13）的 expected／recomputed 值。
 """
 import argparse, csv, hashlib, io, json, random, re, sys, zipfile
 from pathlib import Path
@@ -176,20 +178,48 @@ def stage_data(run, cache, log):
     check(log, "V13", "03_market_stats 只含實價登錄", 0, len(leak) + len(asking_in_ms), not leak and not asking_in_ms, "0")
 
 
+DATA_CHECKS = ("V1", "V2", "V3", "V4", "V5", "V6", "V7", "V12", "V13")
+
+
+def first_issue_summary(issues):
+    """把第一次報告檢核的問題改寫成不含原始數字的摘要，給 final_report.md 第 8 節引用。
+    例：「V8 final_report.md 的數字：無法追溯：4446、4446、3588」→「V8 final_report.md 的數字：3 個數字無法追溯」。"""
+    out = []
+    for s in issues:
+        m = re.match(r"(.*?)：無法追溯：(.*)$", s)
+        if m:
+            out.append(f"{m.group(1)}：{len([x for x in re.split(r'[、,，]', m.group(2)) if x.strip()])} 個數字無法追溯")
+        else:
+            out.append(re.sub(r"\d+(?:\.\d+)?", "#", s))
+    return out
+
+
 def stage_report(run, log):
     rep_full = (run / "final_report.md").read_text(encoding="utf-8")
     # 不檢查：run_id、程式碼片段、連結與圖片路徑、檢核代號（V1–V13、R1–R7、CR-xx、E1–E23）
     rep = rep_full.replace(run.name, "")
+    # 第 8 節原文抄錄的第一次問題（report_first_issues）是審查紀錄，不是報告主張，不納入 V8
+    for s in log.get("report_first_issues", []):
+        rep = rep.replace(s, " ")
     rep = re.sub(r"`[^`]*`|\]\([^)]*\)|\b(V|R|E|CR-|RT)\d+\b", " ", rep)
     # V8 數字可追溯：報告中 ≥3 位數的金額與百分比要能在 03_*.csv／03_signals.json／參數中找到
     pool = set()
-    # 不含 05_review_log.json：它記錄了上一次 V8 的「無法追溯」數字，納入會讓重跑自我通過
+
+    def add(text):
+        for tok in re.findall(r"-?\d+(?:\.\d+)?", text):
+            v = float(tok); pool.update({v, round(v), round(v, 1), abs(v)})
+
+    # 05_review_log.json 不整份納入：它的 issues／note／report_first_issues 記錄了上一次 V8 的「無法追溯」數字，
+    # 納入會讓重跑自我通過。只納入本次資料階段檢核（V1–V7、V12、V13）的 expected／recomputed 值，
+    # 例如 V3 對帳筆數「4446/4446」、V7「3588+912」——這些是本次 run 自己重算出來的數字，第 8 節可以引用。
     srcs = [p for p in run.glob("0[0-5]_*.json") if p.name != "05_review_log.json"] + list(run.glob("03_*.csv")) + [run / "01_candidates.csv", run / "591_sources.json",
             SKILL / "references/cost-params.json"]
     for p in srcs:
         if p.exists():
-            for tok in re.findall(r"-?\d+(?:\.\d+)?", p.read_text(encoding="utf-8-sig")):
-                v = float(tok); pool.update({v, round(v), round(v, 1), abs(v)})
+            add(p.read_text(encoding="utf-8-sig"))
+    for c in log.get("checks", []):
+        if c.get("check_id") in DATA_CHECKS:
+            add(json.dumps([c.get("expected"), c.get("recomputed")], ensure_ascii=False))
     nums = [t for t in re.findall(r"(?<![\w.])[+-]?\d{1,3}(?:,\d{3})+(?:\.\d+)?|(?<![\w.])[+-]?\d{3,}(?:\.\d+)?|[+-]?\d+(?:\.\d+)?(?=\s*%)", rep)]
     bad = []
     for t in nums:
@@ -241,7 +271,7 @@ def main():
     run = Path(a.run)
     lp = run / "05_review_log.json"
     log = json.loads(lp.read_text(encoding="utf-8")) if lp.exists() else {"verdict": None, "retry_count": 0, "checks": [], "issues": []}
-    prefix = ("V8", "V9", "V10", "V11") if a.stage == "report" else ("V1", "V2", "V3", "V4", "V5", "V6", "V7", "V12", "V13")
+    prefix = ("V8", "V9", "V10", "V11") if a.stage == "report" else DATA_CHECKS
     if a.stage == "report":
         # 報告階段重試紀錄：上一次報告檢核 FAIL 時，保留第一次的問題，report_retry 加 1（最多 1 次，見 SKILL.md RT16）
         prev_fail = [f"{c['check_id']} {c['target']}：{c.get('note') or c.get('recomputed')}"
@@ -250,6 +280,7 @@ def main():
         if prev_fail:
             log["report_retry"] += 1
             log.setdefault("report_first_issues", prev_fail)
+            log.setdefault("report_first_issues_summary", first_issue_summary(log["report_first_issues"]))
     log["checks"] = [c for c in log["checks"] if c["check_id"] not in prefix]
     try:
         (stage_report if a.stage == "report" else lambda r, l: stage_data(r, a.cache, l))(run, log)
@@ -262,6 +293,8 @@ def main():
     out = {"stage": a.stage, "verdict": log["verdict"], "checks": len(log["checks"]), "issues": log["issues"]}
     if a.stage == "report":
         out["report_retry"] = log.get("report_retry", 0)
+        if log.get("report_first_issues_summary"):
+            out["report_first_issues_summary"] = log["report_first_issues_summary"]
     print(json.dumps(out, ensure_ascii=False))
     return 0
 

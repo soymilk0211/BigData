@@ -1,0 +1,11 @@
+﻿area_key,mgmt_fee_status,n
+ALL,not_mentioned,4111
+ALL,included,427
+ALL,unknown,166
+ALL,extra,62
+ALL,landlord_pays,16
+臺中市|西屯區,extra,62
+臺中市|西屯區,included,427
+臺中市|西屯區,landlord_pays,16
+臺中市|西屯區,not_mentioned,4111
+臺中市|西屯區,unknown,166

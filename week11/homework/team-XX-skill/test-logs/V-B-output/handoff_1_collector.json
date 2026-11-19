@@ -1,0 +1,26 @@
+{
+  "handoff_version": "1.0",
+  "run_id": "20261118-233629",
+  "from": "collector",
+  "to": "fact-checker",
+  "artifacts": [
+    {"path": "01_area.json", "rows": 1},
+    {"path": "01_collected.csv", "rows": 4782},
+    {"path": "01_collected_city.csv", "rows": 30596},
+    {"path": "01_collect_manifest.json", "rows": 1},
+    {"path": "01_candidates.csv", "rows": 2},
+    {"path": "01_reviews.csv", "rows": 0},
+    {"path": "591_list.csv", "rows": 3881},
+    {"path": "591_detail.csv", "rows": 300},
+    {"path": "591_sources.json", "rows": 1}
+  ],
+  "status": "ok",
+  "warnings": [
+    "地區由學校查表得出：逢甲 → 臺中市西屯區",
+    "實價登錄 data_mode = online，manifest errors 為空",
+    "591 使用快照 sample-data/591/臺中市_西屯區（age_days = 0，list 3881 筆、detail 300 筆）",
+    "L1、L2 管理費、水電瓦斯網路、押金、通勤、刊登來源均未提供；L2 坪數未提供",
+    "使用者未提供評論，01_reviews.csv 只有表頭"
+  ],
+  "next_hint": "逐列加旗標，不刪資料"
+}
