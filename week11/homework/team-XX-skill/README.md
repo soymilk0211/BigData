@@ -1,5 +1,7 @@
 # student-rental-check：台灣學生租屋行情與避雷 Skill
 
+**先看流程：** 打開 [`demo/index.html`](demo/index.html)，這是用一次真實執行（逢甲兩間房，`test-logs/B-4`）重播的互動畫面。會先看到 Skill 被喚起，再出現五個角色的格子，跟著標出每個人做了什麼，最後展開報告。可按「重播這次執行」。把這個檔用瀏覽器打開即可；若這個 repo 開了 GitHub Pages，路徑是 `/week11/homework/team-XX-skill/demo/`。
+
 **最快開始：** 把本資料夾複製成專案裡的 `.claude/skills/student-rental-check/`，裝好套件後，在專案目錄貼上下面這句就會自動啟動（不用打 Skill 名稱、不用斜線指令）：
 
 ```

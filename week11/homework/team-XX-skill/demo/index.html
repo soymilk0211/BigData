@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>學生租屋調查手帳｜student-rental-check</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <svg class="sr-only" aria-hidden="true">
+    <filter id="ink-wobble">
+      <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="0.7"/>
+    </filter>
+  </svg>
+
+  <main class="desk">
+    <header class="top">
+      <div class="chop" aria-hidden="true">避雷</div>
+      <div class="titles">
+        <p class="kicker">WEEK 11　真實執行重播</p>
+        <h1>學生租屋調查手帳</h1>
+        <p class="subtitle">先看 Skill 怎麼被喚起，再看每個角色做了什麼。不是即時連線，是把一次實際跑完的紀錄慢慢攤開。</p>
+      </div>
+      <div class="controls">
+        <button type="button" class="primary" id="btn-replay">重播這次執行</button>
+        <button type="button" id="btn-pause">暫停</button>
+        <button type="button" id="btn-next">下一步</button>
+      </div>
+    </header>
+
+    <div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+
+    <section class="act-ask" aria-label="提問與 Skill 啟動">
+      <article class="slip" id="question-slip">
+        <p class="label">同學問</p>
+        <p id="question-text"></p>
+      </article>
+      <div class="skill-stamp" id="skill-stamp" aria-hidden="true">
+        <div>
+          <strong>Skill 啟動</strong>
+          <span id="skill-name"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="agents-wrap" aria-label="被喚起的角色">
+      <p class="agents-label" id="agents-label">它叫來的角色　（踩雷獵人只在有高風險訊號時出場）</p>
+      <div class="agents" id="agents"></div>
+    </section>
+
+    <section class="work" id="work" aria-live="polite" hidden>
+      <h2 id="work-title"></h2>
+      <ul id="work-list"></ul>
+      <p class="files" id="work-files"></p>
+    </section>
+
+    <section class="report" id="report" aria-label="最終報告">
+      <p class="report-kicker">最終報告</p>
+      <h2 id="report-title"></h2>
+      <p class="conclusion" id="report-conclusion"></p>
+      <ul class="summary" id="report-summary"></ul>
+      <div class="charts" id="report-charts"></div>
+    </section>
+
+    <footer class="colophon" id="colophon"></footer>
+  </main>
+
+  <script src="run.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
