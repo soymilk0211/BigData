@@ -163,6 +163,11 @@ def main():
     Path(a.out).write_text(json.dumps(res, ensure_ascii=False, indent=2), encoding="utf-8")
     print(json.dumps({"area_status": res["area_status"], "targets": [x["area_key"] for x in res["targets"]],
                       "destination": res["destination"], "question": res["question"]}, ensure_ascii=False))
+    if res["area_status"] == "unresolved" and res.get("question"):
+        print("地區還不能確定：" + res["question"], file=sys.stderr)
+    elif res["area_status"] == "resolved" and res["targets"]:
+        names = "、".join(x["area_key"].replace("|", "") for x in res["targets"])
+        print("分析地區：" + names, file=sys.stderr)
 
 
 if __name__ == "__main__":

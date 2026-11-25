@@ -1,18 +1,52 @@
 # student-rental-check：台灣學生租屋行情與避雷 Skill
 
-學生指定地區（縣市＋區、學校名稱或地址）與候選物件，Skill 用內政部實價登錄租賃資料算行情、用 591 刊登資料補物件細節與刊登價對照，算出「真實每月總成本」（已知項目合計＋未提供項目），有風險才啟用踩雷檢查，最後由審查員從原始資料獨立重算抽查，產出 `final_report.md`（含看房殺價話術）。
+**最快開始：** 把本資料夾複製成專案裡的 `.claude/skills/student-rental-check/`，裝好套件後，在專案目錄貼上下面這句就會自動啟動（不用打 Skill 名稱、不用斜線指令）：
 
-## 五個角色
+```
+我在逢甲附近找房，有兩間在猶豫：第一間是分租套房 7 坪，一個月 7,000，房東說要先匯訂金才能看房；第二間是雅房，一個月 5,500，管理費不知道。哪間比較划算？會不會踩雷？
+```
 
-| 角色 | 只負責 | 產出 |
+看完報告先看開頭的「給你看的摘要」。只說「東區」這種會對到好幾個縣市的地名時，它會先問清楚再算。
+
+## 你只要提供這些
+
+- **地區（一定要）：** 縣市＋區（例如「桃園市龜山區」），或學校名稱（例如「逢甲」「長庚」）。
+- **物件（有就寫，沒有也可只問行情）：** 月租、坪數、管理費、水電瓦斯網路、押金、通勤時間，或直接貼 591 網址／刊登內容。
+- 沒寫的項目會標「未提供」，不會幫你猜數字。
+
+報告寫在你執行時的資料夾：`output/<時間>/final_report.md`。
+
+## 安裝
+
+在你要提問的專案目錄執行：
+
+```bash
+mkdir -p .claude/skills
+cp -R /path/to/team-XX-skill .claude/skills/student-rental-check
+pip install pandas numpy matplotlib requests
+```
+
+還需要 `node`（用來解析 591 頁面）。中文圖表需要中文字型（例如 Noto Sans CJK、文泉驛正黑），沒有時圖表會改英文標籤。離線時會自動改用 `sample-data/`（只涵蓋龜山、林口、西屯）。實價登錄 zip 會快取在 `data/lvr-cache/`。
+
+另一個可直接複製的提示詞（單一物件、問貴不貴）：
+
+```
+我是長庚大學新生，在龜山區找到一間獨立套房，月租 9,500 元、權狀 8 坪，管理費另計 800 元，電費每度 5 元，騎車到學校單程約 12 分鐘。這個價格合不合理？真實每月要花多少？
+```
+
+## 五個角色會產出什麼
+
+角色分工沒有改，只是把產出改成比較好懂的說法：
+
+| 角色 | 做什麼 | 你會看到 |
 | --- | --- | --- |
-| ① collector 蒐集員 | 地區解析、實價登錄與 591 取得、候選物件整理 | `01_*` |
-| ② fact-checker 時效驗證員 | 標記過時、重複、來源不明、未提供（不刪資料） | `02_*` |
-| ③ quant-analyst CP 值精算師 | 行情統計、真實每月總成本、排序、刊登租金對照、高風險訊號 | `03_*`、`charts/` |
-| ④ devil-advocate 踩雷獵人 | 只在 R1–R7 成立時啟用，挑戰排名第一的物件 | `04_*` |
-| ⑤ reviewer 審查員 | 獨立重算 V1–V13、組成最終報告 | `05_review_log.json`、`final_report.md` |
+| ① collector 蒐集員 | 找出地區、取得實價登錄與 591、整理你說的物件 | 地區確認、物件表（`01_*`） |
+| ② fact-checker 時效驗證員 | 標記過時、重複、來源不明、沒寫的費用（不刪資料） | 資料品質標記（`02_*`） |
+| ③ quant-analyst CP 值精算師 | 算行情、真實每月總成本、排序、刊登價對照、高風險訊號 | 行情與成本、圖表（`03_*`、`charts/`） |
+| ④ devil-advocate 踩雷獵人 | 只有出現高風險訊號才出場，挑戰排第一的物件 | 踩雷說明（`04_*`；沒訊號就略過） |
+| ⑤ reviewer 審查員 | 從原始資料重新算一遍，寫成報告 | `final_report.md` |
 
-流程：使用者需求 → Trigger（SKILL.md 的 name＋description）→ collector → fact-checker → quant-analyst →（有訊號）devil-advocate → reviewer（品質檢查）→ `final_report.md`。詳細流程、路由表與例外見 `SKILL.md`。
+流程：你的問題 → 自動啟動 → collector → fact-checker → quant-analyst →（有訊號才）devil-advocate → reviewer → `final_report.md`。詳細流程、路由表與例外見 `SKILL.md`。
 
 ```mermaid
 flowchart TD
@@ -31,15 +65,6 @@ flowchart TD
     RV -- "FAIL（重試一次）" --> FX["資料錯 → 回 ③ 重算（RT7）<br/>報告數字無法追溯 → 改成可追溯（RT16）"] --> RV
     RV -- "PASS／第二次仍 FAIL 標 ❌" --> OUT["final_report.md"]
 ```
-
-## 安裝與啟動
-
-1. 把本資料夾複製到專案的 `.claude/skills/student-rental-check/`（Claude Code）。
-2. 環境：Python 3.10+，`pip install pandas numpy matplotlib requests`；需要 `node`（解析 591 頁面）；中文圖表需要中文字型（例：Noto Sans CJK、文泉驛正黑），沒有時圖表改英文標籤。
-3. 直接用自然語言提問即可自動啟動，例如：「我在逢甲附近找房，有兩間在猶豫……哪間比較划算？會不會踩雷？」
-4. 輸出在工作目錄的 `output/<run_id>/`。實價登錄 zip 會快取在 `data/lvr-cache/`。
-
-離線時會自動改用 `sample-data/`（只涵蓋龜山、林口、西屯）。
 
 自行驗證 `test-logs/` 的輸出複本：`python3 scripts/validate.py --input test-logs/A-1-output --evidence-copy`（複本刻意不含 `01_collected*.csv`、`03_inclusion_log.csv`）。
 

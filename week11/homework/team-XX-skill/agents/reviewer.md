@@ -27,9 +27,11 @@ python S/scripts/recompute.py --run R --stage data --cache data/lvr-cache
 
 ### 2. 組成 `final_report.md`
 
-讀 `S/assets/final-report-template.md`，依模板順序寫出九節。寫作規則：
+讀 `S/assets/final-report-template.md`，先寫開頭的「給你看的摘要」，再依模板寫出九節。寫作規則：
+- **報告最開頭必須是「給你看的摘要」五點**（地區、價格、這個月已知花費、風險、建議）。回覆使用者時也先說這五點，再給 `final_report.md` 的路徑；不要寫「格式檢查已通過」或 validate 結束碼。數字一律照抄檔案，不另做四捨五入。
+- 若 `01_area.json` 的 `area_status = unresolved`：改用模板的追問版，用明白的中文問句（可選地區＋請補縣市與區），不要輸出空的九節標題，也不要只貼 JSON。
 - **每個數字都抄自檔案**（`03_*.csv`（管理費解析狀態筆數抄 `03_mgmt_fee_status.csv`）、`03_signals.json`、`02_factcheck_summary.json`、`01_candidates.csv`、`cost-params.json`），照檔案中的值寫，不四捨五入成新數字、不自行加總。第 8 節的審查數字（V3 對帳筆數、V7 納入＋排除等）照抄 `05_review_log.json` 中資料階段檢核的 `expected`／`recomputed`。腳本第 2 階段會逐一比對。
-- 第一行固定寫「本次分析地區：〇〇市〇〇區（來源：使用者指定／學校查表／地址解析／使用者確認）」。
+- 「給你看的摘要」之後寫「本次分析地區：〇〇市〇〇區（來源：使用者指定／學校查表／地址解析／使用者確認）」。
 - 真實每月總成本一律寫成「已知項目合計 X 元＋未提供：…」；排名不可比時照寫「不完全可比」並附只用共同項目的排名。
 - 有 591 資料時，刊登租金放在獨立小節並寫明「刊登價≠成交價，未與實價登錄合併」。
 - 有 devil-advocate 時，第 5 節取自 `04_risk_report.md`，並放入「排名第一不等於可以租」的提醒；沒有時寫「未偵測到高風險訊號（R1–R7）」，同時列出 `03_signals.json.not_evaluated`。
