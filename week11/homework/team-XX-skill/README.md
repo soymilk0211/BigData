@@ -85,8 +85,9 @@ flowchart TD
 
 ## 影片與 AI Tutor
 
-- 影片已上傳 YouTube（不公開）：https://youtu.be/QIAtzRLjpL8 （4:45，Google TTS 旁白＋燒錄字幕；公開 repo 不保留 mp4）。測試 A、B、C 以 `claude -p` 即時執行，A、B 限制回合數，完整流程用 V-A／V-B 紀錄與離線執行角色腳本呈現。章節表 `tutor/chapters.md`，字幕 `tutor/subtitles.zh-TW.srt`。
-- AI Tutor（ClassTutor）材料在 `tutor/`：講義 `tutor-material.md`、詞彙 `vocabulary.txt`、課程簡介 `course-intro.md`；課程包 `tutor/student-rental-check.classtutor`；老師端製作與學生端使用步驟、Q1–Q3 實測結果見 `tutor/README.md`。雲端硬碟連結見 `submission.md`。
+- 影片已上傳 YouTube（不公開）：https://youtu.be/pKZa5sm2O5o （5:43，精確 5:43.67，edge-tts Yunjian 旁白＋燒錄字幕；公開 repo 不保留 mp4）。測試 A、B、C 以 `claude -p` 即時執行，A、B 限制回合數；測試 A 另展示完整 log 證據，測試 B 的完整多角色流程以互動畫面重播。章節表 `tutor/chapters.md`，字幕 `tutor/subtitles.zh-TW.srt`（95 段）。
+- 影片與字幕 Drive 備份：https://drive.google.com/file/d/1CJLdnihYP16584XdWuF-ryBQE3Lkod-A/view?usp=sharing 、https://drive.google.com/file/d/1r63ynn51-j2KMkBb9tPanU19tTNps5v2/view?usp=sharing （上傳完成，分享權限需再設「知道連結的任何人可檢視」）。
+- AI Tutor（ClassTutor）材料在 `tutor/`：講義 `tutor-material.md`、詞彙 `vocabulary.txt`、課程簡介 `course-intro.md`；課程包 `tutor/student-rental-check_v8.classtutor`；雲端硬碟連結（知道連結的任何人可檢視）見 `submission.md`：https://drive.google.com/file/d/1QgwV-tgN19m_y3_yUeV_NSTXo7wgndOw/view?usp=sharing 。老師端製作與學生端使用步驟見 `tutor/README.md`。AI Tutor 測試題待以新課程包重測。
 
 ## 限制
 
