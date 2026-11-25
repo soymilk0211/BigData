@@ -1,4 +1,4 @@
-# 影片章節（student-rental-check_final.mp4，總長 4:45）
+# 影片章節（https://youtu.be/HTNxGOs2UcE ，總長 4:45）
 
 | 時間 | 段落 | 畫面 |
 | --- | --- | --- |

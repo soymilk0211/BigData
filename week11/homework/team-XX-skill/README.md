@@ -58,8 +58,8 @@ flowchart TD
 
 ## 影片與 AI Tutor
 
-- 影片 `../video/student-rental-check_final.mp4`（4:45，Google TTS 旁白＋燒錄字幕；測試 A、B、C 以 `claude -p` 即時執行，A、B 限制回合數，完整流程用 V-A／V-B 紀錄與離線執行角色腳本呈現）：章節表 `tutor/chapters.md`，字幕 `tutor/subtitles.zh-TW.srt`（上傳 YouTube 時一併上傳）。
-- AI Tutor（ClassTutor）材料在 `tutor/`：講義 `tutor-material.md`、詞彙 `vocabulary.txt`、課程簡介 `course-intro.md`；課程包 `tutor/student-rental-check.classtutor`；老師端製作與學生端使用步驟、Q1–Q3 實測結果見 `tutor/README.md`。YouTube：https://youtu.be/HTNxGOs2UcE （不公開）。雲端硬碟連結見 `submission.md`。
+- 影片已上傳 YouTube（不公開）：https://youtu.be/HTNxGOs2UcE （4:45，Google TTS 旁白＋燒錄字幕；公開 repo 不保留 mp4）。測試 A、B、C 以 `claude -p` 即時執行，A、B 限制回合數，完整流程用 V-A／V-B 紀錄與離線執行角色腳本呈現。章節表 `tutor/chapters.md`，字幕 `tutor/subtitles.zh-TW.srt`。
+- AI Tutor（ClassTutor）材料在 `tutor/`：講義 `tutor-material.md`、詞彙 `vocabulary.txt`、課程簡介 `course-intro.md`；課程包 `tutor/student-rental-check.classtutor`；老師端製作與學生端使用步驟、Q1–Q3 實測結果見 `tutor/README.md`。雲端硬碟連結見 `submission.md`。
 
 ## 限制
 
