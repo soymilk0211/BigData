@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>租屋行情與避雷｜student-rental-check 執行重播</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="bar" id="bar">
+    <div class="bar-inner">
+      <p class="bar-title" aria-hidden="true">租屋行情與避雷</p>
+      <p class="bar-step" id="bar-step" aria-live="polite"></p>
+      <div class="controls" role="group" aria-label="播放控制">
+        <button type="button" class="btn" id="btn-replay">重播</button>
+        <button type="button" class="btn" id="btn-pause">暫停</button>
+        <button type="button" class="btn btn-primary" id="btn-next">下一步</button>
+      </div>
+    </div>
+    <div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+  </header>
+
+  <main class="page">
+    <section class="hero">
+      <p class="eyebrow">Week 11・真實執行重播</p>
+      <h1 id="hero-title">租屋行情與避雷</h1>
+      <p class="lede">一位同學在逢甲附近看了兩間房。這裡把 Claude Code 實際跑完的一次紀錄，一步一步攤開：Skill 怎麼被喚起、五個角色各做了什麼、最後給了什麼建議。</p>
+    </section>
+
+    <section class="ask" aria-label="提問與 Skill 啟動">
+      <div class="panel question enter" id="question">
+        <p class="label">同學的問題</p>
+        <p class="bubble" id="question-text"></p>
+      </div>
+      <div class="panel invoke enter" id="invoke">
+        <p class="label">Claude Code 喚起 Skill</p>
+        <p class="skill-id"><span class="slash">/</span><span id="skill-name"></span></p>
+        <p class="skill-title" id="skill-title"></p>
+        <p class="skill-args" id="skill-args"></p>
+      </div>
+    </section>
+
+    <section class="team" id="team" aria-label="五個角色">
+      <div class="section-head">
+        <h2>五個角色</h2>
+        <p>依序接力。踩雷獵人只在出現高風險訊號時才上場。點任一格可直接跳到那一步。</p>
+      </div>
+      <div class="tiles" id="tiles"></div>
+    </section>
+
+    <section class="panel work" id="work" aria-live="polite" hidden>
+      <header class="work-head">
+        <span class="work-no" id="work-no"></span>
+        <div>
+          <h2 id="work-name"></h2>
+          <p class="work-en" id="work-en"></p>
+        </div>
+        <span class="pill" id="work-state"></span>
+      </header>
+      <div class="work-body">
+        <div>
+          <p class="label">它做了什麼</p>
+          <ol class="rows" id="work-list"></ol>
+        </div>
+        <div>
+          <p class="label">它留下了什麼</p>
+          <ul class="files" id="work-files"></ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="report" id="report" aria-label="最終報告" hidden>
+      <p class="eyebrow">最終報告</p>
+      <h2 class="report-title" id="report-title"></h2>
+      <p class="conclusion" id="report-conclusion"></p>
+      <div class="report-grid">
+        <dl class="panel summary" id="report-summary"></dl>
+        <div class="charts" id="report-charts"></div>
+      </div>
+    </section>
+
+    <footer class="colophon">
+      <p id="colophon"></p>
+      <p><a href="../index.html">改看手帳版示範 →</a></p>
+    </footer>
+  </main>
+
+  <script src="../run.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
