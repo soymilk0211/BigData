@@ -311,3 +311,13 @@ jq -c 'select(.type=="system" and .subtype=="init") | .skills | map(select(. == 
   結束碼 0；`test-logs/B2-resolve_area.json` 的 `area_status = unresolved`、`targets = []`，`ambiguities` 列出臺中市、臺南市、新竹市、嘉義市東區，並產生追問句。完整流程中「不下載、不計算、寫追問版報告」的行為**沒有在 log 中驗證**。
 - R6 對「沒交代來源與日期」的物件一律判 high，可能偏嚴；可考慮改為 medium，或只在同時有其他訊號時升為 high。
 - 時間價值（基本工資時薪）與電費每度上限未能取得官方原文，報告與回覆都標「未驗證」；R5 暫停判定。
+
+
+## 6. AI Tutor 實測（v8 課程包，2026-11-25）
+
+以本組 YouTube 解說影片（https://youtu.be/pKZa5sm2O5o ）與字幕建立的 ClassTutor 課程包 `tutor/student-rental-check_v8.classtutor`，在學生頁用 `gemini-flash-lite-latest` 實測 2 題。兩題都在影片播到 5:43（片尾）後提問。詳細摘要與截圖見 `tutor/README.md` 第三節，繳交表見 `submission.md`。
+
+| # | 問題 | 簡短結果 | 引用時間點 | 備註 |
+| --- | --- | --- | --- | --- |
+| Q1 | 哪一段測試證明 Skill 有啟動？ | 內容正確：應看 stream-json，第一個 tool_use 就是 Skill（參數 student-rental-check）；A、B 有啟動，C 沒有誤啟動。 | 04:50、`[chunk0002]` | 前兩次遇 Google AI Studio 暫時無法服務，第三次成功。04:50 對到「log 沒有 Read 證據」（除錯段），不是啟動證據；`[chunk0002]` 不是影片時間點。啟動證據在 1:18–1:32、1:34–1:39、2:02–2:05。 |
+| Q2 | 審查員做了什麼？ | 內容正確：reviewer 從原始資料獨立重算；V8 FAIL 經修正後 A-5 PASS，最後 reviewer 判 PASS。 | 00:00、04:50 | 00:00 是片頭，引用偏弱。04:50 不是審查結論所在位置。審查員說明在 1:02–1:04，測試 B 重算結果在 3:57–4:01，V8 FAIL→A-5 PASS 在 4:55–5:11，總結在 5:18–5:21。 |
