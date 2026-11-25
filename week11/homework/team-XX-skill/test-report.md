@@ -6,11 +6,11 @@
 > 1. 路徑：A-4、B-4 是在 `run_test.sh` 加入 `/tmp/` 規則之後跑的，執行時就直接產生 `<TMP>`（A-4 有 15 處、B-4 有 10 處）。A-1–A-3、A591-1、B-1–B-3、C、C2、C3、N 系列則在那之前跑，是兩個測試 agent **事後**用 `sed` 補清的（取代為 `<WORK>/scratchpad`、`<WORK>/cc-socks` 等，指令見 `test-logs/agent1-positive-results.md`、`agent2-negative-results.md`），所以這些 log 中 `<TMP>` 為 0 次。
 > 2. 第三方個資：繳交前發現 N1-1、N1-2 的 tool_result 含 591 原始網頁與刊登列表（含仲介／屋主姓名與路段，見 4.5 節），已把這幾行的 tool_result 內容換成「[591 原始內容已移除]」。
 >
-> 3. 影片錄製的 V-A、V-B（`test-logs/V-A.jsonl`、`V-B.jsonl`）由錄影腳本執行，執行後即以與 `run_test.sh` 相同的 sed 規則去除路徑；A-5 由 `run_test.sh` 直接產生。繳交前對這三份 log 與輸出複本掃描第三方個資（591 原始 HTML、「○先生／小姐／太太」、手機與市話、門牌）與路徑，**皆 0 筆**，因此沒有再修改內容（行數：V-A 108、V-B 92、A-5 92）。
+> 3. 11/18 為早期影片草稿錄製的 V-A、V-B（`test-logs/V-A.jsonl`、`V-B.jsonl`；新版影片拿來當完整流程證據）由錄影腳本執行，執行後即以與 `run_test.sh` 相同的 sed 規則去除路徑；A-5 由 `run_test.sh` 直接產生。繳交前對這三份 log 與輸出複本掃描第三方個資（591 原始 HTML、「○先生／小姐／太太」、手機與市話、門牌）與路徑，**皆 0 筆**，因此沒有再修改內容（行數：V-A 108、V-B 92、A-5 92）。
 >
 > 所有事後處理都是逐行取代，**每份 log 的行數不變**，本報告引用的行號仍然有效。
 >
-> 影片（5:11）的章節表見 `tutor/chapters.md`，字幕見 `tutor/subtitles.zh-TW.srt`；總表最後一欄「影片時間點」依章節表填寫。AI Tutor（ClassTutor）材料見 `tutor/README.md`。
+> 影片 `../video/student-rental-check_final.mp4`（4:45，Google TTS 旁白＋燒錄字幕；11/25 製作，取代早期草稿）的章節表見 `tutor/chapters.md`，字幕見 `tutor/subtitles.zh-TW.srt`；總表最後一欄「影片時間點」依章節表填寫。AI Tutor（ClassTutor）材料見 `tutor/README.md`。
 
 ## 1. 測試方式
 
@@ -51,31 +51,31 @@ jq -c 'select(.type=="result") | .permission_denials | map(.tool_name)' test-log
 
 | 測試 ID | 類型 | 提示詞 | 觸發方式 | 預期 | 實際 | 啟動證據位置 | 判定 | 影片時間點 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| A-1 | 應啟動（完整） | 測試 A 原文（見 3.1） | 自動 | 啟動；single；略過 devil-advocate；12,618 元 | 符合 | `A-1.jsonl` E1 第 29 行；Read collector 125、fact-checker 356、quant-analyst 469、reviewer 692 行；無 devil-advocate | PASS | 1:37–2:47 |
-| A-2 | 應啟動 | 同上 | 自動 | 啟動 | 啟動 | `A-2.jsonl` E1 第 31 行 | PASS | 1:37–2:47 |
-| A-3 | 應啟動 | 同上 | 自動 | 啟動 | 啟動 | `A-3.jsonl` E1 第 28 行 | PASS | 1:37–2:47 |
-| B-1 | 改寫後仍應啟動（完整） | 測試 B 原文（見 3.2） | 自動 | 啟動；逢甲 → 臺中市西屯區；compare；啟用 devil-advocate | 符合 | `B-1.jsonl` E1 第 34 行；Read collector 134、fact-checker 393、quant-analyst 516、devil-advocate 692、reviewer 1077 行 | PASS | 2:47–3:25 |
-| B-2 | 改寫後仍應啟動 | 同上 | 自動 | 啟動 | 啟動 | `B-2.jsonl` E1 第 33 行 | PASS | 2:47–3:25 |
-| B-3 | 改寫後仍應啟動 | 同上 | 自動 | 啟動 | 啟動 | `B-3.jsonl` E1 第 35 行 | PASS | 2:47–3:25 |
+| A-1 | 應啟動（完整） | 測試 A 原文（見 3.1） | 自動 | 啟動；single；略過 devil-advocate；12,618 元 | 符合 | `A-1.jsonl` E1 第 29 行；Read collector 125、fact-checker 356、quant-analyst 469、reviewer 692 行；無 devil-advocate | PASS | 1:24–2:51 |
+| A-2 | 應啟動 | 同上 | 自動 | 啟動 | 啟動 | `A-2.jsonl` E1 第 31 行 | PASS | 1:24–2:51 |
+| A-3 | 應啟動 | 同上 | 自動 | 啟動 | 啟動 | `A-3.jsonl` E1 第 28 行 | PASS | 1:24–2:51 |
+| B-1 | 改寫後仍應啟動（完整） | 測試 B 原文（見 3.2） | 自動 | 啟動；逢甲 → 臺中市西屯區；compare；啟用 devil-advocate | 符合 | `B-1.jsonl` E1 第 34 行；Read collector 134、fact-checker 393、quant-analyst 516、devil-advocate 692、reviewer 1077 行 | PASS | 2:51–3:33 |
+| B-2 | 改寫後仍應啟動 | 同上 | 自動 | 啟動 | 啟動 | `B-2.jsonl` E1 第 33 行 | PASS | 2:51–3:33 |
+| B-3 | 改寫後仍應啟動 | 同上 | 自動 | 啟動 | 啟動 | `B-3.jsonl` E1 第 35 行 | PASS | 2:51–3:33 |
 | A591-1 | 加測（591 刊登） | 「這是我在 591 看到的，幫我看會不會踩雷：龜山區 獨立套房 7,000元/月 5坪 押金一個月租金 …」 | 自動 | 啟動 | 啟動 | `A591-1.jsonl` E1 第 27 行 | PASS | 未入鏡 |
-| C-1 | 不應啟動 | 「幫我寫一個 Python 函式，輸入兩個日期字串，回傳相差幾天。」 | 自動 | 不啟動 | 直接給程式碼，1 回合 | `C-1.jsonl`：E0 第 3 行；Skill 呼叫 0 | PASS | 3:25–3:56（3:25–3:37 重播本 log） |
-| C-2 | 不應啟動 | 同上 | 自動 | 不啟動 | 同上 | `C-2.jsonl`：Skill 呼叫 0 | PASS | 3:25–3:56 |
-| C-3 | 不應啟動 | 同上 | 自動 | 不啟動 | 同上 | `C-3.jsonl`：Skill 呼叫 0 | PASS | 3:25–3:56 |
-| C2-1 | 邊界（買賣） | 「林口預售屋現在一坪大概多少？」 | 自動 | 不啟動 | 一般回答預售屋行情；WebSearch 權限被拒（`permission_denials` 1 筆），回答註明不是即時資料 | Skill 呼叫 0；權限被拒見 `type=result` 事件（第 247 行） | PASS | 3:25–3:56（3:45–3:56 提到） |
-| C3-1 | 邊界（校務） | 「長庚大學圖書館期末考週開到幾點？」 | 自動 | 不啟動 | WebSearch、WebFetch 權限被拒（`permission_denials` 2 筆），回答「沒查到」，建議查圖書館官網 | Skill 呼叫 0；權限被拒見 `type=result` 事件（第 163 行） | PASS | 3:25–3:56（3:45–3:56 提到） |
-| N1-2 | 近似（程式＋591） | 「幫我寫一個爬 591 租屋網的 Python 爬蟲」 | 自動 | 不啟動 | 自行寫爬蟲，未用本 Skill 的腳本 | Skill 呼叫 0；沒有讀本 Skill 任何檔案 | PASS | 3:25–3:56（3:45–3:56 提到） |
-| N2-1 | 近似（國外） | 「東京學生套房一個月多少？」 | 自動 | 不啟動 | 一般回答東京行情 | Skill 呼叫 0 | PASS | 3:25–3:56（3:45–3:56 提到） |
-| N3-1 | 近似（法規問答） | 「租屋押金法規上限是多少？」 | 自動 | 不啟動 | 回答 2 個月並附條文 | Skill 呼叫 0 | PASS | 3:25–3:56（3:45–3:56 提到） |
-| N4-1 | 近似（房東角度） | 「我想把台中的房子出租，租金該訂多少？」 | 自動 | 不啟動 | 反問物件條件 | Skill 呼叫 0 | PASS | 3:25–3:56（3:45–3:56 提到） |
+| C-1 | 不應啟動 | 「幫我寫一個 Python 函式，輸入兩個日期字串，回傳相差幾天。」 | 自動 | 不啟動 | 直接給程式碼，1 回合 | `C-1.jsonl`：E0 第 3 行；Skill 呼叫 0 | PASS | 3:33–3:44（影片即時執行的是 LIVE-C，見 4.8 節） |
+| C-2 | 不應啟動 | 同上 | 自動 | 不啟動 | 同上 | `C-2.jsonl`：Skill 呼叫 0 | PASS | 3:33–3:44 |
+| C-3 | 不應啟動 | 同上 | 自動 | 不啟動 | 同上 | `C-3.jsonl`：Skill 呼叫 0 | PASS | 3:33–3:44 |
+| C2-1 | 邊界（買賣） | 「林口預售屋現在一坪大概多少？」 | 自動 | 不啟動 | 一般回答預售屋行情；WebSearch 權限被拒（`permission_denials` 1 筆），回答註明不是即時資料 | Skill 呼叫 0；權限被拒見 `type=result` 事件（第 247 行） | PASS | 未入鏡 |
+| C3-1 | 邊界（校務） | 「長庚大學圖書館期末考週開到幾點？」 | 自動 | 不啟動 | WebSearch、WebFetch 權限被拒（`permission_denials` 2 筆），回答「沒查到」，建議查圖書館官網 | Skill 呼叫 0；權限被拒見 `type=result` 事件（第 163 行） | PASS | 未入鏡 |
+| N1-2 | 近似（程式＋591） | 「幫我寫一個爬 591 租屋網的 Python 爬蟲」 | 自動 | 不啟動 | 自行寫爬蟲，未用本 Skill 的腳本 | Skill 呼叫 0；沒有讀本 Skill 任何檔案 | PASS | 未入鏡 |
+| N2-1 | 近似（國外） | 「東京學生套房一個月多少？」 | 自動 | 不啟動 | 一般回答東京行情 | Skill 呼叫 0 | PASS | 未入鏡 |
+| N3-1 | 近似（法規問答） | 「租屋押金法規上限是多少？」 | 自動 | 不啟動 | 回答 2 個月並附條文 | Skill 呼叫 0 | PASS | 未入鏡 |
+| N4-1 | 近似（房東角度） | 「我想把台中的房子出租，租金該訂多少？」 | 自動 | 不啟動 | 反問物件條件 | Skill 呼叫 0 | PASS | 未入鏡 |
 | N1-1 | — | 同 N1-2 | 自動 | — | 執行中碰到帳號用量上限（`is_error=true`） | `N1-1.jsonl` | **無效**，以 N1-2 重跑 | 未入鏡 |
-| A-4 | 應啟動（完整，SKILL.md v2 回歸） | 測試 A 原文 | 自動 | 同 A-1 | 啟動；12618、略過 devil-advocate。報告階段**首次審查 FAIL**（V8：2522、869、701、338 無法追溯，第 1349 行）→ 模型改報告（第 1387 行）→ 重驗 PASS（第 1458 行）。詳見 4.4 節 | `A-4.jsonl` E1 第 27 行；Read collector 128、fact-checker 339、quant-analyst 473、reviewer 657 行；無 devil-advocate | PASS（觸發與分工）；審查經 1 次修正才通過 | 1:37–2:47（測試 A 段）；4:27–4:36（除錯段提到此次 FAIL→PASS） |
-| B-4 | 改寫後仍應啟動（完整，SKILL.md v2 回歸） | 測試 B 原文 | 自動 | 同 B-1 | 符合：school_lookup、L2 第 1、L1 R3＋R6、L2 R6（兩間皆 high）、devil-advocate、PASS | `B-4.jsonl` E1 第 30 行；Read collector 123、fact-checker 373、quant-analyst 502、devil-advocate 676、reviewer 1079 行 | PASS | 2:47–3:25 |
+| A-4 | 應啟動（完整，SKILL.md v2 回歸） | 測試 A 原文 | 自動 | 同 A-1 | 啟動；12618、略過 devil-advocate。報告階段**首次審查 FAIL**（V8：2522、869、701、338 無法追溯，第 1349 行）→ 模型改報告（第 1387 行）→ 重驗 PASS（第 1458 行）。詳見 4.4 節 | `A-4.jsonl` E1 第 27 行；Read collector 128、fact-checker 339、quant-analyst 473、reviewer 657 行；無 devil-advocate | PASS（觸發與分工）；審查經 1 次修正才通過 | 1:24–2:51（測試 A 段；除錯段未提到 A-4） |
+| B-4 | 改寫後仍應啟動（完整，SKILL.md v2 回歸） | 測試 B 原文 | 自動 | 同 B-1 | 符合：school_lookup、L2 第 1、L1 R3＋R6、L2 R6（兩間皆 high）、devil-advocate、PASS | `B-4.jsonl` E1 第 30 行；Read collector 123、fact-checker 373、quant-analyst 502、devil-advocate 676、reviewer 1079 行 | PASS | 2:51–3:33 |
 | B2-R | 加測（地區歧義，只測腳本） | 「我想在東區找學生套房，月租 6000 以內，行情如何？」 | 手動（直接執行 `resolve_area.py`，不經 Claude） | `unresolved`，列出候選地區並產生追問句 | `area_status = unresolved`；候選：臺中市、臺南市、新竹市、嘉義市東區；有追問句；結束碼 0 | `test-logs/B2-resolve_area.json`（指令見第 5 節） | PASS（只驗證腳本，未跑完整流程） | 未入鏡 |
-| V-A | 應啟動（完整，**影片錄製的實際執行**） | 測試 A 原文 | 自動 | 同 A-1 | 啟動；12618、略過 devil-advocate；資料階段 PASS。報告階段**V8 FAIL 兩次**（第 79、91 行：「無法追溯：4446、4446、3588」），依 RT8 標 ❌ 出報告；`05_review_log.json` verdict = FAIL、`report_retry` = 1。原因是規則缺陷，詳見 4.6 節 | `V-A.jsonl` E1 第 6 行；Read collector 15、fact-checker 37、quant-analyst 48、reviewer 63 行；無 devil-advocate；`V-A-output/` | PASS（觸發與分工）；**審查 FAIL → 找到 bug → 修正 → A-5 PASS**（真實失敗與除錯紀錄，4.6 節） | 1:37–2:47（FAIL 說明 2:31–2:47） |
-| A-5 | 應啟動（完整，修正 V8 後的回歸） | 測試 A 原文 | 自動 | 同 A-1；V3、V7 審查數字可追溯 | 啟動；12618、略過 devil-advocate；第一次報告檢核就 PASS（第 69 行，V3「4446/4446」、V7「3588+912」都可追溯）；之後模型在第 8 節加入 V8 自己的計數「122/122」，第 72 行 FAIL 一次，第 89 行修正後 PASS（`report_retry` = 1，第 8 節只寫摘要、不抄原始數字）；validate 直接執行結束碼 0 | `A-5.jsonl` E1 第 3 行；Read collector 12、fact-checker 31、quant-analyst 41、reviewer 57 行；無 devil-advocate；`A-5-output/` verdict = PASS | PASS | 未入鏡（錄影後才執行） |
-| V-B | 改寫後仍應啟動（完整，**影片錄製的實際執行**） | 測試 B 原文 | 自動 | 同 B-1 | 符合：school_lookup（臺中市\|西屯區）、L2 第 1、L1 R3＋R6、L2 R6、devil-advocate、資料與報告階段 PASS（第 68、87 行），validate 結束碼 0。流程結束後，**最後的文字回覆被帳號 5 小時用量上限截斷**（第 92 行 `is_error = true`、「You've hit your 5-hour limit」） | `V-B.jsonl` E1 第 3 行；Read collector 13、fact-checker 32、quant-analyst 42、devil-advocate 54、reviewer 64 行；`V-B-output/` verdict = PASS | PASS（觸發、分工、審查）；最後回覆中斷是用量上限，**不是 Skill 失敗** | 2:47–3:25 |
+| V-A | 應啟動（完整，**11/18 為早期影片草稿錄製；新版影片當完整流程證據**） | 測試 A 原文 | 自動 | 同 A-1 | 啟動；12618、略過 devil-advocate；資料階段 PASS。報告階段**V8 FAIL 兩次**（第 79、91 行：「無法追溯：4446、4446、3588」），依 RT8 標 ❌ 出報告；`05_review_log.json` verdict = FAIL、`report_retry` = 1。原因是規則缺陷，詳見 4.6 節 | `V-A.jsonl` E1 第 6 行；Read collector 15、fact-checker 37、quant-analyst 48、reviewer 63 行；無 devil-advocate；`V-A-output/` | PASS（觸發與分工）；**審查 FAIL → 找到 bug → 修正 → A-5 PASS**（真實失敗與除錯紀錄，4.6 節） | 2:31–2:51（完整紀錄）；FAIL 說明 4:00–4:11 |
+| A-5 | 應啟動（完整，修正 V8 後的回歸） | 測試 A 原文 | 自動 | 同 A-1；V3、V7 審查數字可追溯 | 啟動；12618、略過 devil-advocate；第一次報告檢核就 PASS（第 69 行，V3「4446/4446」、V7「3588+912」都可追溯）；之後模型在第 8 節加入 V8 自己的計數「122/122」，第 72 行 FAIL 一次，第 89 行修正後 PASS（`report_retry` = 1，第 8 節只寫摘要、不抄原始數字）；validate 直接執行結束碼 0 | `A-5.jsonl` E1 第 3 行；Read collector 12、fact-checker 31、quant-analyst 41、reviewer 57 行；無 devil-advocate；`A-5-output/` verdict = PASS | PASS | 4:11–4:18（除錯段，A-5 PASS） |
+| V-B | 改寫後仍應啟動（完整，**11/18 為早期影片草稿錄製；新版影片當完整流程證據**） | 測試 B 原文 | 自動 | 同 B-1 | 符合：school_lookup（臺中市\|西屯區）、L2 第 1、L1 R3＋R6、L2 R6、devil-advocate、資料與報告階段 PASS（第 68、87 行），validate 結束碼 0。流程結束後，**最後的文字回覆被帳號 5 小時用量上限截斷**（第 92 行 `is_error = true`、「You've hit your 5-hour limit」） | `V-B.jsonl` E1 第 3 行；Read collector 13、fact-checker 32、quant-analyst 42、devil-advocate 54、reviewer 64 行；`V-B-output/` verdict = PASS | PASS（觸發、分工、審查）；最後回覆中斷是用量上限，**不是 Skill 失敗** | 3:20–3:33（完整紀錄） |
 
-「觸發方式」：除 B2-R 外都是**自動**（提示詞沒有指名 Skill、沒有斜線指令）。「影片時間點」依 `tutor/chapters.md`：測試 A 段 1:37–2:47、測試 B 段 2:47–3:25、測試 C 段 3:25–3:56（影片中的 C 是重播 `C-1.jsonl`，錄影時帳號已達用量上限）、除錯段 3:56–4:45；影片中的 A、B 畫面是 V-A、V-B 這兩次實際執行。
+「觸發方式」：除 B2-R 外都是**自動**（提示詞沒有指名 Skill、沒有斜線指令）。「影片時間點」依 `tutor/chapters.md`：測試 A 段 1:24–2:51、測試 B 段 2:51–3:33、測試 C 段 3:33–3:44、除錯段 3:44–4:18。影片中 A、B、C 都用 `claude -p` 即時執行（`LIVE-A/B/C.jsonl`，見 4.8 節）；A、B 為省用量限制回合數，完整流程改用 V-A、V-B 的紀錄（A 2:31–2:51、B 3:20–3:33），並在 `sample-data` 上離線直接執行各角色腳本（2:04–2:31）。測試 C 是即時執行，不是重播。
 
 穩定性：A 6/6（A-1–A-5、V-A）、B 5/5（B-1–B-4、V-B）自動啟動；C 3/3 未啟動；近似與邊界題 6/6 未啟動。A-2、A-3、A591-1、B-2、B-3 的 `result` 事件 `is_error = true` 是因為刻意設了 `--max-turns 3`（拿到 Skill 呼叫就停），不是執行失敗。每個反向 log 的 E0 都顯示 Skill 已安裝，所以「沒啟動」是模型依 description 判斷的結果。
 
@@ -132,7 +132,7 @@ for x in A-1 B-1 A-4 B-4 V-A V-B A-5; do python3 scripts/validate.py --input tes
 
 （`echo rc=$?` 緊接在 `validate.py` 之後、沒有管線，所以是 validate 本身的結束碼。）
 
-## 4. 修正紀錄（v1 → v2）（影片 3:56–4:45）
+## 4. 修正紀錄（v1 → v2）（影片 3:44–4:18）
 
 ### 4.1 description（觸發條件）：首次即通過
 
@@ -164,7 +164,7 @@ for x in A-1 B-1 A-4 B-4 V-A V-B A-5; do python3 scripts/validate.py --input tes
 
 證據：`test-logs/SKILL.v1.md`、`test-logs/SKILL.v2.md`、`test-logs/SKILL.v1-v2.diff`（`diff -u`）。修改後以同樣提示詞重跑完整流程 A-4、B-4：兩者都自動啟動、依序讀角色檔、最終審查 PASS，數字與 A-1、B-1 相同。不同之處：**A-4 的報告階段審查第一次 FAIL**，修正後才 PASS（4.4 節）；A-4 log 中的 `rc=0`（第 1349、1458 行）是 `validate.py … | tail` 的 `tail` 結束碼，不能當作 validate 的證據，因此改以 3.3 節在證據複本上重跑的結束碼為準。B-4 log 中的 validate 是直接執行，結束碼 0。
 
-> 註：上面說的 v2 是測試當時的版本。繳交前又依稽核意見修改了 SKILL.md 本體（新增 RT16、流程圖、範例 2 更正）與腳本（4.4、4.5 節），description 仍然一字未改；這些修改當時是直接執行腳本驗證的；之後影片錄製的 V-A、V-B 與修正後的 A-5 就是用這個版本（加上 4.6 節的修正）跑的完整 `claude -p`。
+> 註：上面說的 v2 是測試當時的版本。繳交前又依稽核意見修改了 SKILL.md 本體（新增 RT16、流程圖、範例 2 更正）與腳本（4.4、4.5 節），description 仍然一字未改；這些修改當時是直接執行腳本驗證的；之後 11/18 為早期影片草稿錄製的 V-A、V-B 與修正後的 A-5 就是用這個版本（加上 4.6 節的修正）跑的完整 `claude -p`。
 
 ### 4.4 實際失敗 → 修正 → 重新驗證（一）：A-4 報告階段 V8 FAIL
 
@@ -185,7 +185,7 @@ for x in A-1 B-1 A-4 B-4 V-A V-B A-5; do python3 scripts/validate.py --input tes
 **修正**：
 - `SKILL.md` 新增 RT16 與步驟 5 的「報告階段 FAIL」規則（`reviewer.md` 同步）：要記錄 `report_retry` 與第一次的問題，修法是讓數字可追溯（照抄 `03_*` 等檔案中的值並寫出來源），不是刪掉數字；最多重試 1 次，第二次仍 FAIL 就依 RT8 標 ❌。另規定 validate 要直接執行，不接 `| tail`。
 - `scripts/analyze.py` 新增 `03_mgmt_fee_status.csv`（各管理費解析狀態的筆數，全部與各區）。
-- `scripts/recompute.py`：報告階段重跑時，若上一次 FAIL，就自動寫入 `report_retry` 與 `report_first_issues`；V8 不再把 `05_review_log.json` 當來源；通過時 `note` 留空。（影片錄製時發現這條排除得太寬，4.6 節改為納入資料階段檢核的重算值。）
+- `scripts/recompute.py`：報告階段重跑時，若上一次 FAIL，就自動寫入 `report_retry` 與 `report_first_issues`；V8 不再把 `05_review_log.json` 當來源；通過時 `note` 留空。（11/18 錄製 V-A 時發現這條排除得太寬，4.6 節改為納入資料階段檢核的重算值。）
 
 **重新驗證**（直接執行腳本，沒有再跑 `claude -p`）：用 sample-data 離線重建 A 的 run，放入 A-4 的 `final_report.md`（把第 1387 行改掉的那句還原成原句）、`03_asking_stats.csv` 與 `05_review_log.json`（離線重建沒有爬 591，所以刊登對照沿用 A-4 的檔）：
 
@@ -221,9 +221,9 @@ grep -rnoP '(?<![\d\w./:-])0\d-\d' test-logs sample-data                        
 grep -rnoP '(?<![\d\w./:-])09\d{2}(?![\d/:])' test-logs sample-data   # 只剩 uuid 與 addr_hash 的十六進位字串（例：0921dc5a-…、0934ccaa9ef6），不是電話
 ```
 
-### 4.6 實際失敗 → 修正 → 重新驗證（三）：影片錄製時 V-A 的 V8 FAIL
+### 4.6 實際失敗 → 修正 → 重新驗證（三）：早期影片草稿錄製時（11/18）V-A 的 V8 FAIL
 
-這是錄影時真的發生的失敗（影片 2:31–2:47 有說明），完整保留在 `test-logs/V-A.jsonl` 與 `V-A-output/`。
+這是 11/18 為早期影片草稿錄製 V-A 時真的發生的失敗（新版影片 4:00–4:18 有說明），完整保留在 `test-logs/V-A.jsonl` 與 `V-A-output/`。
 
 | 階段 | log 位置 | 內容 |
 | --- | --- | --- |
@@ -266,14 +266,40 @@ grep -rnoP '(?<![\d\w./:-])09\d{2}(?![\d/:])' test-logs sample-data   # 只剩 u
 
 第一次啟動兩個測試 agent 時，帳號碰到 5 小時用量上限，A-1、B-1、N1-1 的執行被中斷（log 結尾 `is_error = true`、「You've hit your 5-hour limit」）。A-1、B-1 的中斷 log 已刪除並重跑；N1-1 保留作為紀錄，以 N1-2 重跑。這些中斷不計入成功或失敗。
 
-錄影時又碰到同一個上限兩次：
+11/18 錄製早期影片草稿時又碰到同一個上限兩次：
 - V-B：五個角色與審查都已完成（verdict = PASS、validate 結束碼 0），只有最後給使用者的文字回覆被截斷（第 92 行）。輸出檔齊全，判定以檔案與 log 為準。
-- 測試 C：錄影 C 時帳號已達上限，影片 3:25–3:37 改為重播 `C-1.jsonl` 的原始 log（非即時），旁白與章節表都有說明。
+- 測試 C：當時帳號已達上限，早期草稿改為重播 `C-1.jsonl`。新版影片（11/25）的測試 C 已改為即時執行（`LIVE-C.jsonl`，見 4.8 節），不再重播。
+
+### 4.8 新版影片的即時執行：LIVE-A／LIVE-B／LIVE-C
+
+新版影片（11/25）中，測試 A、B、C 都用 `claude -p` 即時執行（提示詞未指名 Skill、無斜線指令），log 存為 `test-logs/LIVE-A.jsonl`、`LIVE-B.jsonl`、`LIVE-C.jsonl`（路徑已是 `<WORK>`；掃描路徑與第三方個資皆 0 筆）。為了省用量，A 限 9 回合、B 限 7 回合，只用來證明「自動啟動並開始分工」；完整流程以 V-A、V-B 的紀錄與離線直接執行角色腳本呈現。C 完整跑完，提示詞為「請幫我寫一個 Python 函式，把字串反轉並回傳。」（`-p` 的提示詞不會寫進 stream-json，此句取自錄影腳本 `video-build/s7.sh`）。
+
+查核指令：
+
+```bash
+# 第一個 tool_use（A、B 應為 Skill → student-rental-check）
+jq -c 'select(.type=="assistant") | .message.content[]? | select(.type=="tool_use") | {name, input}' test-logs/LIVE-A.jsonl | head -1
+# 讀了哪些 agents 檔
+jq -r 'select(.type=="assistant") | .message.content[]? | select(.type=="tool_use" and .name=="Read") | .input.file_path' test-logs/LIVE-B.jsonl | grep agents/
+# 結束方式與回合數
+jq -c 'select(.type=="result") | {subtype, num_turns}' test-logs/LIVE-A.jsonl test-logs/LIVE-B.jsonl test-logs/LIVE-C.jsonl
+# C：Skill 呼叫次數應為 0；init 的 skills 含本 Skill（E0）
+jq -c 'select(.type=="assistant") | .message.content[]? | select(.type=="tool_use" and .name=="Skill")' test-logs/LIVE-C.jsonl | wc -l
+jq -c 'select(.type=="system" and .subtype=="init") | .skills | map(select(. == "student-rental-check"))' test-logs/LIVE-C.jsonl
+```
+
+| log | 第一個 tool_use | 角色檔 | 結束 | 判定 | 影片時間點 |
+| --- | --- | --- | --- | --- | --- |
+| `LIVE-A.jsonl` | 第 2 行 `Skill` → `student-rental-check` | 第 13 行 Read `agents/collector.md`（第一個 Read） | `error_max_turns`，9 回合（刻意限制） | PASS（自動啟動） | 1:24–2:04 |
+| `LIVE-B.jsonl` | 第 3 行 `Skill` → `student-rental-check` | 第 12 行 Read `agents/collector.md`（第一個 Read） | `error_max_turns`，7 回合（刻意限制） | PASS（自動啟動） | 2:51–3:08 |
+| `LIVE-C.jsonl` | 沒有任何 tool_use；直接回覆程式碼 | 無 | `success`，1 回合 | PASS（Skill 呼叫 0；init 顯示已安裝） | 3:33–3:44 |
+
+`error_max_turns` 是刻意的回合限制造成的，不是 Skill 失敗；三份 log 的 init 都是 18 個 skill（含本 Skill）、模型 `claude-opus-5-5`。
 
 ## 5. 限制與後續
 
 - 本次全部以非互動模式測試；互動模式的「追問一次」（地區歧義、缺月租）沒有在 log 中驗證。
-- **帳號用量上限**：測試期間共有 4 次執行碰到 5 小時用量上限（A-1、B-1 初次、N1-1、V-B 的最後回覆），另外影片的測試 C 因上限改為重播舊 log。這些是執行環境的限制，不是 Skill 的失敗，但也代表 V-B 的最終文字回覆與「即時的測試 C」沒有影片證據。
+- **帳號用量上限**：測試期間共有 4 次執行碰到 5 小時用量上限（A-1、B-1 初次、N1-1、V-B 的最後回覆）。這些是執行環境的限制，不是 Skill 的失敗，但也代表 V-B 的最終文字回覆沒有影片證據。新版影片的即時 A、B 為省用量限制回合數，只證明自動啟動與開始分工，完整流程靠 V-A、V-B 紀錄（4.8 節）。
 - 4.6 節最後補上的「第 8 節不寫 V8 自己的計數」只改了 `reviewer.md` 與模板，沒有再跑一次完整的 `claude -p`。
 - V-A、V-B 由錄影腳本執行（`--model opus --effort high`，其他參數同 `run_test.sh`），A-5 與其他測試由 `run_test.sh` 執行（預設模型，init 皆為 `claude-opus-5-5`）。
 - 測試 B2（「東區」歧義）屬加分項，沒有跑完整的 `claude -p` 流程，只直接執行地區解析腳本（總表 B2-R）。在本 Skill 資料夾執行：

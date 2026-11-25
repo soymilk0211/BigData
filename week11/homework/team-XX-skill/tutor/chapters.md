@@ -1,14 +1,14 @@
-# 影片章節（final.mp4，總長 5:11）
-| 時間 | 段落 |
-| --- | --- |
-| 0:00–0:08 | 標題 |
-| 0:08–0:42 | 主題、資料來源（實價登錄 21 縣市租賃檔、備註管理費、591 補充）、預期成果 final_report.md |
-| 0:42–1:37 | Skill 架構：資料夾、SKILL.md frontmatter（Trigger：何時啟動／不啟動）、五個 Agent、devil-advocate 條件啟動、handoff 交接 |
-| 1:37–2:06 | 測試 A 實際執行（加速 5.5 倍）：Skill tool_use 自動呼叫、讀 4 個角色檔、未讀 devil-advocate |
-| 2:06–2:47 | 測試 A 啟動證據：jq 查 E1 Skill tool_use、E2 角色檔、路由 agents_skipped、12,618 元；本次錄影 reviewer V8 判 FAIL（報告抄錄上一輪問題中的對帳筆數 4446、3588 無法追溯） |
-| 2:47–3:04 | 測試 B 實際執行（加速約 8 倍）：逢甲、兩間比較、先匯訂金，五個角色都出現 |
-| 3:04–3:25 | 測試 B 證據：逢甲→臺中市西屯區（school_lookup）、R3 先匯訂金→devil-advocate、L1 high |
-| 3:25–3:37 | 測試 C：重播 Agent 2 的 C-1.jsonl 原始 log（非即時；錄影時帳號達 5 小時用量上限） |
-| 3:37–3:56 | 測試 C 證據：E0 已安裝、Skill 呼叫 0；近似題 C2/C3/N1–N4 全部 0 |
-| 3:56–4:45 | 除錯：開發試跑 7 個問題（cat→Read、遮蔽個資…）、SKILL.md v1→v2 description 不變、A-4 V8 FAIL→PASS、reviewer V3/V5 重算 |
-| 4:45–5:11 | 限制、AI Tutor（ClassTutor 老師頁匯入字幕、學生頁載入課程包） |
+# 影片章節（student-rental-check_final.mp4，總長 4:45）
+
+| 時間 | 段落 | 畫面 |
+| --- | --- | --- |
+| 0:00–0:09 | 標題 | 標題卡 |
+| 0:09–0:40 | 主題、資料來源、預期成果 | 終端機：資料夾、sample-data（三區筆數）、data-sources、final_report 一句話結論 |
+| 0:40–1:24 | Skill 架構：SKILL.md（Trigger）與五個 Agent | 終端機：SKILL.md frontmatter（name、description）、agents/ 五個角色檔、fact-checker 的輸入／輸出／交接表、handoff_2 交接檔 |
+| 1:24–2:04 | 測試 A（應啟動）：Claude Code 即時執行 | 終端機：claude -p 測試 A 即時執行（init、tool_use Skill、Read collector.md），加速 1.5 倍；最後 jq 從 log 取出 Skill 名稱 |
+| 2:04–2:31 | 完整流程：各角色腳本直接執行 | 終端機：resolve_area → collect_lvr → candidates → flag → analyze → recompute（data）實際輸出 |
+| 2:31–2:51 | 測試 A 完整執行紀錄：啟動證據 E1–E3 | 終端機：jq 列出 V-A.jsonl 的 Skill 與四個 Read 角色檔、00_routing.json（略過 devil-advocate）、12618 元 |
+| 2:51–3:33 | 測試 B（換說法仍應啟動）＋ devil-advocate | 終端機：claude -p 測試 B 即時執行（tool_use Skill）、resolve_area 逢甲→臺中市西屯區、V-B 的 R3 訊號、agents_planned 五角色、04_risk_report 風險等級 high |
+| 3:33–3:44 | 測試 C（不應啟動）：即時執行 | 終端機：claude -p 測試 C 即時執行、Skill 呼叫次數 = 0 |
+| 3:44–4:18 | 失敗分析與修正：V8 FAIL → A-5 PASS | 終端機：SKILL v1/v2 description 相同、V-A 05_review_log V8 FAIL、A-5 PASS、validate 通過 |
+| 4:18–4:45 | 限制、AI Tutor 使用方式 | 限制與 AI Tutor 說明卡（含 ClassTutor 老師頁截圖） |

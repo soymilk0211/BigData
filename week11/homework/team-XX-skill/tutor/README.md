@@ -4,13 +4,13 @@
 
 | 檔案 | 用途（ClassTutor 中的欄位） |
 | --- | --- |
-| `subtitles.zh-TW.srt` | 影片燒錄字幕的 SRT 版（共 45 段，5:11）；上傳到「字幕檔案（VTT／SRT／SBV）」，也上傳到 YouTube 當字幕 |
+| `subtitles.zh-TW.srt` | 影片燒錄字幕的 SRT 版（共 65 段，4:45；影片 `../video/student-rental-check_final.mp4`，Google TTS 旁白）；上傳到「字幕檔案（VTT／SRT／SBV）」，也上傳到 YouTube 當字幕 |
 | `tutor-material.md` | 講義（Skill 功能、五個 Agent、E0–E3、測試 A／B／C 與時間點、除錯、限制）；上傳到「教材／講義（可多選）」 |
 | `vocabulary.txt` | 專有名詞，一行一個；貼到「確認詞彙／專有名詞」 |
 | `course-intro.md` | 課程簡介（≤150 字）；貼到「摘要內容（可自由修改）」 |
 | `chapters.md` | 影片章節時間表；也可貼到 YouTube 說明欄當章節 |
 
-字幕已校對關鍵詞（SKILL.md、Agent、Trigger、collector、fact-checker、quant-analyst、devil-advocate、reviewer、實價登錄、逢甲、西屯）：與燒錄字幕一致、沒有錯字，因此未修改任何文字與時間軸。（「龜山」只出現在畫面與講義，不在旁白中。）
+字幕已校對關鍵詞（SKILL.md、Agent、Trigger、collector、fact-checker、quant-analyst、devil-advocate、reviewer、實價登錄、龜山、逢甲、西屯）：與燒錄字幕一致、沒有錯字，因此未修改任何文字與時間軸。
 
 ## 一、老師端：產生 `.classtutor` 課程包
 
@@ -39,11 +39,11 @@
 
 | # | 問題 | 預期回答重點 | 預期時間點 |
 | --- | --- | --- | --- |
-| Q1 | 哪一段測試證明 Skill 有自動啟動？ | 測試 A：提示詞沒指名 Skill、沒用斜線指令；log 中有 `name = Skill` 的 tool_use（E1），接著依序讀 collector、fact-checker、quant-analyst、reviewer 四個角色檔（E2），輸出已知項目合計 12,618 元可核對（E3） | 1:37–2:47 |
-| Q2 | reviewer（審查員）如何檢查資料？ | 從原始資料獨立重算抽查（V1–V13），例如四千多筆每坪單價全部對帳、總成本重算一致；也檢查報告數字可追溯（V8），錄影那次 V8 判 FAIL | 1:12–1:25、4:36–4:45（亦可 2:31–2:47） |
-| Q3 | 什麼情況才會啟動 devil-advocate？ | 條件啟動：只有出現高風險訊號才啟動；測試 B 第一間「房東要先匯訂金才能看房」命中 R3，路由啟動 devil-advocate，判為高風險、建議避開；測試 A 沒有訊號就沒有讀 devil-advocate | 2:47–3:25（亦可 1:25–1:33） |
-| Q4 | 不限長庚嗎？ | 不限；測試 B 用逢甲，經學校對照表對應到臺中市西屯區，證明全台各縣市都能用（限制：學校對照表只收錄少數學校） | 3:20–3:25（測試 B 段 2:47–3:25） |
-| Q5 | 測試 C 為什麼沒有啟動？ | 一般程式問題；init 顯示 Skill 已安裝但 Skill 呼叫 0，是模型依 description 判斷 | 3:25–3:56 |
+| Q1 | 哪一段測試證明 Skill 有自動啟動？ | 測試 A：提示詞沒指名 Skill、沒用斜線指令；log 中有 `name = Skill` 的 tool_use（E1），接著依序讀 collector、fact-checker、quant-analyst、reviewer 四個角色檔（E2），輸出已知項目合計 12,618 元可核對（E3） | 1:24–2:51 |
+| Q2 | reviewer（審查員）如何檢查資料？ | 從原始資料獨立重算抽查（V1–V13），例如資料階段 23 項檢查全部 PASS、總成本重算一致；也檢查報告數字可追溯（V8），V-A 完整執行那次 V8 判 FAIL，修正後 A-5 PASS | 1:15–1:19、2:24–2:31（亦可 4:00–4:18） |
+| Q3 | 什麼情況才會啟動 devil-advocate？ | 條件啟動：只有出現高風險訊號才啟動；測試 B 第一間「房東要先匯訂金才能看房」命中 R3，路由啟動 devil-advocate，判為高風險、建議避開；測試 A 沒有訊號就沒有讀 devil-advocate | 2:51–3:33（亦可 1:11–1:15） |
+| Q4 | 不限長庚嗎？ | 不限；測試 B 用逢甲，經學校對照表對應到臺中市西屯區，證明全台各縣市都能用（限制：學校對照表只收錄少數學校） | 3:00–3:08（測試 B 段 2:51–3:33） |
+| Q5 | 測試 C 為什麼沒有啟動？ | 一般程式問題（影片中即時執行）；init 顯示 Skill 已安裝但 Skill 呼叫 0，是模型依 description 判斷 | 3:33–3:44 |
 
 ### 實測結果（上傳 YouTube 並製作課程包後填寫）
 
