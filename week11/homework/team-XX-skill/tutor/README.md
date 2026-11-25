@@ -10,7 +10,7 @@
 | `course-intro.md` | 課程簡介（≤150 字）；貼到「摘要內容（可自由修改）」 |
 | `chapters.md` | 影片章節時間表；也可貼到 YouTube 說明欄當章節 |
 | `student-rental-check_v8.classtutor` | 已用 v8 影片與字幕重建的課程包；雲端硬碟連結（知道連結的任何人可檢視）見 `../submission.md` |
-| `screenshots/` | 資料夾仍保留先前截圖，不作為 v8 課程包的實測結果 |
+| `screenshots/tutor-v8-q1.webp`、`screenshots/tutor-v8-q2.webp` | 學生頁 v8 課程包 Q1、Q2 實測截圖（已裁切瀏覽器列與工作列，畫面中沒有 API Key） |
 
 字幕已校對關鍵詞（SKILL.md、Agent、Trigger、collector、fact-checker、quant-analyst、devil-advocate、reviewer、實價登錄、龜山、逢甲、西屯）：與燒錄字幕一致、沒有錯字，因此未修改任何文字與時間軸。
 
@@ -47,7 +47,14 @@
 | Q4 | 不限長庚嗎？ | 不限；測試 B 用逢甲，經學校對照表對應到臺中市西屯區，證明全台各縣市都能用（限制：學校對照表只收錄少數學校） | 2:07–2:11（測試 B 段 1:56–4:27） |
 | Q5 | 測試 C 為什麼沒有啟動？ | 一般程式問題（影片中即時執行）；init 顯示 Skill 已安裝但 Skill 呼叫 0，是模型依 description 判斷 | 4:27–4:41 |
 
-### 實測結果
+### 實測結果（2026-11-25，學生頁，v8 課程包）
 
-待以新課程包重測。至少需在學生頁測試 2 個能回到影片具體時間點的內容問題（建議用上方 Q1、Q2）。目前尚未記入 v8 課程包的實測結果。
+模型：`gemini-flash-lite-latest`。課程包 `student-rental-check_v8.classtutor`。兩題都在影片播到 5:43（片尾）後提問。截圖（已裁切瀏覽器列與工作列，畫面中沒有 API Key）在 `screenshots/tutor-v8-q1.webp`、`screenshots/tutor-v8-q2.webp`。
+
+Q1 前兩次嘗試（觀看進度 1:08、5:41）回傳「Google AI Studio 暫時無法服務，請稍後重試」；第三次（5:43）成功。Q2 一次成功。下面記錄的是成功的那一次回答。實際問句與上表預定問句略有不同，以實測為準。
+
+| # | 實際問句 | 實際回答（摘要） | 引用時間點 | 是否指到正確時間點 |
+| --- | --- | --- | --- | --- |
+| Q1 | 哪一段測試證明 Skill 有啟動？ | 內容正確：要判定 Skill 是否有啟動，可看 stream-json 的工具呼叫紀錄，第一個 tool_use 就是 Skill（參數 student-rental-check）；測試 A 與 B 都有正確啟動，測試 C 呼叫次數為 0、沒有誤啟動。截圖 `screenshots/tutor-v8-q1.webp`。 | 04:50、以及原始標記 `[chunk0002]` | 部分符合。內容對，但 04:50 對到的字幕是「log 沒有 Read 證據」（4:50–4:51，除錯段），不是啟動證據；`[chunk0002]` 不是影片時間點。啟動證據在 1:18–1:32（怎麼判定、第一個 tool_use 就是 Skill）、1:34–1:39（E1–E3 完整 log）、2:02–2:05（測試 B 同樣第一個 tool_use 是 Skill）。總結「A、B 正確啟動，C 沒有誤啟動」在 5:13–5:17。 |
+| Q2 | 審查員做了什麼？ | 內容正確：reviewer 會從原始資料獨立重算；測試 A 完整執行時判 V8 FAIL，報告數字在舊排除規則下無法追溯；修正規則後再跑回歸測試 A-5 判 PASS；最後五個角色完整交接並由 reviewer 判 PASS。截圖 `screenshots/tutor-v8-q2.webp`。 | 00:00、04:50 | 部分符合。內容對，但 00:00 是片頭標題，不是審查員說明，引用偏弱。04:50 同樣對到「log 沒有 Read 證據」，比 V8 FAIL（4:55–5:11）和總結「reviewer 判 PASS」（5:18–5:21）都早。審查員職責說明在 1:02–1:04（「reviewer 從原始資料獨立重算」），測試 B 的審查結果在 3:57–4:01。 |
 
