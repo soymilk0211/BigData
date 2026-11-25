@@ -1,6 +1,6 @@
 # 旁白講稿（對齊影片時間軸）
 
-影片：https://youtu.be/HTNxGOs2UcE （4:45，1920×1080；公開 repo 不保留 mp4）。主要版本為 Google 語音（gTTS，zh-TW，1.3 倍速）旁白＋燒錄字幕；字幕檔見 `../team-XX-skill/tutor/subtitles.zh-TW.srt`，與下列文字相同。
+影片：https://youtu.be/QIAtzRLjpL8 （4:45，1920×1080；公開 repo 不保留 mp4）。主要版本為 Google 語音（gTTS，zh-TW，1.3 倍速）旁白＋燒錄字幕；字幕檔見 `../team-XX-skill/tutor/subtitles.zh-TW.srt`，與下列文字相同。
 若想改成真人配音：照下表時間點念同一句即可（每段可略快或略慢 0.5 秒內）。
 
 ## 0:00–0:09　標題

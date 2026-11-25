@@ -1,4 +1,4 @@
-# 影片章節（https://youtu.be/HTNxGOs2UcE ，總長 4:45）
+# 影片章節（https://youtu.be/QIAtzRLjpL8 ，總長 4:45）
 
 | 時間 | 段落 | 畫面 |
 | --- | --- | --- |
