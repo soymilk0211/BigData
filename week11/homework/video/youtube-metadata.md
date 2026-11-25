@@ -1,6 +1,6 @@
 # YouTube 上傳資料
 
-- 已上傳：https://youtu.be/HTNxGOs2UcE （4:45，1080p，已燒錄中文字幕、Google 語音旁白）。公開 repo 不保留 mp4。
+- 已上傳：https://youtu.be/QIAtzRLjpL8 （4:45，1080p，已燒錄中文字幕、Google 語音旁白）。公開 repo 不保留 mp4。
 - 可見度：**不公開（Unlisted）**，不可設「私人」
 - 字幕：上傳 `student-rental-check.zh-TW.srt`，語言「中文（台灣）」
 - 「為兒童打造」：否

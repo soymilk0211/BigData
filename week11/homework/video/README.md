@@ -2,7 +2,7 @@
 
 公開 repo 不保留 mp4。請看 YouTube（不公開／Unlisted）：
 
-https://youtu.be/HTNxGOs2UcE
+https://youtu.be/QIAtzRLjpL8
 
 - 長度 4:45，1080p，Google 語音（gTTS，zh-TW）旁白＋燒錄中文字幕
 - 上傳用的字幕：`../team-XX-skill/tutor/subtitles.zh-TW.srt`（中文（台灣））

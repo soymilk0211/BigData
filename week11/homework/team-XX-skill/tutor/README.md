@@ -4,7 +4,7 @@
 
 | 檔案 | 用途（ClassTutor 中的欄位） |
 | --- | --- |
-| `subtitles.zh-TW.srt` | 影片燒錄字幕的 SRT 版（共 65 段，4:45；影片 https://youtu.be/HTNxGOs2UcE ，Google TTS 旁白；公開 repo 不保留 mp4）；上傳到「字幕檔案（VTT／SRT／SBV）」，也上傳到 YouTube 當字幕 |
+| `subtitles.zh-TW.srt` | 影片燒錄字幕的 SRT 版（共 65 段，4:45；影片 https://youtu.be/QIAtzRLjpL8 ，Google TTS 旁白；公開 repo 不保留 mp4）；上傳到「字幕檔案（VTT／SRT／SBV）」，也上傳到 YouTube 當字幕 |
 | `tutor-material.md` | 講義（Skill 功能、五個 Agent、E0–E3、測試 A／B／C 與時間點、除錯、限制）；上傳到「教材／講義（可多選）」 |
 | `vocabulary.txt` | 專有名詞，一行一個；貼到「確認詞彙／專有名詞」 |
 | `course-intro.md` | 課程簡介（≤150 字）；貼到「摘要內容（可自由修改）」 |

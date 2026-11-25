@@ -1,6 +1,6 @@
 # 課程講義：student-rental-check——台灣學生租屋行情與避雷 Claude Skill
 
-> 本講義搭配影片（https://youtu.be/HTNxGOs2UcE ，總長 4:45，Google TTS 旁白＋燒錄字幕；公開 repo 不保留 mp4）與字幕 `subtitles.zh-TW.srt` 使用。括號中的時間是影片時間點，章節表見 `chapters.md`。所有數字都來自 `test-logs/` 的實際執行紀錄。
+> 本講義搭配影片（https://youtu.be/QIAtzRLjpL8 ，總長 4:45，Google TTS 旁白＋燒錄字幕；公開 repo 不保留 mp4）與字幕 `subtitles.zh-TW.srt` 使用。括號中的時間是影片時間點，章節表見 `chapters.md`。所有數字都來自 `test-logs/` 的實際執行紀錄。
 
 ## 1. 這個 Skill 做什麼（0:00–0:40）
 

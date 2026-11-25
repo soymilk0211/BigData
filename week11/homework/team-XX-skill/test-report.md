@@ -10,7 +10,7 @@
 >
 > 所有事後處理都是逐行取代，**每份 log 的行數不變**，本報告引用的行號仍然有效。
 >
-> 影片已上傳 YouTube（不公開）：https://youtu.be/HTNxGOs2UcE （4:45，Google TTS 旁白＋燒錄字幕；11/25 製作，取代早期草稿；公開 repo 不保留 mp4）。章節表見 `tutor/chapters.md`，字幕見 `tutor/subtitles.zh-TW.srt`；總表最後一欄「影片時間點」依章節表填寫。AI Tutor（ClassTutor）材料見 `tutor/README.md`。
+> 影片已上傳 YouTube（不公開）：https://youtu.be/QIAtzRLjpL8 （4:45，Google TTS 旁白＋燒錄字幕；11/25 製作，取代早期草稿；公開 repo 不保留 mp4）。章節表見 `tutor/chapters.md`，字幕見 `tutor/subtitles.zh-TW.srt`；總表最後一欄「影片時間點」依章節表填寫。AI Tutor（ClassTutor）材料見 `tutor/README.md`。
 
 ## 1. 測試方式
 
