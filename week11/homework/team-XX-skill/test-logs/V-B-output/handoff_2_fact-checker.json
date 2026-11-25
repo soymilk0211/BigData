@@ -1,0 +1,18 @@
+{
+  "handoff_version": "1.0",
+  "run_id": "20261118-233629",
+  "from": "fact-checker",
+  "to": "quant-analyst",
+  "artifacts": [
+    {"path": "02_flags.csv", "rows": 4062},
+    {"path": "02_factcheck_summary.json", "rows": 1}
+  ],
+  "status": "ok",
+  "warnings": [
+    "臺中市|西屯區 行情窗內社會住宅相關案件 2296/4137 筆，比例過半，行情可能被拉低，需做排除社宅的敏感度比較",
+    "L1：UNKNOWN_SOURCE、STALE_LISTING（未說刊登來源與日期）、COST_UNSTATED（管理費、水電瓦斯網路、押金未提供）、COMMUTE_UNSTATED",
+    "L2：UNKNOWN_SOURCE、STALE_LISTING、COST_UNSTATED（管理費使用者明說不知道；水電瓦斯網路、押金、坪數未提供）、COMMUTE_UNSTATED",
+    "候選旗標已核對使用者原話，一致；rows_deleted = 0"
+  ],
+  "next_hint": "注意西屯社宅比例過半；L2 雅房沒有坪數，無法算每坪租金"
+}

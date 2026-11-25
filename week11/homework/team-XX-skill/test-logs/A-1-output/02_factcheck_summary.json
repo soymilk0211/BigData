@@ -1,0 +1,30 @@
+{
+  "rows_in": 4500,
+  "rows_flagged": 3762,
+  "by_flag": {
+    "SOCIAL_HOUSING": 2969,
+    "MGMT_FEE_UNKNOWN": 1670,
+    "PARKING_BUNDLED": 1168,
+    "TYPE_MISSING": 307,
+    "LATE_FILING": 140,
+    "NON_RESIDENTIAL": 127,
+    "OUTLIER_PRELIM": 73,
+    "TAX_INCLUDED": 66,
+    "AREA_INVALID": 47,
+    "STEP_RENT": 36,
+    "STALE_LISTING": 1,
+    "COST_UNSTATED": 1
+  },
+  "rows_deleted": 0,
+  "analysis_window_start": "2025-08-10",
+  "latest_rent_date": "2026-08-10",
+  "candidate_flags": {
+    "L1": [
+      "STALE_LISTING",
+      "COST_UNSTATED"
+    ]
+  },
+  "notes": [
+    "桃園市|龜山區 目前行情窗內社會住宅相關案件 2362/3700 筆，需做排除社宅的敏感度比較"
+  ]
+}

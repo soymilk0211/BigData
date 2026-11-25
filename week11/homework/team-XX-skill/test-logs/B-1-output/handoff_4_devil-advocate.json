@@ -1,0 +1,22 @@
+{
+ "handoff_version": "1.0",
+ "run_id": "20261118-220902",
+ "from": "devil-advocate",
+ "to": "reviewer",
+ "artifacts": [
+  {
+   "path": "04_risk_report.json",
+   "rows": 2
+  },
+  {
+   "path": "04_risk_report.md",
+   "rows": 2
+  }
+ ],
+ "status": "ok",
+ "warnings": [
+  "L1 R3 先匯訂金才能看房 → 建議避開",
+  "兩間都有 R6 來源不明"
+ ],
+ "next_hint": "未看房先匯訂金是常見詐騙手法：L1 不先看房就不要付款；L2 便宜但管理費、水電未提供"
+}

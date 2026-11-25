@@ -1,0 +1,5 @@
+school_name,aliases,campus,city,district,source_url,verified_on,note
+長庚大學,長庚;長庚大學;CGU,本校,桃園市,龜山區,https://www.cgu.edu.tw/,,校址：桃園市龜山區文化一路；本環境未能連線至學校網站，未於線上查證
+逢甲大學,逢甲;逢甲大學;FCU,本校,臺中市,西屯區,https://www.fcu.edu.tw/,,校址：臺中市西屯區文華路；本環境未能連線至學校網站，未於線上查證
+長庚科技大學,長庚科大;長庚科技大學,林口校區,桃園市,龜山區,https://www.cgust.edu.tw/,,多校區示例：同一學校兩列 → 有歧義，須追問；未於線上查證
+長庚科技大學,長庚科大;長庚科技大學,嘉義校區,嘉義縣,朴子市,https://www.cgust.edu.tw/,,多校區示例；未於線上查證

@@ -1,0 +1,22 @@
+{
+  "handoff_version": "1.0",
+  "run_id": "20261118-233629",
+  "from": "devil-advocate",
+  "to": "reviewer",
+  "artifacts": [
+    {
+      "path": "04_risk_report.json",
+      "rows": 2
+    },
+    {
+      "path": "04_risk_report.md",
+      "rows": 2
+    }
+  ],
+  "status": "ok",
+  "warnings": [
+    "L1 命中 R3＋R6 → high，建議避開（未看房不匯款）",
+    "L2 命中 R6 → high，看房前必問"
+  ],
+  "next_hint": "排名第一不等於可以租：L2 便宜 1,500 元但管理費與所有雜費都未提供；L1 要求未看房先匯訂金，是常見詐騙手法"
+}

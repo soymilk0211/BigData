@@ -1,0 +1,4 @@
+{"handoff_version":"1.0","run_id":"20261118-220902","from":"fact-checker","to":"quant-analyst",
+"artifacts":[{"path":"02_flags.csv","rows":4782},{"path":"02_factcheck_summary.json","rows":1}],
+"status":"ok","warnings":["西屯區行情窗內社宅相關案件 2296/4137 筆（約 55%），行情可能被拉低，需做排除社宅敏感度比較","L1、L2：UNKNOWN_SOURCE、STALE_LISTING、COMMUTE_UNSTATED、COST_UNSTATED","L1 未提供：管理費、水電瓦斯網路、押金、通勤","L2 未提供：管理費、坪數、水電瓦斯網路、押金、通勤"],
+"next_hint":"西屯雅房分組有效樣本可能偏少，注意 fallback；社宅比例高需敏感度比較"}

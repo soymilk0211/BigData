@@ -1,0 +1,45 @@
+{
+  "handoff_version": "1.0",
+  "run_id": "20261118-233629",
+  "from": "quant-analyst",
+  "to": "devil-advocate",
+  "artifacts": [
+    {
+      "path": "03_market_stats.csv",
+      "rows": 6
+    },
+    {
+      "path": "03_mgmt_fee_status.csv",
+      "rows": 10
+    },
+    {
+      "path": "03_cost_breakdown.csv",
+      "rows": 2
+    },
+    {
+      "path": "03_ranking.csv",
+      "rows": 2
+    },
+    {
+      "path": "03_asking_stats.csv",
+      "rows": 3
+    },
+    {
+      "path": "03_signals.json",
+      "rows": 3
+    },
+    {
+      "path": "charts/",
+      "rows": 4
+    }
+  ],
+  "status": "ok",
+  "warnings": [
+    "社宅敏感度差異大：西屯 student_suite 含社宅 rpp_median 959.2（n=2091），不含社宅 1679.8（n=896）；L1 每坪 1000 在含社宅分組第 55.2 百分位，但低於不含社宅分組的 Q1 1184.8",
+    "student_room 分組 n=53，含／不含社宅兩列相同（rent_median 6400、Q1 6000）；L2 月租 5500 低於 Q1，但 L2 無坪數，R1／R2 不判定",
+    "兩間 true_monthly_cost_known 都只有月租（L1 7000、L2 5500），未提供 mgmt;water;gas;internet;elec;commute；排名只代表已知項目（rank_common_items 同為 L2 第 1）",
+    "591 刊登對照：student_suite 刊登中位數 8999（vs 實價登錄 8000，+12.5%）；student_room 刊登中位數 5750（n=12，vs 6400，-10.2%）；只並列，不合併",
+    "not_evaluated：L2 的 R1／R2（缺坪數）、R7（無評論）"
+  ],
+  "next_hint": "排名第一是 L2 雅房（已知月租 5500，比 L1 少 1500），但管理費與所有雜費都未知、命中 R6；L1 命中 R3（先匯訂金才能看房）與 R6"
+}

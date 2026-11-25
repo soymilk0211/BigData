@@ -1,0 +1,3 @@
+﻿listing_id,label,area_key,price_basis,rent,mgmt_fee,mgmt_status,elec_cost,elec_assumption,water_fee,gas_fee,internet_fee,destination_label,commute_minutes_oneway,commute_source,commute_time_cost,commute_fare_cost,true_monthly_cost_known,unstated_items,cost_complete,area_ping,area_basis,rent_per_ping,true_cost_per_ping,market_group_key,market_fallback,market_percentile,vs_median_pct,outlier,anchor_rent_at_median
+L1,逢甲分租套房,臺中市|西屯區,user_stated,7000,,unstated,,未提供,,,,逢甲大學,,unstated,,,7000,mgmt;water;gas;internet;elec;commute,False,7,user,1000.0,1000.0,臺中市|西屯區|student_suite|114S4-115S3,,55.2,4.3,none,6700
+L2,逢甲雅房,臺中市|西屯區,user_stated,5500,,unstated,,未提供,,,,逢甲大學,,unstated,,,5500,mgmt;water;gas;internet;elec;commute,False,,unstated,,,臺中市|西屯區|student_room|114S4-115S3,,,,n/a,

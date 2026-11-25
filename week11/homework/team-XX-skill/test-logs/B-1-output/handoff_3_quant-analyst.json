@@ -1,0 +1,37 @@
+{
+ "handoff_version": "1.0",
+ "run_id": "20261118-220902",
+ "from": "quant-analyst",
+ "to": "devil-advocate",
+ "artifacts": [
+  {
+   "path": "03_market_stats.csv",
+   "rows": 6
+  },
+  {
+   "path": "03_cost_breakdown.csv",
+   "rows": 2
+  },
+  {
+   "path": "03_ranking.csv",
+   "rows": 2
+  },
+  {
+   "path": "03_asking_stats.csv",
+   "rows": 3
+  },
+  {
+   "path": "03_signals.json",
+   "rows": 3
+  }
+ ],
+ "status": "ok",
+ "warnings": [
+  "西屯套房行情含社宅中位數 8,000（每坪 959）vs 不含社宅 10,500（每坪 1,680），差距大；L1 每坪 1,000 在含社宅分組約第 55 百分位",
+  "西屯雅房分組 n=53，含/不含社宅相同；L2 缺坪數，R1/R2 不判定",
+  "排名只比已知項目（僅月租），兩間的管理費、水電瓦斯網路、通勤都未提供",
+  "591 刊登：套房中位 8,999、雅房中位 5,750（n=12），只並列不合併",
+  "圖表已用中文字型（WenQuanYi），無 E15"
+ ],
+ "next_hint": "已知項目合計第一為 L2（5,500）；L1 有 R3 先匯訂金才能看房；兩間都有 R6 來源不明"
+}

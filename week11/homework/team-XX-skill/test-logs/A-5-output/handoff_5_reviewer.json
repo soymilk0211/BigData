@@ -1,0 +1,23 @@
+{
+  "handoff_version": "1.0",
+  "run_id": "20261119-075028",
+  "from": "reviewer",
+  "to": "user",
+  "artifacts": [
+    {
+      "path": "final_report.md",
+      "rows": null
+    },
+    {
+      "path": "05_review_log.json",
+      "rows": null
+    }
+  ],
+  "status": "ok",
+  "warnings": [
+    "未驗證：hourly_value 196 元／小時",
+    "未驗證：elec_cap_per_kwh（R5 不判定）",
+    "R7 不判定：無評論資料"
+  ],
+  "next_hint": "向房東確認水費、瓦斯、網路、押金與刊登日期"
+}

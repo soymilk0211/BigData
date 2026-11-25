@@ -1,0 +1,42 @@
+{
+  "rows_in": 4782,
+  "rows_flagged": 4062,
+  "by_flag": {
+    "MGMT_FEE_UNKNOWN": 3087,
+    "SOCIAL_HOUSING": 2679,
+    "PARKING_BUNDLED": 757,
+    "TYPE_MISSING": 538,
+    "NON_RESIDENTIAL": 352,
+    "TAX_INCLUDED": 228,
+    "OUTLIER_PRELIM": 156,
+    "AREA_INVALID": 60,
+    "STEP_RENT": 45,
+    "UNKNOWN_SOURCE": 2,
+    "STALE_LISTING": 2,
+    "COMMUTE_UNSTATED": 2,
+    "AREA_FROM_LOOKUP": 2,
+    "COST_UNSTATED": 2
+  },
+  "rows_deleted": 0,
+  "analysis_window_start": "2025-08-10",
+  "latest_rent_date": "2026-08-10",
+  "candidate_flags": {
+    "L1": [
+      "UNKNOWN_SOURCE",
+      "STALE_LISTING",
+      "COMMUTE_UNSTATED",
+      "AREA_FROM_LOOKUP",
+      "COST_UNSTATED"
+    ],
+    "L2": [
+      "UNKNOWN_SOURCE",
+      "STALE_LISTING",
+      "COMMUTE_UNSTATED",
+      "AREA_FROM_LOOKUP",
+      "COST_UNSTATED"
+    ]
+  },
+  "notes": [
+    "臺中市|西屯區 目前行情窗內社會住宅相關案件 2296/4137 筆，需做排除社宅的敏感度比較"
+  ]
+}

@@ -1,0 +1,4 @@
+﻿area_key,rent_type_group,price_basis,n_listings,asking_rent_median,asking_rent_q1,asking_rent_q3,asking_per_use_ping_median,lvr_rent_median,asking_vs_lvr_pct,crawled_at,note
+臺中市|西屯區,student_suite,asking_591,1347,8999.0,6800.0,12000.0,1000.0,8000.0,12.5,2026-11-18T17:41:45+08:00,刊登價≠成交價；坪數為使用坪數，不與實價登錄合併
+臺中市|西屯區,student_room,asking_591,12,5750.0,4875.0,7250.0,1030.0,6400.0,-10.2,2026-11-18T17:41:45+08:00,刊登價≠成交價；坪數為使用坪數，不與實價登錄合併
+臺中市|西屯區,whole_unit,asking_591,2484,28500.0,23500.0,36000.0,1160.0,20000.0,42.5,2026-11-18T17:41:45+08:00,刊登價≠成交價；坪數為使用坪數，不與實價登錄合併
