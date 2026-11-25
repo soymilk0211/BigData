@@ -54,12 +54,12 @@ flowchart TD
 
 `tests/run_test.sh <ID> "<提示詞>" [max_turns]`：在乾淨暫存目錄安裝本 Skill，用 `claude -p --setting-sources project,local --output-format stream-json --verbose` 執行，log 去除絕對路徑後存到 `test-logs/`。A／B／C 測試結果、啟動證據與修正紀錄見 `test-report.md`。
 
-影片錄製時的 A、B 實際執行另存為 `test-logs/V-A.jsonl`、`V-B.jsonl`（含輸出複本 `V-A-output/`、`V-B-output/`）；V-A 審查 V8 FAIL 的除錯與修正後的回歸測試 A-5 見 `test-report.md` 第 4.6 節。
+11/18 為早期影片草稿錄製的 A、B 完整執行另存為 `test-logs/V-A.jsonl`、`V-B.jsonl`（含輸出複本 `V-A-output/`、`V-B-output/`），新版影片拿來當完整流程證據；新版影片中即時執行的 A、B、C 存為 `test-logs/LIVE-A.jsonl`、`LIVE-B.jsonl`、`LIVE-C.jsonl`（見 `test-report.md` 第 4.8 節）。V-A 審查 V8 FAIL 的除錯與修正後的回歸測試 A-5 見 `test-report.md` 第 4.6 節。
 
 ## 影片與 AI Tutor
 
-- 影片（5:11）：章節表 `tutor/chapters.md`，字幕 `tutor/subtitles.zh-TW.srt`（上傳 YouTube 時一併上傳）。
-- AI Tutor（ClassTutor）材料在 `tutor/`：講義 `tutor-material.md`、詞彙 `vocabulary.txt`、課程簡介 `course-intro.md`；老師端製作 `.classtutor` 課程包與學生端使用步驟、測試題見 `tutor/README.md`。
+- 影片已上傳 YouTube（不公開）：https://youtu.be/HTNxGOs2UcE （4:45，Google TTS 旁白＋燒錄字幕；公開 repo 不保留 mp4）。測試 A、B、C 以 `claude -p` 即時執行，A、B 限制回合數，完整流程用 V-A／V-B 紀錄與離線執行角色腳本呈現。章節表 `tutor/chapters.md`，字幕 `tutor/subtitles.zh-TW.srt`。
+- AI Tutor（ClassTutor）材料在 `tutor/`：講義 `tutor-material.md`、詞彙 `vocabulary.txt`、課程簡介 `course-intro.md`；課程包 `tutor/student-rental-check.classtutor`；老師端製作與學生端使用步驟、Q1–Q3 實測結果見 `tutor/README.md`。雲端硬碟連結見 `submission.md`。
 
 ## 限制
 
